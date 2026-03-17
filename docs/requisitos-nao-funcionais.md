@@ -86,4 +86,4 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 # 9. Conclusão
 
-Os requisitos não funcionais garantem que o sistema BemStock seja confiável, fácil de utilizar, seguro e adequado ao ambiente de uso da instituição Lar Bem.
+Os requisitos não funcionais garantem que o sistema BemStock seja confiável, fácil de utilizar, seguro e adequado ao ambiente de uso da instituição Lar Bem
