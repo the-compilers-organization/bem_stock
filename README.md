@@ -1,1 +1,166 @@
-# bem_stock
+<h1>BemStock</h1>
+
+<p align="center">
+  <img src="http://img.shields.io/static/v1?label=Python&message=3.x&color=3776AB&style=for-the-badge&logo=python"/>
+  <img src="http://img.shields.io/static/v1?label=CustomTkinter&message=GUI&color=1E90FF&style=for-the-badge"/>
+  <img src="http://img.shields.io/static/v1?label=SQLite&message=Database&color=003B57&style=for-the-badge&logo=sqlite"/>
+  <img src="http://img.shields.io/static/v1?label=Git&message=2.x&color=f05032&style=for-the-badge&logo=git"/>
+  <img src="http://img.shields.io/static/v1?label=GitHub&message=2026&color=181717&style=for-the-badge&logo=github"/>
+  <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=yellow&style=for-the-badge"/>
+  <img src="http://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>
+</p>
+
+> Status do Projeto: :heavy_check_mark: (concluído) | :warning: (em desenvolvimento) | :x: (não iniciada)
+
+---
+
+# Tópicos
+
+:small_blue_diamond: [Contexto](#contexto-information_source)
+
+:small_blue_diamond: [Problema](#problema-writing_hand)
+
+:small_blue_diamond: [Público-Alvo](#público-alvo-busts_in_silhouette)
+
+:small_blue_diamond: [Objetivo](#objetivo-dart)
+
+:small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)
+
+:small_blue_diamond: [Arquitetura](#arquitetura-computer)
+
+:small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)
+
+:small_blue_diamond: [Documentação](#documentação-book)
+
+:small_blue_diamond: [Desenvolvedores/Contribuintes](#desenvolvedorescontribuintes-octocat)
+
+:small_blue_diamond: [Licença](#licença)
+
+---
+
+# Contexto :information_source:
+
+<p align="justify">
+O projeto <strong>BemStock</strong> é um sistema de gerenciamento de estoque desenvolvido para auxiliar a instituição <strong>Lar Bem</strong>, localizada no Recife, no controle de alimentos, produtos de higiene e produtos de limpeza utilizados no dia a dia da instituição.
+</p>
+
+<p align="justify">
+O sistema será executado em um computador da administração da instituição e permitirá registrar entradas e saídas de produtos, acompanhar a quantidade disponível em estoque e controlar a validade dos itens armazenados.
+</p>
+
+---
+
+# Problema :writing_hand:
+
+<p align="justify">
+Instituições de acolhimento utilizam diversos itens essenciais para seu funcionamento diário, como alimentos, produtos de higiene e produtos de limpeza. Muitas vezes, o controle desses materiais é realizado de forma manual ou pouco estruturada, o que pode dificultar o acompanhamento do estoque e a identificação de itens em falta ou próximos do vencimento.
+</p>
+
+<p align="justify">
+O BemStock busca resolver esse problema oferecendo uma ferramenta simples e organizada para registrar movimentações de estoque e acompanhar os recursos disponíveis na instituição.
+</p>
+
+---
+
+# Público-Alvo :busts_in_silhouette:
+
+- Funcionários administrativos da instituição
+- Responsáveis pelo controle de estoque
+- Coordenação da instituição Lar Bem
+
+---
+
+# Objetivo :dart:
+
+<p align="justify">
+O objetivo do sistema BemStock é organizar e controlar o estoque de alimentos, produtos de higiene e produtos de limpeza utilizados pela instituição Lar Bem.
+</p>
+
+<p align="justify">
+O sistema permitirá registrar entradas e saídas de produtos, acompanhar quantidades disponíveis, controlar validade dos itens e manter histórico de movimentações, contribuindo para uma gestão mais eficiente dos recursos da instituição.
+</p>
+
+---
+
+# Funcionalidades :video_game:
+
+### Funcionalidades principais (MVP)
+
+1. Login de usuário
+2. Cadastro de categorias de produtos
+3. Cadastro de produtos
+4. Registro de entrada de produtos
+5. Registro de saída de produtos
+6. Consulta de estoque
+7. Controle de estoque mínimo
+8. Controle de validade dos produtos
+9. Histórico de movimentações de estoque
+10. Relatórios básicos de estoque
+
+---
+
+# Arquitetura :computer:
+
+O sistema BemStock utiliza uma arquitetura organizada em camadas inspirada no padrão **MVC**, composta por:
+
+- **View** → Interface gráfica do sistema
+- **Controller** → Controle das operações do sistema
+- **Model** → Representação das entidades e regras de negócio
+- **Database** → Comunicação com o banco de dados
+- **Utils** → Funções auxiliares
+
+Fluxo simplificado da aplicação:
+
+```text
+Usuário
+  ↓
+Interface (CustomTkinter)
+  ↓
+Controller
+  ↓
+Model
+  ↓
+Database
+  ↓
+SQLite
+```
+
+
+---
+
+# Tecnologias Utilizadas :wrench:
+
+- **Python**
+- **CustomTkinter**
+- **SQLite**
+- **Git**
+- **GitHub**
+
+---
+
+# Documentação :book:
+
+A documentação do projeto está disponível na pasta **docs** do repositório:
+
+- [Domínio do Projeto](docs/dominio-do-projeto.md)
+- [Entidades do Domínio](docs/entidades-do-dominio.md)
+- [Requisitos Funcionais](docs/requisitos-funcionais.md)
+- [Requisitos Não Funcionais](docs/requisitos-nao-funcionais.md)
+- [Arquitetura do Sistema](docs/arquitetura-do-sistema.md)
+
+---
+
+# Desenvolvedores/Contribuintes :octocat:
+
+Time responsável pelo desenvolvimento do projeto
+
+| [<img src="https://avatars.githubusercontent.com/u/222337719?v=4" width=115><br><sub>Allan Lucas</sub>](https://github.com/allagez) | [<img src="https://avatars.githubusercontent.com/u/229312657?v=4" width=115><br><sub>Breno Bezerra</sub>](https://github.com/brenobezerra2014-cyber) | [<img src="https://avatars.githubusercontent.com/u/130801505?v=4" width=115><br><sub>Francis Lauriano</sub>](https://github.com/FrancisLauriano) | [<img src="https://avatars.githubusercontent.com/u/234993270?v=4" width=115><br><sub>Jeanne Espíndola</sub>](https://github.com/Jeanne3229)
+| :---: | :---: | :---: | :---:
+
+---
+
+# Licença
+
+The [MIT License](LICENSE) (MIT)
+
+Copyright :copyright: 2026 - BemStock
