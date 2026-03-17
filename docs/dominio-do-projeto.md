@@ -41,11 +41,12 @@ O sistema controlará inicialmente três categorias principais:
 
 ## Operações do Sistema
 
-O sistema permitirá:
+O sistema BemStock permitirá realizar as seguintes operações:
 
-- cadastro de produtos
-- consulta de estoque
-- registro de entrada de produtos
-- registro de saída de produtos
-- controle de estoque mínimo
-- histórico de movimentações
+- **Cadastro de produtos:** cadastrar os itens do estoque com informações como nome, categoria, quantidade, unidade de medida e validade.
+- **Consulta de estoque:** visualizar os produtos cadastrados e verificar a quantidade disponível de cada item.
+- **Registro de entrada de produtos:** registrar a entrada de novos itens no estoque.
+- **Registro de saída de produtos:** registrar a retirada de itens para uso na instituição.
+- **Controle de estoque mínimo:** identificar produtos com quantidade abaixo do nível mínimo definido.
+- **Controle de validade:** acompanhar a data de validade dos produtos e identificar itens próximos do vencimento.
+- **Histórico de movimentações:** consultar o registro de entradas e saídas realizadas no estoque.
