@@ -121,4 +121,4 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 # 10. Conclusão
 
-Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque de alimentos, produtos de higiene e produtos de limpeza.
+Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque de alimentos, produtos de higiene e produtos de limpeza
