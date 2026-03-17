@@ -274,15 +274,15 @@ Arquitetura simplificada:
 
 ```text
 Usuário
-↓
+  ↓
 Interface (View)
-↓
+  ↓
 Controller
-↓
+  ↓
 Model
-↓
+  ↓
 Database
-↓
+  ↓
 SQLite
 ```
 
@@ -291,15 +291,15 @@ Fluxo detalhado:
 
 ```text
 [Usuário]
-↓
+    ↓
 [Telas em CustomTkinter]
-↓
+    ↓
 [Controllers]
-↓
+    ↓
 [Models / Regras de negócio]
-↓
+    ↓
 [Camada de banco de dados]
-↓
+    ↓
 [SQLite]
 ```
 
