@@ -192,4 +192,4 @@ Esta etapa é considerada concluída quando:
 - as entidades principais do sistema estão identificadas
 - os atributos iniciais de cada entidade foram definidos
 - os relacionamentos entre as entidades estão documentados
-- a equipe confirma que as entidades representam corretamente o domínio do sistema
+- a equipe confirma que as entidades representam corretamente o domínio do sistema.
