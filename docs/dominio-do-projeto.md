@@ -36,8 +36,8 @@ Os principais usuários do sistema serão:
 O sistema controlará inicialmente três categorias principais:
 
 - Alimentos
-- Produtos de higiene
-- Produtos de limpeza
+- Produtos de Higiene
+- Produtos de Limpeza
 
 ## Operações do Sistema
 
