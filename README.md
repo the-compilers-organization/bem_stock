@@ -16,23 +16,27 @@
 
 # Tópicos
 
-:small_blue_diamond: [Contexto](#contexto-information_source)
+:small_blue_diamond: [Contexto](#contexto-information_source) 
 
-:small_blue_diamond: [Problema](#problema-writing_hand)
+:small_blue_diamond: [Problema](#problema-writing_hand)  
 
-:small_blue_diamond: [Público-Alvo](#público-alvo-busts_in_silhouette)
+:small_blue_diamond: [Público-Alvo](#público-alvo-busts_in_silhouette)  
 
-:small_blue_diamond: [Objetivo](#objetivo-dart)
+:small_blue_diamond: [Objetivo](#objetivo-dart)  
 
-:small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)
+:small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)  
 
-:small_blue_diamond: [Arquitetura](#arquitetura-computer)
+:small_blue_diamond: [Arquitetura](#arquitetura-computer)  
 
-:small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)
+:small_blue_diamond: [Estrutura do Projeto](#estrutura-do-projeto-file_folder)  
 
-:small_blue_diamond: [Documentação](#documentação-book)
+:small_blue_diamond: [Instalação](#instalação-rocket)  
 
-:small_blue_diamond: [Desenvolvedores/Contribuintes](#desenvolvedorescontribuintes-octocat)
+:small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)  
+
+:small_blue_diamond: [Documentação](#documentação-book)  
+
+:small_blue_diamond: [Desenvolvedores](#desenvolvedorescontribuintes-octocat)  
 
 :small_blue_diamond: [Licença](#licença)
 
@@ -125,6 +129,84 @@ Database
 SQLite
 ```
 
+---
+
+# Estrutura do Projeto :file_folder:
+
+```text 
+bemstock/
+│
+├── docs/
+│ ├── dominio-do-projeto.md
+│ ├── entidades-do-dominio.md
+│ ├── requisitos-funcionais.md
+│ ├── requisitos-nao-funcionais.md
+│ ├── arquitetura-do-sistema.md
+│ └── atores-e-casos-de-uso.md
+│
+├── src/
+│ ├── main.py
+│ ├── models/
+│ ├── views/
+│ ├── controllers/
+│ ├── database/
+│ └── utils/
+│
+├── assets/
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+
+
+---
+
+# Instalação :rocket:
+
+### 1️⃣ Clonar o repositório
+
+git clone https://github.com/SEU-REPOSITORIO/bemstock.git
+
+---
+
+### 2️⃣ Entrar na pasta do projeto
+
+cd bemstock
+
+---
+
+### 3️⃣ Criar ambiente virtual
+
+python -m venv venv
+
+---
+
+
+### 4️⃣ Ativar ambiente virtual
+
+Windows:
+### 3️⃣ Criar ambiente virtual
+
+
+python -m venv venv
+
+
+### 4️⃣ Ativar ambiente virtual
+
+**Windows:**
+venv\Scripts\activate
+
+
+**Linux/Mac:**
+source venv/bin/activate
+
+---
+
+### 5️⃣ Instalar dependências
+
+pip install -r requirements.txt
 
 ---
 
@@ -147,6 +229,7 @@ A documentação do projeto está disponível na pasta **docs** do repositório:
 - [Requisitos Funcionais](docs/requisitos-funcionais.md)
 - [Requisitos Não Funcionais](docs/requisitos-nao-funcionais.md)
 - [Arquitetura do Sistema](docs/arquitetura-do-sistema.md)
+- [Atores e Casos de Uso](docs/atores-e-casos-de-uso.png)
 
 ---
 
