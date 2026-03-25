@@ -16,11 +16,13 @@ O sistema BemStock tem como objetivo organizar e controlar o estoque de alimento
 
 O sistema permitirá:
 
+- realizar login no sistema
 - cadastrar produtos
 - registrar entradas de itens
 - registrar saídas de itens
 - consultar quantidades disponíveis
 - identificar produtos com estoque baixo
+- controlar a validade dos produtos
 - acompanhar histórico de movimentações
 
 ## Usuários do Sistema
@@ -33,16 +35,19 @@ Os principais usuários do sistema serão:
 
 ## Itens Controlados
 
-O sistema controlará inicialmente três categorias principais:
+O sistema controlará três categorias fixas predefinidas:
 
 - Alimentos
 - Produtos de Higiene
 - Produtos de Limpeza
 
+Essas categorias não poderão ser alteradas pelo usuário.
+
 ## Operações do Sistema
 
 O sistema BemStock permitirá realizar as seguintes operações:
 
+- **Login:** acessar o sistema por meio de autenticação.
 - **Cadastro de produtos:** cadastrar os itens do estoque com informações como nome, categoria, quantidade, unidade de medida e validade.
 - **Consulta de estoque:** visualizar os produtos cadastrados e verificar a quantidade disponível de cada item.
 - **Registro de entrada de produtos:** registrar a entrada de novos itens no estoque.
