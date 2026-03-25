@@ -8,7 +8,7 @@ A arquitetura foi definida para organizar o desenvolvimento do sistema, separand
 
 ---
 
-# 2. Visão geral da arquitetura
+## 2. Visão geral da arquitetura
 
 O sistema BemStock será uma aplicação **desktop**, executada localmente no computador da administração da instituição.
 
@@ -23,7 +23,7 @@ Essa organização facilita o desenvolvimento em equipe e torna o código mais o
 
 ---
 
-# 3. Tecnologias utilizadas
+## 3. Tecnologias utilizadas
 
 ## Linguagem principal
 
@@ -67,19 +67,15 @@ Motivos da escolha:
 
 ## Acesso ao banco de dados
 
-O acesso ao banco poderá ser feito utilizando:
+O acesso ao banco será feito utilizando:
 
 - **sqlite3** (biblioteca nativa do Python)
 
-ou
-
-- **SQLAlchemy** (ORM opcional para organização do código)
-
-Para simplificar o desenvolvimento inicial do projeto, pode ser utilizado o **sqlite3**.
+Essa escolha foi feita para simplificar o desenvolvimento inicial do projeto e reduzir a curva de aprendizado da equipe.
 
 ---
 
-# 4. Organização em camadas
+## 4. Organização em camadas
 
 A arquitetura do sistema será dividida nas seguintes camadas:
 
@@ -93,7 +89,7 @@ Essa organização segue uma adaptação do padrão **MVC (Model-View-Controller
 
 ---
 
-# 5. Responsabilidade de cada camada
+## 5. Responsabilidade de cada camada
 
 ## 5.1 View
 
@@ -110,7 +106,7 @@ Exemplos de telas:
 
 - tela de login
 - tela principal (dashboard)
-- cadastro de categorias
+- cadastro de usuários
 - cadastro de produtos
 - registro de entrada de produtos
 - registro de saída de produtos
@@ -134,6 +130,7 @@ Funções principais:
 
 Exemplos de operações:
 
+- cadastrar usuário
 - cadastrar produto
 - registrar entrada de produto
 - registrar saída de produto
@@ -155,7 +152,6 @@ Funções principais:
 Principais entidades do sistema:
 
 - Usuário
-- Categoria
 - Produto
 - Movimentação
 
@@ -164,6 +160,7 @@ Exemplos de regras de negócio:
 - impedir saída maior que o estoque disponível
 - identificar produtos abaixo do estoque mínimo
 - verificar produtos próximos da validade
+- permitir apenas categorias predefinidas no cadastro de produtos
 
 ---
 
@@ -199,7 +196,7 @@ Essa camada evita repetição de código.
 
 ---
 
-# 6. Fluxo da aplicação
+## 6. Fluxo da aplicação
 
 O funcionamento básico do sistema seguirá o fluxo abaixo:
 
@@ -215,7 +212,7 @@ O funcionamento básico do sistema seguirá o fluxo abaixo:
 
 ---
 
-# 7. Estrutura inicial de pastas
+## 7. Estrutura inicial de pastas
 
 A estrutura inicial sugerida para o projeto é:
 
@@ -223,48 +220,47 @@ A estrutura inicial sugerida para o projeto é:
 bemstock/
 │
 ├── docs/
-│ ├── dominio-do-projeto.md
-│ ├── entidades-do-dominio.md
-│ ├── requisitos-funcionais.md
-│ ├── requisitos-nao-funcionais.md
-│ └── arquitetura-do-sistema.md
+│   ├── dominio-do-projeto.md
+│   ├── entidades-do-dominio.md
+│   ├── requisitos-funcionais.md
+│   ├── requisitos-nao-funcionais.md
+│   └── arquitetura-do-sistema.md
 │
 ├── src/
-│ ├── main.py
+│   ├── main.py
 │
-│ ├── views/
-│ │ ├── login_view.py
-│ │ ├── dashboard_view.py
-│ │ ├── categoria_view.py
-│ │ ├── produto_view.py
-│ │ └── movimentacao_view.py
+│   ├── views/
+│   │   ├── login_view.py
+│   │   ├── dashboard_view.py
+│   │   ├── usuario_view.py
+│   │   ├── produto_view.py
+│   │   └── movimentacao_view.py
 │
-│ ├── controllers/
-│ │ ├── login_controller.py
-│ │ ├── categoria_controller.py
-│ │ ├── produto_controller.py
-│ │ └── movimentacao_controller.py
+│   ├── controllers/
+│   │   ├── login_controller.py
+│   │   ├── usuario_controller.py
+│   │   ├── produto_controller.py
+│   │   └── movimentacao_controller.py
 │
-│ ├── models/
-│ │ ├── usuario.py
-│ │ ├── categoria.py
-│ │ ├── produto.py
-│ │ └── movimentacao.py
+│   ├── models/
+│   │   ├── usuario.py
+│   │   ├── produto.py
+│   │   └── movimentacao.py
 │
-│ ├── database/
-│ │ ├── connection.py
-│ │ └── schema.py
+│   ├── database/
+│   │   ├── connection.py
+│   │   └── schema.py
 │
-│ └── utils/
-│ ├── validacoes.py
-│ └── formatadores.py
+│   └── utils/
+│       ├── validacoes.py
+│       └── formatadores.py
 │
 ├── assets/
-│ └── logo.png
+│   └── logo.png
 │
 ├── requirements.txt
 └── README.md
-```
+ ```
 
 ---
 
@@ -312,14 +308,15 @@ A arquitetura escolhida é adequada ao projeto porque:
 - utiliza tecnologias gratuitas
 - é simples de implementar
 - organiza bem o código
-- facilita manutenção futura
-- permite divisão de tarefas entre os membros da equipe
+- facilita a manutenção futura
+- permite a divisão de tarefas entre os membros da equipe
 
 Ela atende ao escopo do sistema BemStock, que inclui:
 
-- cadastro de categorias
+- cadastro de usuários
 - cadastro de produtos
-- entrada e saída de itens
+- entrada de produtos
+- saída de produtos
 - controle de estoque mínimo
 - controle de validade
 - histórico de movimentações
@@ -335,7 +332,7 @@ A solução utiliza:
 - Python como linguagem principal
 - CustomTkinter para interface gráfica
 - SQLite como banco de dados local
-- arquitetura em camadas para separar responsabilidades
+- arquitetura em camadas para separação de responsabilidades
 
 Essa estrutura fornece uma base sólida para o desenvolvimento do sistema de gerenciamento de estoque da instituição Lar Bem.
 
@@ -350,9 +347,7 @@ Esta etapa é considerada concluída quando:
 - o banco de dados está definido
 - a arquitetura em camadas está documentada
 - as responsabilidades de cada camada estão descritas
-- a arquitetura inicial está desenhada
+- a arquitetura inicial está representada
 - o grupo confirma que a arquitetura é viável para o desenvolvimento do projeto
-
-
 
 
