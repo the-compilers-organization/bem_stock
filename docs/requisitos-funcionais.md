@@ -8,9 +8,9 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 2. Módulo de Autenticação
+## 2. Módulo de Autenticação
 
-**RF01.** O sistema deve permitir que o usuário realize login informando usuário e senha.
+**RF01.** O sistema deve permitir que o usuário realize login informando e-mail e senha.
 
 **RF02.** O sistema deve permitir acesso apenas a usuários cadastrados.
 
@@ -18,23 +18,25 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 3. Módulo de Categorias
+## 3. Módulo de Usuários
 
-**RF04.** O sistema deve permitir cadastrar categorias de produtos.
+**RF04.** O sistema deve permitir que o administrador cadastre novos usuários.
 
-**RF05.** O sistema deve permitir listar todas as categorias cadastradas.
+**RF05.** O sistema deve permitir registrar no cadastro do usuário as seguintes informações:
+- nome
+- e-mail
+- senha
+- perfil
 
-**RF06.** O sistema deve permitir editar informações de uma categoria.
-
-**RF07.** O sistema deve permitir excluir uma categoria que não esteja associada a produtos.
+**RF06.** O sistema não deve permitir o cadastro de dois usuários com o mesmo e-mail.
 
 ---
 
-# 4. Módulo de Produtos
+## 4. Módulo de Produtos
 
-**RF08.** O sistema deve permitir cadastrar produtos no estoque.
+**RF07.** O sistema deve permitir cadastrar produtos no estoque.
 
-**RF09.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
+**RF08.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
 - nome do produto
 - descrição
 - categoria
@@ -43,19 +45,24 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 - estoque mínimo
 - data de validade
 
-**RF10.** O sistema deve permitir listar todos os produtos cadastrados.
+**RF09.** O sistema deve permitir listar todos os produtos cadastrados.
 
-**RF11.** O sistema deve permitir buscar produtos por nome.
+**RF10.** O sistema deve permitir buscar produtos por nome.
 
-**RF12.** O sistema deve permitir filtrar produtos por categoria.
+**RF11.** O sistema deve permitir filtrar produtos por categoria.
 
-**RF13.** O sistema deve permitir editar informações de um produto.
+**RF12.** O sistema deve permitir editar informações de um produto.
 
-**RF14.** O sistema deve permitir excluir um produto do sistema.
+**RF13.** O sistema deve permitir excluir um produto do sistema.
+
+**RF14.** O sistema deve permitir utilizar apenas as categorias predefinidas no sistema:
+- Alimentos
+- Produtos de Higiene
+- Produtos de Limpeza
 
 ---
 
-# 5. Módulo de Movimentação de Estoque
+## 5. Módulo de Movimentação de Estoque
 
 **RF15.** O sistema deve permitir registrar entrada de produtos no estoque.
 
@@ -73,7 +80,7 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 6. Módulo de Controle de Estoque
+## 6. Módulo de Controle de Estoque
 
 **RF22.** O sistema deve permitir consultar a quantidade atual de cada produto.
 
@@ -83,7 +90,7 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 7. Módulo de Controle de Validade
+## 7. Módulo de Controle de Validade
 
 **RF25.** O sistema deve permitir registrar a data de validade dos produtos.
 
@@ -93,7 +100,7 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 8. Módulo de Histórico
+## 8. Módulo de Histórico
 
 **RF28.** O sistema deve registrar todas as movimentações de entrada e saída de produtos.
 
@@ -107,7 +114,7 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 9. Módulo de Relatórios
+## 9. Módulo de Relatórios
 
 **RF33.** O sistema deve permitir visualizar relatório de produtos em estoque.
 
@@ -119,6 +126,6 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 ---
 
-# 10. Conclusão
+## 10. Conclusão
 
-Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque de alimentos, produtos de higiene e produtos de limpeza
+Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque de alimentos, produtos de higiene e produtos de limpeza.
