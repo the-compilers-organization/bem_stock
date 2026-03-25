@@ -9,7 +9,6 @@ O sistema será responsável pelo controle de **alimentos, produtos de higiene e
 As principais entidades identificadas para o domínio do sistema são:
 
 - Usuário
-- Categoria
 - Produto
 - Movimentação
 
@@ -25,33 +24,15 @@ A entidade **Usuário** representa a pessoa responsável por acessar o sistema e
 
 ### Atributos
 
-- **id_usuario** – identificador único do usuário
-- **nome** – nome do usuário
-- **login** – nome de usuário utilizado para acessar o sistema
-- **senha** – senha de autenticação do usuário
-- **perfil** – tipo de usuário (por exemplo: administrador ou funcionário)
+- **id_usuario** – identificador único do usuário  
+- **nome** – nome do usuário  
+- **email** – e-mail utilizado para autenticação no sistema (deve ser único)  
+- **senha** – senha de autenticação do usuário  
+- **perfil** – tipo de usuário (por exemplo: administrador ou funcionário)  
 
 ---
 
-## 2.2 Categoria
-
-A entidade **Categoria** representa o grupo ao qual um produto pertence.
-
-No escopo atual do projeto, as categorias principais são:
-
-- alimentos
-- produtos de higiene
-- produtos de limpeza
-
-### Atributos
-
-- **id_categoria** – identificador único da categoria
-- **nome_categoria** – nome da categoria
-- **descricao** – descrição opcional da categoria
-
----
-
-## 2.3 Produto
+## 2.2 Produto
 
 A entidade **Produto** representa cada item armazenado no estoque da instituição.
 
@@ -59,18 +40,18 @@ Essa entidade contém as informações principais dos itens controlados no siste
 
 ### Atributos
 
-- **id_produto** – identificador único do produto
-- **nome** – nome do produto
-- **descricao** – descrição ou observação sobre o produto
-- **quantidade_atual** – quantidade disponível no estoque
-- **unidade_medida** – unidade de controle do produto (ex.: unidade, pacote, litro, caixa)
-- **estoque_minimo** – quantidade mínima recomendada para o produto
-- **data_validade** – data de validade do produto
-- **id_categoria** – referência à categoria do produto
+- **id_produto** – identificador único do produto  
+- **nome** – nome do produto  
+- **descricao** – descrição ou observação sobre o produto  
+- **categoria** – categoria predefinida do produto (Alimentos, Produtos de Higiene ou Produtos de Limpeza)  
+- **quantidade_atual** – quantidade disponível no estoque  
+- **unidade_medida** – unidade de controle do produto (ex.: unidade, pacote, litro, caixa)  
+- **estoque_minimo** – quantidade mínima recomendada para o produto  
+- **data_validade** – data de validade do produto  
 
 ---
 
-## 2.4 Movimentação
+## 2.3 Movimentação
 
 A entidade **Movimentação** representa cada operação de entrada ou saída de produtos no estoque.
 
@@ -78,27 +59,17 @@ Essa entidade permite registrar o histórico de alterações de quantidade dos p
 
 ### Atributos
 
-- **id_movimentacao** – identificador único da movimentação
-- **tipo_movimentacao** – tipo da movimentação (entrada ou saída)
-- **quantidade** – quantidade movimentada
-- **data_movimentacao** – data em que a movimentação ocorreu
-- **observacao** – observação opcional sobre a movimentação
-- **id_produto** – referência ao produto movimentado
-- **id_usuario** – referência ao usuário que realizou a movimentação
+- **id_movimentacao** – identificador único da movimentação  
+- **tipo_movimentacao** – tipo da movimentação (entrada ou saída)  
+- **quantidade** – quantidade movimentada  
+- **data_movimentacao** – data em que a movimentação ocorreu  
+- **observacao** – observação opcional sobre a movimentação  
+- **id_produto** – referência ao produto movimentado  
+- **id_usuario** – referência ao usuário que realizou a movimentação  
 
 ---
 
 # 3. Relacionamentos entre as entidades
-
-## Categoria e Produto
-
-Uma **categoria** pode possuir vários produtos, enquanto cada **produto** pertence a apenas uma categoria.
-
-Relacionamento:
-
-Categoria **1 : N** Produto
-
----
 
 ## Produto e Movimentação
 
@@ -106,7 +77,7 @@ Um **produto** pode possuir várias movimentações registradas no sistema, enqu
 
 Relacionamento:
 
-Produto **1 : N** Movimentação
+Produto **1 : N** Movimentação  
 
 ---
 
@@ -116,7 +87,7 @@ Um **usuário** pode registrar várias movimentações no sistema, enquanto cada
 
 Relacionamento:
 
-Usuário **1 : N** Movimentação
+Usuário **1 : N** Movimentação  
 
 ---
 
@@ -124,38 +95,36 @@ Usuário **1 : N** Movimentação
 
 ## Usuário
 
-- id_usuario
-- nome
-- login
-- senha
-- perfil
+- id_usuario  
+- nome  
+- email  
+- senha  
+- perfil  
 
-## Categoria
-
-- id_categoria
-- nome_categoria
-- descricao
+---
 
 ## Produto
 
-- id_produto
-- nome
-- descricao
-- quantidade_atual
-- unidade_medida
-- estoque_minimo
-- data_validade
-- id_categoria
+- id_produto  
+- nome  
+- descricao  
+- categoria  
+- quantidade_atual  
+- unidade_medida  
+- estoque_minimo  
+- data_validade  
+
+---
 
 ## Movimentação
 
-- id_movimentacao
-- tipo_movimentacao
-- quantidade
-- data_movimentacao
-- observacao
-- id_produto
-- id_usuario
+- id_movimentacao  
+- tipo_movimentacao  
+- quantidade  
+- data_movimentacao  
+- observacao  
+- id_produto  
+- id_usuario  
 
 ---
 
@@ -163,10 +132,15 @@ Usuário **1 : N** Movimentação
 
 As entidades identificadas atendem às necessidades do sistema porque permitem representar:
 
-- os itens controlados no estoque por meio da entidade **Produto**
-- a organização dos itens por meio da entidade **Categoria**
-- os responsáveis pelas operações por meio da entidade **Usuário**
-- o registro das entradas e saídas por meio da entidade **Movimentação**
+- os itens controlados no estoque por meio da entidade **Produto**  
+- os responsáveis pelas operações por meio da entidade **Usuário**  
+- o registro das entradas e saídas por meio da entidade **Movimentação**  
+
+A categoria do produto não foi modelada como entidade separada, pois o sistema utilizará categorias fixas predefinidas:
+
+- Alimentos  
+- Produtos de Higiene  
+- Produtos de Limpeza  
 
 Essas entidades são suficientes para implementar as funcionalidades principais do sistema BemStock na primeira versão do projeto.
 
@@ -178,10 +152,10 @@ A identificação das entidades e suas informações define a base para a modela
 
 Com essa definição, a equipe poderá avançar para as próximas etapas do projeto, como:
 
-- criação das histórias de usuário
-- definição dos critérios de aceitação em BDD
-- modelagem do banco de dados
-- implementação do sistema.
+- criação das histórias de usuário  
+- definição dos critérios de aceitação em BDD  
+- modelagem do banco de dados  
+- implementação do sistema  
 
 ---
 
@@ -189,7 +163,7 @@ Com essa definição, a equipe poderá avançar para as próximas etapas do proj
 
 Esta etapa é considerada concluída quando:
 
-- as entidades principais do sistema estão identificadas
-- os atributos iniciais de cada entidade foram definidos
-- os relacionamentos entre as entidades estão documentados
-- a equipe confirma que as entidades representam corretamente o domínio do sistema.
+- as entidades principais do sistema estão identificadas  
+- os atributos iniciais de cada entidade foram definidos  
+- os relacionamentos entre as entidades estão documentados  
+- a equipe confirma que as entidades representam corretamente o domínio do sistema  
