@@ -6,7 +6,7 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 ---
 
-# 2. Usabilidade
+## 2. Usabilidade
 
 **RNF01.** O sistema deve possuir uma interface simples e intuitiva.
 
@@ -20,7 +20,7 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 ---
 
-# 3. Funcionamento Offline
+## 3. Funcionamento Offline
 
 **RNF06.** O sistema deve funcionar localmente no computador da administração da instituição.
 
@@ -30,31 +30,31 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 ---
 
-# 4. Segurança
+## 4. Segurança
 
-**RNF09.** O sistema deve exigir autenticação por login e senha.
+**RNF09.** O sistema deve exigir autenticação por e-mail e senha.
 
 **RNF10.** O sistema deve permitir acesso apenas a usuários autorizados.
 
-**RNF11.** O sistema deve proteger as informações de acesso dos usuários.
+**RNF11.** O sistema deve armazenar as senhas dos usuários de forma segura (ex.: utilizando hash).
 
 **RNF12.** O sistema deve impedir operações inválidas no estoque.
 
 ---
 
-# 5. Desempenho
+## 5. Desempenho
 
-**RNF13.** O sistema deve responder rapidamente às operações de cadastro, busca e movimentação.
+**RNF13.** O sistema deve responder às operações principais em tempo adequado (sem atrasos perceptíveis ao usuário).
 
-**RNF14.** O sistema deve carregar as telas principais em tempo adequado para uso cotidiano.
+**RNF14.** O sistema deve carregar as telas principais rapidamente para uso cotidiano.
 
 **RNF15.** O sistema deve permitir consultas de estoque e histórico sem atrasos excessivos.
 
 ---
 
-# 6. Manutenção e Organização do Código
+## 6. Manutenção e Organização do Código
 
-**RNF16.** O sistema deve possuir código organizado em módulos ou camadas.
+**RNF16.** O sistema deve possuir código organizado em camadas (MVC).
 
 **RNF17.** O sistema deve possuir estrutura de pastas padronizada.
 
@@ -66,7 +66,7 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 ---
 
-# 7. Confiabilidade
+## 7. Confiabilidade
 
 **RNF21.** O sistema deve garantir consistência dos dados após cada operação.
 
@@ -74,16 +74,18 @@ Os requisitos não funcionais descrevem as características de qualidade que o s
 
 **RNF23.** O sistema deve manter o estoque atualizado após entradas e saídas.
 
----
-
-# 8. Implantação
-
-**RNF24.** O sistema deve poder ser instalado no computador da administração da ONG.
-
-**RNF25.** O sistema deve ser empacotado de forma que facilite sua execução no ambiente local.
+**RNF24.** O sistema não deve permitir inconsistências no estoque (ex.: quantidade negativa).
 
 ---
 
-# 9. Conclusão
+## 8. Implantação
+
+**RNF25.** O sistema deve poder ser instalado no computador da administração da ONG.
+
+**RNF26.** O sistema deve ser empacotado de forma que facilite sua execução no ambiente local.
+
+---
+
+## 9. Conclusão
 
 Os requisitos não funcionais garantem que o sistema BemStock seja confiável, fácil de utilizar, seguro e adequado ao ambiente de uso da instituição Lar Bem.
