@@ -91,15 +91,13 @@ O sistema permitirá registrar entradas e saídas de produtos, acompanhar quanti
 ### Funcionalidades principais (MVP)
 
 1. Login de usuário
-2. Cadastro de categorias de produtos
-3. Cadastro de produtos
-4. Registro de entrada de produtos
-5. Registro de saída de produtos
-6. Consulta de estoque
-7. Controle de estoque mínimo
-8. Controle de validade dos produtos
-9. Histórico de movimentações de estoque
-10. Relatórios básicos de estoque
+2. Cadastro de produtos
+3. Registro de entrada de produtos
+4. Registro de saída de produtos
+5. Consulta de estoque
+6. Controle de estoque mínimo
+7. Controle de validade dos produtos
+8. Histórico de movimentações de estoque
 
 ---
 
