@@ -26,6 +26,8 @@
 
 :small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)  
 
+:small_blue_diamond: [Protótipo do Sistema](#protótipo-do-sistema-art) 
+
 :small_blue_diamond: [Arquitetura](#arquitetura-computer)  
 
 :small_blue_diamond: [Estrutura do Projeto](#estrutura-do-projeto-file_folder)  
@@ -98,6 +100,14 @@ O sistema permitirá registrar entradas e saídas de produtos, acompanhar quanti
 6. Controle de estoque mínimo
 7. Controle de validade dos produtos
 8. Histórico de movimentações de estoque
+
+---
+
+# Protótipo do Sistema :art:
+
+O protótipo visual do sistema BemStock foi desenvolvido no Figma e pode ser acessado no link abaixo:
+
+🔗 [Acessar protótipo do BemStock no Figma](https://drawn-award-18708393.figma.site/)
 
 ---
 
