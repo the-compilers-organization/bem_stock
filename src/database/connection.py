@@ -1,10 +1,13 @@
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent.parent / "bemstock.db"
+
+def obter_caminho_banco():
+    return Path(__file__).resolve().parent.parent.parent / "bemstock.db"
 
 
-def get_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+def conectar():
+    caminho_banco = obter_caminho_banco()
+    conexao = sqlite3.connect(caminho_banco)
+    conexao.row_factory = sqlite3.Row
+    return conexao

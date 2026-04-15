@@ -1,9 +1,10 @@
-from database.connection import get_connection
+from database.connection import conectar
+from utils.seguranca import gerar_hash_senha
 
 
-def create_tables():
-    conn = get_connection()
-    cursor = conn.cursor()
+def criar_tabelas():
+    conexao = conectar()
+    cursor = conexao.cursor()
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
@@ -23,10 +24,11 @@ def create_tables():
             categoria TEXT NOT NULL CHECK (
                 categoria IN (
                     'Alimentos',
-                    'Produtos de Higiene',
-                    'Produtos de Limpeza'
+                    'Limpeza',
+                    'Higiene Pessoal'
                 )
             ),
+            lote TEXT,
             quantidade_atual INTEGER NOT NULL DEFAULT 0,
             unidade_medida TEXT NOT NULL,
             estoque_minimo INTEGER NOT NULL,
@@ -50,5 +52,36 @@ def create_tables():
         )
     """)
 
-    conn.commit()
-    conn.close()
+    conexao.commit()
+    conexao.close()
+
+
+def criar_admin_inicial():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        "SELECT id_usuario FROM usuarios WHERE email = ?",
+        ("admin@bemstock.com",)
+    )
+    admin = cursor.fetchone()
+
+    if admin is None:
+        senha_hash = gerar_hash_senha("123456")
+
+        cursor.execute(
+            """
+            INSERT INTO usuarios (nome, email, senha, perfil)
+            VALUES (?, ?, ?, ?)
+            """,
+            ("Administrador", "admin@bemstock.com", senha_hash, "admin")
+        )
+
+        conexao.commit()
+
+    conexao.close()
+
+
+def inicializar_banco():
+    criar_tabelas()
+    criar_admin_inicial()
