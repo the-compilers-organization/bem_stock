@@ -56,32 +56,7 @@ def criar_tabelas():
     conexao.close()
 
 
-def criar_admin_inicial():
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        "SELECT id_usuario FROM usuarios WHERE email = ?",
-        ("admin@bemstock.com",)
-    )
-    admin = cursor.fetchone()
-
-    if admin is None:
-        senha_hash = gerar_hash_senha("123456")
-
-        cursor.execute(
-            """
-            INSERT INTO usuarios (nome, email, senha, perfil)
-            VALUES (?, ?, ?, ?)
-            """,
-            ("Administrador", "admin@bemstock.com", senha_hash, "admin")
-        )
-
-        conexao.commit()
-
-    conexao.close()
-
 
 def inicializar_banco():
     criar_tabelas()
-    criar_admin_inicial()
+    
