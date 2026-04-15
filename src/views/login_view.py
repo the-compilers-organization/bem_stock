@@ -81,13 +81,17 @@ def abrir_login():
         from views.cadastro_usuario_view import abrir_cadastro_usuario
         abrir_cadastro_usuario()
 
+    # def abrir_sistema_principal(usuario):
+    #     nome = usuario.get("nome", "usuário")
+    #     perfil = usuario.get("perfil", "")
+    #     messagebox.showinfo(
+    #         "Login realizado",
+    #         f"Bem-vindo(a), {nome}!\nPerfil: {perfil}\n\nA tela principal ainda não foi conectada."
+    #     )
+
     def abrir_sistema_principal(usuario):
-        nome = usuario.get("nome", "usuário")
-        perfil = usuario.get("perfil", "")
-        messagebox.showinfo(
-            "Login realizado",
-            f"Bem-vindo(a), {nome}!\nPerfil: {perfil}\n\nA tela principal ainda não foi conectada."
-        )
+        from views.dashboard_view import abrir_dashboard
+        abrir_dashboard(usuario)
 
     def fazer_login(event=None):
         limpar_erros()
