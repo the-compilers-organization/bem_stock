@@ -4,7 +4,6 @@ from tkinter import messagebox
 from controllers.produto_controller import (
     listar_produtos,
     buscar_produtos_por_nome,
-    filtrar_produtos_por_categoria,
     excluir_produto
 )
 
@@ -31,15 +30,16 @@ class ProdutoView(ctk.CTkFrame):
         self.combo_categoria = None
         self.lista_container = None
 
+        # pesos das colunas para alinhar cabeçalho e linhas
         self.colunas_tabela = [
-            ("Produto", 330),
-            ("Categoria", 150),
-            ("Unidade", 150),
-            ("Estoque Atual", 140),
-            ("Estoque Mínimo", 150),
-            ("Status", 160),
-            ("Validade", 190),
-            ("Ações", 120),
+            ("Produto", 4),
+            ("Categoria", 2),
+            ("Unidade", 2),
+            ("Estoque Atual", 2),
+            ("Estoque Mínimo", 2),
+            ("Status", 2),
+            ("Validade", 2),
+            ("Ações", 2),
         ]
 
         self.criar_interface()
@@ -70,8 +70,8 @@ class ProdutoView(ctk.CTkFrame):
         self.master.mostrar_cadastro_produto(self.usuario, produto)
 
     def configurar_colunas_grid(self, frame):
-        for i, (_, largura) in enumerate(self.colunas_tabela):
-            frame.grid_columnconfigure(i, minsize=largura, weight=0)
+        for i, (_, peso) in enumerate(self.colunas_tabela):
+            frame.grid_columnconfigure(i, weight=peso, uniform="produto_cols")
 
     def carregar_produtos(self, produtos=None):
         for widget in self.lista_container.winfo_children():
@@ -96,19 +96,22 @@ class ProdutoView(ctk.CTkFrame):
 
     def criar_cabecalho_tabela(self):
         cabecalho = ctk.CTkFrame(self.lista_container, fg_color="transparent")
-        cabecalho.pack(fill="x", padx=12, pady=(0, 8))
+        cabecalho.pack(fill="x", expand=True, padx=14, pady=(0, 8))
 
         self.configurar_colunas_grid(cabecalho)
 
         for i, (titulo, _) in enumerate(self.colunas_tabela):
-            label = ctk.CTkLabel(
+            anchor = "w"
+            if titulo in ("Estoque Atual", "Estoque Mínimo", "Ações"):
+                anchor = "center"
+
+            ctk.CTkLabel(
                 cabecalho,
                 text=titulo,
                 font=("Segoe UI", 13, "bold"),
                 text_color=self.cor_texto,
-                anchor="w"
-            )
-            label.grid(row=0, column=i, sticky="w", padx=(0, 10))
+                anchor=anchor
+            ).grid(row=0, column=i, sticky="ew", padx=10)
 
     def obter_estilo_status(self, produto):
         status = produto.get("status_estoque", "Normal")
@@ -150,16 +153,17 @@ class ProdutoView(ctk.CTkFrame):
         linha = ctk.CTkFrame(
             self.lista_container,
             fg_color="#ffffff",
-            corner_radius=10,
+            corner_radius=12,
             border_width=1,
             border_color="#eeeeee"
         )
-        linha.pack(fill="x", padx=12, pady=6)
+        linha.pack(fill="x", expand=True, padx=14, pady=6)
 
         self.configurar_colunas_grid(linha)
 
+        # Produto
         frame_produto = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_produto.grid(row=0, column=0, sticky="w", padx=(12, 10), pady=12)
+        frame_produto.grid(row=0, column=0, sticky="ew", padx=10, pady=14)
 
         ctk.CTkLabel(
             frame_produto,
@@ -177,41 +181,46 @@ class ProdutoView(ctk.CTkFrame):
             anchor="w"
         ).pack(anchor="w")
 
+        # Categoria
         ctk.CTkLabel(
             linha,
             text=produto.get("categoria", "-"),
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
             anchor="w"
-        ).grid(row=0, column=1, sticky="w", padx=(0, 10), pady=12)
+        ).grid(row=0, column=1, sticky="ew", padx=10, pady=14)
 
+        # Unidade
         ctk.CTkLabel(
             linha,
             text=(produto.get("unidade_medida", "-") or "-").title(),
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
             anchor="w"
-        ).grid(row=0, column=2, sticky="w", padx=(0, 10), pady=12)
+        ).grid(row=0, column=2, sticky="ew", padx=10, pady=14)
 
+        # Estoque atual
         ctk.CTkLabel(
             linha,
             text=str(produto.get("estoque_atual", 0)),
             font=("Segoe UI", 13, "bold"),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=3, sticky="w", padx=(0, 10), pady=12)
+            anchor="center"
+        ).grid(row=0, column=3, sticky="ew", padx=10, pady=14)
 
+        # Estoque mínimo
         ctk.CTkLabel(
             linha,
             text=str(produto.get("estoque_minimo", 0)),
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=4, sticky="w", padx=(0, 10), pady=12)
+            anchor="center"
+        ).grid(row=0, column=4, sticky="ew", padx=10, pady=14)
 
+        # Status
         cor_status, cor_texto_status = self.obter_estilo_status(produto)
         frame_status = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_status.grid(row=0, column=5, sticky="w", padx=(0, 10), pady=12)
+        frame_status.grid(row=0, column=5, sticky="ew", padx=10, pady=14)
 
         ctk.CTkLabel(
             frame_status,
@@ -220,13 +229,14 @@ class ProdutoView(ctk.CTkFrame):
             text_color=cor_texto_status,
             fg_color=cor_status,
             corner_radius=16,
-            width=125,
-            height=28
-        ).pack(anchor="w")
+            width=130,
+            height=30
+        ).pack(anchor="center")
 
+        # Validade
         cor_validade, cor_texto_validade = self.obter_estilo_validade(produto)
         frame_validade = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_validade.grid(row=0, column=6, sticky="w", padx=(0, 10), pady=12)
+        frame_validade.grid(row=0, column=6, sticky="ew", padx=10, pady=14)
 
         texto_validade = self.formatar_validade(produto)
 
@@ -239,25 +249,29 @@ class ProdutoView(ctk.CTkFrame):
                 fg_color=cor_validade,
                 corner_radius=16,
                 width=150,
-                height=28
-            ).pack(anchor="w")
+                height=30
+            ).pack(anchor="center")
         else:
             ctk.CTkLabel(
                 frame_validade,
                 text=texto_validade,
                 font=("Segoe UI", 13),
                 text_color=self.cor_texto,
-                anchor="w"
-            ).pack(anchor="w")
+                anchor="center"
+            ).pack(anchor="center")
 
+        # Ações
         frame_acoes = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_acoes.grid(row=0, column=7, sticky="w", padx=(0, 10), pady=12)
+        frame_acoes.grid(row=0, column=7, sticky="ew", padx=10, pady=14)
+
+        container_acoes = ctk.CTkFrame(frame_acoes, fg_color="transparent")
+        container_acoes.pack(anchor="center")
 
         btn_editar = ctk.CTkButton(
-            frame_acoes,
+            container_acoes,
             text="✎",
-            width=34,
-            height=34,
+            width=36,
+            height=36,
             corner_radius=8,
             fg_color="#ffffff",
             hover_color="#f3f4f6",
@@ -269,10 +283,10 @@ class ProdutoView(ctk.CTkFrame):
         btn_editar.pack(side="left", padx=(0, 8))
 
         btn_excluir = ctk.CTkButton(
-            frame_acoes,
+            container_acoes,
             text="🗑",
-            width=34,
-            height=34,
+            width=36,
+            height=36,
             corner_radius=8,
             fg_color="#ffffff",
             hover_color="#fef2f2",
@@ -310,10 +324,7 @@ class ProdutoView(ctk.CTkFrame):
                 produtos = buscar_produtos_por_nome(termo)
 
             if categoria and categoria != "Todas":
-                produtos = [
-                    p for p in produtos
-                    if p.get("categoria") == categoria
-                ]
+                produtos = [p for p in produtos if p.get("categoria") == categoria]
 
             self.carregar_produtos(produtos)
 
