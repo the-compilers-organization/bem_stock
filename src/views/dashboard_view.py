@@ -2,6 +2,9 @@ import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
 
+from controllers.produto_controller import listar_produtos
+from controllers.movimentacao_controller import listar_historico
+
 
 class DashboardView(ctk.CTkFrame):
     def __init__(self, master, usuario):
@@ -32,16 +35,43 @@ class DashboardView(ctk.CTkFrame):
             self.master.mostrar_login()
 
     def abrir_produtos(self):
-        messagebox.showinfo("Produtos", "Tela de produtos ainda será conectada.")
+        self.master.mostrar_produto(self.usuario)
 
     def abrir_movimentacoes(self):
-        messagebox.showinfo("Movimentações", "Tela de movimentações ainda será conectada.")
+        self.master.mostrar_movimentacao(self.usuario)
 
     def abrir_usuarios(self):
         messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
 
     def abrir_relatorios(self):
         messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
+
+    def obter_indicadores(self):
+        try:
+            produtos = listar_produtos()
+            historico = listar_historico()
+
+            total_produtos = len(produtos)
+            total_movimentacoes = len(historico)
+
+            total_alimentos = len([p for p in produtos if p["categoria"] == "Alimentos"])
+            total_limpeza = len([p for p in produtos if p["categoria"] == "Limpeza"])
+            total_higiene = len([p for p in produtos if p["categoria"] == "Higiene Pessoal"])
+
+        except Exception:
+            total_produtos = 0
+            total_movimentacoes = 0
+            total_alimentos = 0
+            total_limpeza = 0
+            total_higiene = 0
+
+        return {
+            "total_produtos": total_produtos,
+            "total_movimentacoes": total_movimentacoes,
+            "total_alimentos": total_alimentos,
+            "total_limpeza": total_limpeza,
+            "total_higiene": total_higiene
+        }
 
     def criar_card_resumo(self, master, coluna, titulo, valor, subtitulo):
         card = ctk.CTkFrame(
@@ -77,9 +107,8 @@ class DashboardView(ctk.CTkFrame):
         ).pack(anchor="w", padx=20, pady=(5, 0))
 
     def criar_interface(self):
-        # =========================
-        # SIDEBAR
-        # =========================
+        indicadores = self.obter_indicadores()
+
         frame_sidebar = ctk.CTkFrame(
             self,
             width=260,
@@ -91,18 +120,12 @@ class DashboardView(ctk.CTkFrame):
         frame_sidebar.pack(side="left", fill="y")
         frame_sidebar.pack_propagate(False)
 
-        # =========================
-        # CONTEÚDO PRINCIPAL
-        # =========================
         frame_conteudo = ctk.CTkFrame(
             self,
             fg_color="transparent"
         )
         frame_conteudo.pack(side="left", fill="both", expand=True, padx=20, pady=20)
 
-        # =========================
-        # LOGO + TÍTULO DA SIDEBAR
-        # =========================
         frame_logo = ctk.CTkFrame(
             frame_sidebar,
             fg_color="transparent"
@@ -147,9 +170,6 @@ class DashboardView(ctk.CTkFrame):
             text_color=self.cor_texto_secundario
         ).grid(row=1, column=1, sticky="w")
 
-        # =========================
-        # DADOS DO USUÁRIO
-        # =========================
         ctk.CTkLabel(
             frame_sidebar,
             text=f"Usuário: {self.nome_usuario}",
@@ -164,10 +184,7 @@ class DashboardView(ctk.CTkFrame):
             text_color=self.cor_texto_secundario
         ).pack(anchor="w", padx=20, pady=(0, 25))
 
-        # =========================
-        # MENU LATERAL
-        # =========================
-        btn_dashboard = ctk.CTkButton(
+        ctk.CTkButton(
             frame_sidebar,
             text="Dashboard",
             height=42,
@@ -176,10 +193,9 @@ class DashboardView(ctk.CTkFrame):
             hover_color=self.cor_roxo_hover,
             text_color="#ffffff",
             font=("Segoe UI", 14, "bold")
-        )
-        btn_dashboard.pack(fill="x", padx=20, pady=6)
+        ).pack(fill="x", padx=20, pady=6)
 
-        btn_produtos = ctk.CTkButton(
+        ctk.CTkButton(
             frame_sidebar,
             text="Produtos",
             height=42,
@@ -191,10 +207,9 @@ class DashboardView(ctk.CTkFrame):
             border_color=self.cor_borda,
             font=("Segoe UI", 14, "bold"),
             command=self.abrir_produtos
-        )
-        btn_produtos.pack(fill="x", padx=20, pady=6)
+        ).pack(fill="x", padx=20, pady=6)
 
-        btn_movimentacoes = ctk.CTkButton(
+        ctk.CTkButton(
             frame_sidebar,
             text="Movimentações",
             height=42,
@@ -206,11 +221,10 @@ class DashboardView(ctk.CTkFrame):
             border_color=self.cor_borda,
             font=("Segoe UI", 14, "bold"),
             command=self.abrir_movimentacoes
-        )
-        btn_movimentacoes.pack(fill="x", padx=20, pady=6)
+        ).pack(fill="x", padx=20, pady=6)
 
         if self.perfil_usuario == "admin":
-            btn_usuarios = ctk.CTkButton(
+            ctk.CTkButton(
                 frame_sidebar,
                 text="Usuários",
                 height=42,
@@ -222,10 +236,9 @@ class DashboardView(ctk.CTkFrame):
                 border_color=self.cor_borda,
                 font=("Segoe UI", 14, "bold"),
                 command=self.abrir_usuarios
-            )
-            btn_usuarios.pack(fill="x", padx=20, pady=6)
+            ).pack(fill="x", padx=20, pady=6)
 
-        btn_relatorios = ctk.CTkButton(
+        ctk.CTkButton(
             frame_sidebar,
             text="Relatórios",
             height=42,
@@ -237,10 +250,9 @@ class DashboardView(ctk.CTkFrame):
             border_color=self.cor_borda,
             font=("Segoe UI", 14, "bold"),
             command=self.abrir_relatorios
-        )
-        btn_relatorios.pack(fill="x", padx=20, pady=6)
+        ).pack(fill="x", padx=20, pady=6)
 
-        btn_sair = ctk.CTkButton(
+        ctk.CTkButton(
             frame_sidebar,
             text="Sair",
             height=42,
@@ -252,12 +264,8 @@ class DashboardView(ctk.CTkFrame):
             border_color="#efcaca",
             font=("Segoe UI", 14, "bold"),
             command=self.sair
-        )
-        btn_sair.pack(side="bottom", fill="x", padx=20, pady=25)
+        ).pack(side="bottom", fill="x", padx=20, pady=25)
 
-        # =========================
-        # TOPO DO CONTEÚDO
-        # =========================
         frame_topo = ctk.CTkFrame(
             frame_conteudo,
             height=90,
@@ -283,33 +291,36 @@ class DashboardView(ctk.CTkFrame):
             text_color=self.cor_texto_secundario
         ).pack(anchor="w", padx=25, pady=(2, 0))
 
-        # =========================
-        # CARDS DE RESUMO
-        # =========================
         frame_cards = ctk.CTkFrame(frame_conteudo, fg_color="transparent")
         frame_cards.pack(fill="x", pady=(0, 20))
 
-        frame_cards.grid_columnconfigure((0, 1, 2), weight=1)
+        frame_cards.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         self.criar_card_resumo(
             frame_cards, 0,
-            "Produtos cadastrados", 0,
+            "Produtos cadastrados",
+            indicadores["total_produtos"],
             "Total atual no sistema"
         )
         self.criar_card_resumo(
             frame_cards, 1,
-            "Movimentações hoje", 0,
-            "Entradas e saídas do dia"
+            "Movimentações",
+            indicadores["total_movimentacoes"],
+            "Registros realizados"
         )
         self.criar_card_resumo(
             frame_cards, 2,
-            "Usuários ativos", 1,
-            "Acessando o sistema"
+            "Alimentos",
+            indicadores["total_alimentos"],
+            "Produtos dessa categoria"
+        )
+        self.criar_card_resumo(
+            frame_cards, 3,
+            "Limpeza + Higiene",
+            indicadores["total_limpeza"] + indicadores["total_higiene"],
+            "Produtos cadastrados"
         )
 
-        # =========================
-        # ÁREA CENTRAL
-        # =========================
         frame_central = ctk.CTkFrame(
             frame_conteudo,
             corner_radius=15,
@@ -357,7 +368,7 @@ class DashboardView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             card_atalho_1,
-            text="Cadastre, edite e acompanhe os produtos do estoque.",
+            text="Cadastre, edite e acompanhe os produtos do sistema.",
             font=("Segoe UI", 13),
             text_color=self.cor_texto_secundario,
             justify="left"
@@ -395,7 +406,11 @@ class DashboardView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             card_atalho_2,
-            text="Controle entradas e saídas dos itens do estoque.",
+            text=(
+                f"Total de movimentações: {indicadores['total_movimentacoes']}\n"
+                f"Alimentos cadastrados: {indicadores['total_alimentos']}\n"
+                f"Limpeza: {indicadores['total_limpeza']} | Higiene: {indicadores['total_higiene']}"
+            ),
             font=("Segoe UI", 13),
             text_color=self.cor_texto_secundario,
             justify="left"

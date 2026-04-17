@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from database.connection import conectar
 from models.produto import criar_produto, produto_para_tupla
@@ -6,19 +6,156 @@ from utils.validacoes import (
     campo_preenchido,
     categoria_valida,
     quantidade_valida,
-    data_valida
+    unidade_medida_valida
 )
+from utils.formatadores import formatar_data_para_exibicao
+
+
+def _obter_data_hoje():
+    return datetime.now().date()
+
+
+def _calcular_estoque_atual(cursor, id_produto):
+    cursor.execute(
+        """
+        SELECT
+            COALESCE(SUM(
+                CASE
+                    WHEN tipo_movimentacao = 'entrada' THEN quantidade
+                    WHEN tipo_movimentacao = 'saida' THEN -quantidade
+                    ELSE 0
+                END
+            ), 0) AS estoque_atual
+        FROM movimentacoes
+        WHERE id_produto = ?
+        """,
+        (id_produto,)
+    )
+    resultado = cursor.fetchone()
+    return resultado["estoque_atual"] if resultado and resultado["estoque_atual"] is not None else 0
+
+
+def _obter_validade_mais_proxima(cursor, id_produto):
+    cursor.execute(
+        """
+        SELECT data_validade
+        FROM movimentacoes
+        WHERE id_produto = ?
+          AND tipo_movimentacao = 'entrada'
+          AND data_validade IS NOT NULL
+          AND TRIM(data_validade) <> ''
+        ORDER BY date(data_validade) ASC
+        LIMIT 1
+        """,
+        (id_produto,)
+    )
+    resultado = cursor.fetchone()
+    return resultado["data_validade"] if resultado else None
+
+
+def _calcular_status_estoque(estoque_atual, estoque_minimo):
+    if estoque_atual <= 0:
+        return "Esgotado"
+
+    if estoque_minimo <= 0:
+        return "Normal"
+
+    if estoque_atual < estoque_minimo:
+        return "Baixo"
+
+    if estoque_atual <= estoque_minimo + 5:
+        return "Próximo ao Mínimo"
+
+    return "Normal"
+
+
+def _calcular_status_validade(data_validade):
+    if not data_validade:
+        return {
+            "validade_exibicao": "-",
+            "status_validade": "normal",
+            "dias_para_vencer": None
+        }
+
+    try:
+        data_validade_date = datetime.strptime(data_validade, "%Y-%m-%d").date()
+    except ValueError:
+        return {
+            "validade_exibicao": data_validade,
+            "status_validade": "normal",
+            "dias_para_vencer": None
+        }
+
+    hoje = _obter_data_hoje()
+    dias_para_vencer = (data_validade_date - hoje).days
+
+    if dias_para_vencer < 0:
+        return {
+            "validade_exibicao": "Vencido",
+            "status_validade": "vencido",
+            "dias_para_vencer": dias_para_vencer
+        }
+
+    if dias_para_vencer <= 30:
+        return {
+            "validade_exibicao": formatar_data_para_exibicao(data_validade),
+            "status_validade": "proximo",
+            "dias_para_vencer": dias_para_vencer
+        }
+
+    return {
+        "validade_exibicao": formatar_data_para_exibicao(data_validade),
+        "status_validade": "normal",
+        "dias_para_vencer": dias_para_vencer
+    }
+
+
+def _enriquecer_produto(cursor, produto):
+    produto_dict = dict(produto)
+
+    estoque_atual = _calcular_estoque_atual(cursor, produto_dict["id_produto"])
+    data_validade = _obter_validade_mais_proxima(cursor, produto_dict["id_produto"])
+
+    produto_dict["estoque_atual"] = estoque_atual
+    produto_dict["status_estoque"] = _calcular_status_estoque(
+        estoque_atual,
+        produto_dict["estoque_minimo"]
+    )
+
+    info_validade = _calcular_status_validade(data_validade)
+    produto_dict["validade_exibicao"] = info_validade["validade_exibicao"]
+    produto_dict["status_validade"] = info_validade["status_validade"]
+    produto_dict["dias_para_vencer"] = info_validade["dias_para_vencer"]
+
+    return produto_dict
+
+
+def _listar_produtos_base(where_clause="", params=()):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    query = f"""
+        SELECT *
+        FROM produtos
+        {where_clause}
+        ORDER BY nome
+    """
+
+    cursor.execute(query, params)
+    produtos = cursor.fetchall()
+
+    resultado = [_enriquecer_produto(cursor, produto) for produto in produtos]
+
+    conexao.close()
+    return resultado
 
 
 def cadastrar_produto(
     nome,
-    descricao,
     categoria,
-    lote,
-    quantidade_atual,
     unidade_medida,
     estoque_minimo,
-    data_validade
+    descricao
 ):
     if not campo_preenchido(nome):
         return False, "O nome do produto é obrigatório."
@@ -29,142 +166,76 @@ def cadastrar_produto(
     if not campo_preenchido(unidade_medida):
         return False, "A unidade de medida é obrigatória."
 
-    if not quantidade_valida(quantidade_atual):
-        return False, "A quantidade atual deve ser um número inteiro maior ou igual a zero."
+    if not unidade_medida_valida(unidade_medida):
+        return False, "Unidade de medida inválida."
 
     if not quantidade_valida(estoque_minimo):
         return False, "O estoque mínimo deve ser um número inteiro maior ou igual a zero."
 
-    if not data_valida(data_validade):
-        return False, "A data de validade deve estar no formato YYYY-MM-DD."
-
-    if lote is None:
-        lote = ""
-
     produto = criar_produto(
-        nome=nome,
-        descricao=descricao,
+        nome=nome.strip(),
         categoria=categoria,
-        lote=lote,
-        quantidade_atual=quantidade_atual,
         unidade_medida=unidade_medida,
         estoque_minimo=estoque_minimo,
-        data_validade=data_validade
+        descricao=descricao.strip() if descricao else ""
     )
 
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute(
-        """
-        INSERT INTO produtos (
-            nome,
-            descricao,
-            categoria,
-            lote,
-            quantidade_atual,
-            unidade_medida,
-            estoque_minimo,
-            data_validade
+    try:
+        cursor.execute(
+            """
+            INSERT INTO produtos (
+                nome,
+                categoria,
+                unidade_medida,
+                estoque_minimo,
+                descricao
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            produto_para_tupla(produto)
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        produto_para_tupla(produto)
-    )
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+        return True, "Produto cadastrado com sucesso."
 
-    return True, "Produto cadastrado com sucesso."
+    except Exception as e:
+        return False, f"Erro ao cadastrar produto: {str(e)}"
+
+    finally:
+        conexao.close()
 
 
 def listar_produtos():
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        ORDER BY nome
-        """
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
-
-
-def buscar_produtos_por_nome(nome):
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE nome LIKE ?
-        ORDER BY nome
-        """,
-        (f"%{nome}%",)
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
-
-
-def buscar_produtos_por_lote(lote):
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE lote LIKE ?
-        ORDER BY nome
-        """,
-        (f"%{lote}%",)
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
+    return _listar_produtos_base()
 
 
 def buscar_produto_por_id(id_produto):
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE id_produto = ?
-        """,
+    produtos = _listar_produtos_base(
+        "WHERE id_produto = ?",
         (id_produto,)
     )
-    produto = cursor.fetchone()
-
-    conexao.close()
-
-    if produto is None:
+    if not produtos:
         return None
+    return produtos[0]
 
-    return dict(produto)
+
+def buscar_produtos_por_nome(nome):
+    return _listar_produtos_base(
+        "WHERE nome LIKE ?",
+        (f"%{nome.strip()}%",)
+    )
 
 
 def atualizar_produto(
     id_produto,
     nome,
-    descricao,
     categoria,
-    lote,
-    quantidade_atual,
     unidade_medida,
     estoque_minimo,
-    data_validade
+    descricao
 ):
     if not campo_preenchido(nome):
         return False, "O nome do produto é obrigatório."
@@ -175,17 +246,11 @@ def atualizar_produto(
     if not campo_preenchido(unidade_medida):
         return False, "A unidade de medida é obrigatória."
 
-    if not quantidade_valida(quantidade_atual):
-        return False, "A quantidade atual deve ser um número inteiro maior ou igual a zero."
+    if not unidade_medida_valida(unidade_medida):
+        return False, "Unidade de medida inválida."
 
     if not quantidade_valida(estoque_minimo):
         return False, "O estoque mínimo deve ser um número inteiro maior ou igual a zero."
-
-    if not data_valida(data_validade):
-        return False, "A data de validade deve estar no formato YYYY-MM-DD."
-
-    if lote is None:
-        lote = ""
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -200,30 +265,36 @@ def atualizar_produto(
         conexao.close()
         return False, "Produto não encontrado."
 
-    cursor.execute(
-        """
-        UPDATE produtos
-        SET nome = ?, descricao = ?, categoria = ?, lote = ?,
-            quantidade_atual = ?, unidade_medida = ?, estoque_minimo = ?, data_validade = ?
-        WHERE id_produto = ?
-        """,
-        (
-            nome,
-            descricao,
-            categoria,
-            lote,
-            quantidade_atual,
-            unidade_medida,
-            estoque_minimo,
-            data_validade,
-            id_produto
+    try:
+        cursor.execute(
+            """
+            UPDATE produtos
+            SET
+                nome = ?,
+                categoria = ?,
+                unidade_medida = ?,
+                estoque_minimo = ?,
+                descricao = ?
+            WHERE id_produto = ?
+            """,
+            (
+                nome.strip(),
+                categoria,
+                unidade_medida,
+                estoque_minimo,
+                descricao.strip() if descricao else "",
+                id_produto
+            )
         )
-    )
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+        return True, "Produto atualizado com sucesso."
 
-    return True, "Produto atualizado com sucesso."
+    except Exception as e:
+        return False, f"Erro ao atualizar produto: {str(e)}"
+
+    finally:
+        conexao.close()
 
 
 def excluir_produto(id_produto):
@@ -250,98 +321,27 @@ def excluir_produto(id_produto):
         conexao.close()
         return False, "Não é possível excluir um produto que possui movimentações registradas."
 
-    cursor.execute(
-        "DELETE FROM produtos WHERE id_produto = ?",
-        (id_produto,)
-    )
+    try:
+        cursor.execute(
+            "DELETE FROM produtos WHERE id_produto = ?",
+            (id_produto,)
+        )
 
-    conexao.commit()
-    conexao.close()
+        conexao.commit()
+        return True, "Produto excluído com sucesso."
 
-    return True, "Produto excluído com sucesso."
+    except Exception as e:
+        return False, f"Erro ao excluir produto: {str(e)}"
+
+    finally:
+        conexao.close()
 
 
 def filtrar_produtos_por_categoria(categoria):
     if not categoria_valida(categoria):
         return []
 
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE categoria = ?
-        ORDER BY nome
-        """,
+    return _listar_produtos_base(
+        "WHERE categoria = ?",
         (categoria,)
     )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
-
-
-def listar_produtos_estoque_baixo():
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE quantidade_atual < estoque_minimo
-        ORDER BY nome
-        """
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
-
-
-def listar_produtos_vencidos():
-    hoje = datetime.now().strftime("%Y-%m-%d")
-
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE data_validade < ?
-        ORDER BY data_validade
-        """,
-        (hoje,)
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]
-
-
-def listar_produtos_proximos_validade(dias=30):
-    hoje = datetime.now().date()
-    limite = hoje + timedelta(days=dias)
-
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM produtos
-        WHERE data_validade >= ? AND data_validade <= ?
-        ORDER BY data_validade
-        """,
-        (
-            hoje.strftime("%Y-%m-%d"),
-            limite.strftime("%Y-%m-%d")
-        )
-    )
-    produtos = cursor.fetchall()
-
-    conexao.close()
-    return [dict(produto) for produto in produtos]

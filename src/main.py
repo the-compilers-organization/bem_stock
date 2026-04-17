@@ -37,11 +37,17 @@
 # if __name__ == "__main__":
 #     main()
 
+
+import customtkinter as ctk
+
 from database.schema import inicializar_banco
 from views.login_view import LoginView
 from views.cadastro_usuario_view import CadastroUsuarioView
 from views.dashboard_view import DashboardView
-import customtkinter as ctk
+from views.produto_view import ProdutoView
+from views.cadastro_produto_view import CadastroProdutoView
+from views.movimentacao_view import MovimentacaoView
+from views.cadastro_movimentacao_view import CadastroMovimentacaoView
 
 
 class BemStockApp(ctk.CTk):
@@ -88,6 +94,34 @@ class BemStockApp(ctk.CTk):
         self.limpar_tela()
         self.title("BemStock - Dashboard")
         self.frame_atual = DashboardView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_produto(self, usuario):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Produtos")
+        self.frame_atual = ProdutoView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_cadastro_produto(self, usuario, produto=None):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Cadastro de Produto")
+        self.frame_atual = CadastroProdutoView(self, usuario, produto)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_movimentacao(self, usuario):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Movimentações")
+        self.frame_atual = MovimentacaoView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_cadastro_movimentacao(self, usuario):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Cadastro de Movimentação")
+        self.frame_atual = CadastroMovimentacaoView(self, usuario)
         self.frame_atual.pack(fill="both", expand=True)
 
 

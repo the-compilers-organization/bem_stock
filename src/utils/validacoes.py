@@ -3,7 +3,8 @@ from datetime import datetime
 from utils.constantes import (
     CATEGORIAS_PREDEFINIDAS,
     PERFIS_USUARIO,
-    TIPOS_MOVIMENTACAO
+    UNIDADES_MEDIDA,
+    DESTINOS_MOVIMENTACAO
 )
 
 
@@ -34,8 +35,12 @@ def categoria_valida(categoria):
     return categoria in CATEGORIAS_PREDEFINIDAS
 
 
-def tipo_movimentacao_valido(tipo_movimentacao):
-    return tipo_movimentacao in TIPOS_MOVIMENTACAO
+def unidade_medida_valida(unidade_medida):
+    return unidade_medida in UNIDADES_MEDIDA
+
+
+def destino_valido(destino):
+    return destino in DESTINOS_MOVIMENTACAO
 
 
 def quantidade_valida(quantidade):
