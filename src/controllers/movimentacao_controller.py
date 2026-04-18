@@ -40,7 +40,26 @@ def _enriquecer_registros(registros):
     return resultado
 
 
-def _buscar_historico(where_clause="", params=()):
+def _contar_historico(where_clause="", params=()):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    query = f"""
+        SELECT COUNT(*) AS total
+        FROM movimentacoes m
+        JOIN produtos p ON m.id_produto = p.id_produto
+        JOIN usuarios u ON m.id_usuario = u.id_usuario
+        {where_clause}
+    """
+
+    cursor.execute(query, params)
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    return resultado["total"] if resultado else 0
+
+
+def _buscar_historico(where_clause="", params=(), limite=None, offset=None):
     conexao = conectar()
     cursor = conexao.cursor()
 
@@ -68,7 +87,17 @@ def _buscar_historico(where_clause="", params=()):
         ORDER BY m.data_movimentacao DESC, m.id_movimentacao DESC
     """
 
-    cursor.execute(query, params)
+    parametros = list(params)
+
+    if limite is not None:
+        query += " LIMIT ?"
+        parametros.append(limite)
+
+        if offset is not None:
+            query += " OFFSET ?"
+            parametros.append(offset)
+
+    cursor.execute(query, tuple(parametros))
     registros = cursor.fetchall()
     conexao.close()
 
@@ -270,8 +299,18 @@ def registrar_saida(
         conexao.close()
 
 
-def listar_historico():
-    return _buscar_historico()
+def listar_historico(pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    offset = (pagina - 1) * itens_por_pagina
+    total = _contar_historico()
+    registros = _buscar_historico(
+        limite=itens_por_pagina,
+        offset=offset
+    )
+
+    return registros, total
 
 
 def buscar_movimentacao_por_id(id_movimentacao):
@@ -284,63 +323,146 @@ def buscar_movimentacao_por_id(id_movimentacao):
     return registros[0]
 
 
-def filtrar_historico_por_produto(id_produto):
-    return _buscar_historico(
-        "WHERE m.id_produto = ?",
-        (id_produto,)
+def filtrar_historico_por_produto(id_produto, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.id_produto = ?"
+    params = (id_produto,)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_categoria(categoria):
+
+def filtrar_historico_por_categoria(categoria, pagina=1, itens_por_pagina=10):
     if not categoria_valida(categoria):
-        return []
+        return [], 0
 
-    return _buscar_historico(
-        "WHERE m.categoria = ?",
-        (categoria,)
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.categoria = ?"
+    params = (categoria,)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_destino(destino):
+
+def filtrar_historico_por_destino(destino, pagina=1, itens_por_pagina=10):
     if not destino_valido(destino):
-        return []
+        return [], 0
 
-    return _buscar_historico(
-        "WHERE m.destino = ?",
-        (destino,)
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.destino = ?"
+    params = (destino,)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_periodo(data_inicial, data_final):
+
+def filtrar_historico_por_periodo(data_inicial, data_final, pagina=1, itens_por_pagina=10):
     if not data_valida(data_inicial) or not data_valida(data_final):
-        return []
+        return [], 0
 
-    return _buscar_historico(
-        "WHERE date(m.data_movimentacao) BETWEEN ? AND ?",
-        (data_inicial, data_final)
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE date(m.data_movimentacao) BETWEEN ? AND ?"
+    params = (data_inicial, data_final)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_fornecedor(fornecedor):
-    return _buscar_historico(
-        "WHERE m.fornecedor LIKE ?",
-        (f"%{fornecedor.strip()}%",)
+
+def filtrar_historico_por_fornecedor(fornecedor, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.fornecedor LIKE ?"
+    params = (f"%{fornecedor.strip()}%",)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_lote(numero_lote):
-    return _buscar_historico(
-        "WHERE m.numero_lote LIKE ?",
-        (f"%{numero_lote.strip()}%",)
+
+def filtrar_historico_por_lote(numero_lote, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.numero_lote LIKE ?"
+    params = (f"%{numero_lote.strip()}%",)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total
 
-def filtrar_historico_por_tipo(tipo_movimentacao):
+
+def filtrar_historico_por_tipo(tipo_movimentacao, pagina=1, itens_por_pagina=10):
     if tipo_movimentacao not in ("entrada", "saida"):
-        return []
+        return [], 0
 
-    return _buscar_historico(
-        "WHERE m.tipo_movimentacao = ?",
-        (tipo_movimentacao,)
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE m.tipo_movimentacao = ?"
+    params = (tipo_movimentacao,)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, params)
+    registros = _buscar_historico(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
 
+    return registros, total

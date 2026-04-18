@@ -1,9 +1,10 @@
+import math
 import customtkinter as ctk
 from tkinter import messagebox
 
 from controllers.produto_controller import (
     listar_produtos,
-    buscar_produtos_por_nome,
+    filtrar_produtos,
     excluir_produto
 )
 
@@ -92,6 +93,14 @@ class ProdutoView(ctk.CTkFrame):
         self.entry_busca = None
         self.combo_categoria = None
         self.lista_container = None
+        self.label_paginacao = None
+        self.btn_anterior = None
+        self.btn_proxima = None
+
+        self.pagina_atual = 1
+        self.itens_por_pagina = 10
+        self.total_registros = 0
+        self.total_paginas = 1
 
         self.colunas_tabela = [
             ("Produto", 4, 260),
@@ -120,6 +129,9 @@ class ProdutoView(ctk.CTkFrame):
             "produto_descricao": 240,
             "categoria": 130,
             "unidade": 110,
+            "estoque_atual": 100,
+            "estoque_minimo": 100,
+            "status": 120,
             "validade": 150,
         }
 
@@ -189,12 +201,6 @@ class ProdutoView(ctk.CTkFrame):
     def abrir_usuarios(self):
         self.master.mostrar_usuario(self.usuario)
 
-    # def abrir_usuarios(self):
-    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
-
-    # def abrir_relatorios(self):
-    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
-
     def sair(self):
         confirmar = messagebox.askyesno("Sair", "Deseja realmente sair do sistema?")
         if confirmar:
@@ -214,32 +220,79 @@ class ProdutoView(ctk.CTkFrame):
                 weight=peso,
                 minsize=largura_minima
             )
-        frame.grid_rowconfigure(0, weight=1)
 
-    def carregar_produtos(self, produtos=None):
+    def obter_filtros_atuais(self):
+        termo = self.entry_busca.get().strip() if self.entry_busca else ""
+        categoria = self.combo_categoria.get().strip() if self.combo_categoria else "Todas"
+        return termo, categoria
+
+    def atualizar_controles_paginacao(self):
+        if self.total_registros <= 0:
+            self.total_paginas = 1
+        else:
+            self.total_paginas = math.ceil(self.total_registros / self.itens_por_pagina)
+
+        if self.label_paginacao is not None:
+            self.label_paginacao.configure(
+                text=f"Página {self.pagina_atual} de {self.total_paginas}  •  {self.total_registros} produto(s)"
+            )
+
+        if self.btn_anterior is not None:
+            self.btn_anterior.configure(
+                state="normal" if self.pagina_atual > 1 else "disabled"
+            )
+
+        if self.btn_proxima is not None:
+            self.btn_proxima.configure(
+                state="normal" if self.pagina_atual < self.total_paginas else "disabled"
+            )
+
+    def carregar_produtos(self):
         for widget in self.lista_container.winfo_children():
             widget.destroy()
 
-        if produtos is None:
-            produtos = listar_produtos()
+        termo, categoria = self.obter_filtros_atuais()
 
-        if not produtos:
-            ctk.CTkLabel(
-                self.lista_container,
-                text="Nenhum produto encontrado.",
-                font=("Segoe UI", 14),
-                text_color=self.cor_texto_secundario
-            ).pack(pady=20)
-            return
+        try:
+            if termo or (categoria and categoria != "Todas"):
+                produtos, total = filtrar_produtos(
+                    nome=termo,
+                    categoria=categoria,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
+            else:
+                produtos, total = listar_produtos(
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
-        self.criar_cabecalho_tabela()
+            self.total_registros = total
 
-        for produto in produtos:
-            self.criar_linha_produto(produto)
+            if not produtos:
+                ctk.CTkLabel(
+                    self.lista_container,
+                    text="Nenhum produto encontrado.",
+                    font=("Segoe UI", 14),
+                    text_color=self.cor_texto_secundario
+                ).pack(pady=20)
+
+                self.atualizar_controles_paginacao()
+                return
+
+            self.criar_cabecalho_tabela()
+
+            for produto in produtos:
+                self.criar_linha_produto(produto)
+
+            self.atualizar_controles_paginacao()
+
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao carregar produtos: {str(e)}")
 
     def criar_cabecalho_tabela(self):
         cabecalho = ctk.CTkFrame(self.lista_container, fg_color="transparent")
-        cabecalho.pack(fill="x", expand=True, padx=14, pady=(0, 8))
+        cabecalho.pack(fill="x", padx=14, pady=(0, 8))
 
         self.configurar_colunas_grid(cabecalho)
 
@@ -305,7 +358,7 @@ class ProdutoView(ctk.CTkFrame):
             border_width=1,
             border_color="#eeeeee"
         )
-        linha.pack(fill="x", expand=True, padx=14, pady=6)
+        linha.pack(fill="x", padx=14, pady=6)
 
         self.configurar_colunas_grid(linha)
 
@@ -358,7 +411,8 @@ class ProdutoView(ctk.CTkFrame):
             font=("Segoe UI", 13, "bold"),
             text_color=self.cor_texto,
             anchor="center",
-            justify="center"
+            justify="center",
+            wraplength=self.wrap_celulas["estoque_atual"]
         ).grid(row=0, column=3, sticky="nsew", padx=10, pady=14)
 
         ctk.CTkLabel(
@@ -367,7 +421,8 @@ class ProdutoView(ctk.CTkFrame):
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
             anchor="center",
-            justify="center"
+            justify="center",
+            wraplength=self.wrap_celulas["estoque_minimo"]
         ).grid(row=0, column=4, sticky="nsew", padx=10, pady=14)
 
         cor_status, cor_texto_status = self.obter_estilo_status(produto)
@@ -382,7 +437,9 @@ class ProdutoView(ctk.CTkFrame):
             fg_color=cor_status,
             corner_radius=16,
             width=130,
-            height=30
+            height=30,
+            justify="center",
+            wraplength=self.wrap_celulas["status"]
         ).pack(anchor="center")
 
         cor_validade, cor_texto_validade = self.obter_estilo_validade(produto)
@@ -400,7 +457,9 @@ class ProdutoView(ctk.CTkFrame):
                 fg_color=cor_validade,
                 corner_radius=16,
                 width=150,
-                height=30
+                height=30,
+                justify="center",
+                wraplength=self.wrap_celulas["validade"]
             ).pack(anchor="center")
         else:
             ctk.CTkLabel(
@@ -426,9 +485,7 @@ class ProdutoView(ctk.CTkFrame):
             height=38,
             corner_radius=8,
             fg_color="#ffffff",
-            # hover_color="#f3f4f6",
             hover_color="#e4f2f7",
-            # text_color="#111111",
             text_color="#0000ff",
             border_width=0,
             font=("Segoe UI", 16),
@@ -466,32 +523,33 @@ class ProdutoView(ctk.CTkFrame):
 
         if sucesso:
             messagebox.showinfo("Sucesso", mensagem)
+
+            if self.pagina_atual > 1 and self.total_registros == 1:
+                self.pagina_atual -= 1
+
             self.carregar_produtos()
         else:
             messagebox.showerror("Erro", mensagem)
 
     def aplicar_filtros(self):
-        termo = self.entry_busca.get().strip()
-        categoria = self.combo_categoria.get().strip()
-
-        try:
-            produtos = listar_produtos()
-
-            if termo:
-                produtos = buscar_produtos_por_nome(termo)
-
-            if categoria and categoria != "Todas":
-                produtos = [p for p in produtos if p.get("categoria") == categoria]
-
-            self.carregar_produtos(produtos)
-
-        except Exception as e:
-            messagebox.showerror("Erro", f"Erro ao aplicar filtros: {str(e)}")
+        self.pagina_atual = 1
+        self.carregar_produtos()
 
     def limpar_filtros(self):
         self.entry_busca.delete(0, "end")
         self.combo_categoria.set("Todas")
+        self.pagina_atual = 1
         self.carregar_produtos()
+
+    def ir_para_pagina_anterior(self):
+        if self.pagina_atual > 1:
+            self.pagina_atual -= 1
+            self.carregar_produtos()
+
+    def ir_para_proxima_pagina(self):
+        if self.pagina_atual < self.total_paginas:
+            self.pagina_atual += 1
+            self.carregar_produtos()
 
     def criar_interface(self):
         frame_sidebar = ctk.CTkFrame(
@@ -612,20 +670,6 @@ class ProdutoView(ctk.CTkFrame):
                 font=("Segoe UI", 14, "bold"),
                 command=self.abrir_usuarios
             ).pack(fill="x", padx=20, pady=6)
-
-        # ctk.CTkButton(
-        #     frame_sidebar,
-        #     text="Relatórios",
-        #     height=42,
-        #     corner_radius=8,
-        #     fg_color="#ffffff",
-        #     hover_color=self.cor_hover_secundario,
-        #     text_color=self.cor_texto,
-        #     border_width=1,
-        #     border_color=self.cor_borda,
-        #     font=("Segoe UI", 14, "bold"),
-        #     command=self.abrir_relatorios
-        # ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
             frame_sidebar,
@@ -782,6 +826,47 @@ class ProdutoView(ctk.CTkFrame):
             frame_lista,
             fg_color="transparent"
         )
-        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
         self.lista_container = scroll
+
+        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+
+        self.btn_anterior = ctk.CTkButton(
+            frame_paginacao,
+            text="← Anterior",
+            width=120,
+            height=36,
+            corner_radius=8,
+            border_width=1,
+            border_color="#d0d0d0",
+            fg_color="#ffffff",
+            hover_color="#f5f5f5",
+            text_color="#1a1a1a",
+            font=("Segoe UI", 12, "bold"),
+            command=self.ir_para_pagina_anterior
+        )
+        self.btn_anterior.pack(side="left")
+
+        self.label_paginacao = ctk.CTkLabel(
+            frame_paginacao,
+            text="Página 1 de 1  •  0 produto(s)",
+            font=("Segoe UI", 13),
+            text_color=self.cor_texto_secundario
+        )
+        self.label_paginacao.pack(side="left", padx=20)
+
+        self.btn_proxima = ctk.CTkButton(
+            frame_paginacao,
+            text="Próxima →",
+            width=120,
+            height=36,
+            corner_radius=8,
+            fg_color=self.cor_roxo,
+            hover_color=self.cor_roxo_hover,
+            text_color="#ffffff",
+            font=("Segoe UI", 12, "bold"),
+            command=self.ir_para_proxima_pagina
+        )
+        self.btn_proxima.pack(side="right")

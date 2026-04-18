@@ -1,3 +1,4 @@
+import math
 import customtkinter as ctk
 from tkinter import messagebox
 from datetime import datetime
@@ -40,10 +41,18 @@ class MovimentacaoView(ctk.CTkFrame):
         self.entry_data_inicial = None
         self.entry_data_final = None
         self.cards_container = None
+        self.label_paginacao = None
+        self.btn_anterior = None
+        self.btn_proxima = None
 
         self.campos_datas = {}
         self.campos_datas_frames = {}
         self.calendario_popup = None
+
+        self.pagina_atual = 1
+        self.itens_por_pagina = 10
+        self.total_registros = 0
+        self.total_paginas = 1
 
         self.colunas_historico = [
             ("Data/Hora", 145),
@@ -55,6 +64,29 @@ class MovimentacaoView(ctk.CTkFrame):
             ("Responsável", 145),
             ("Observações", 180),
         ]
+
+        self.wrap_cabecalho = {
+            "Data/Hora": 120,
+            "Tipo": 100,
+            "Produto": 160,
+            "Categoria": 130,
+            "Quantidade": 100,
+            "Fornecedor / Destino": 170,
+            "Responsável": 130,
+            "Observações": 170,
+        }
+
+        self.wrap_celulas = {
+            "data": 120,
+            "hora": 120,
+            "tipo": 90,
+            "produto": 165,
+            "categoria": 135,
+            "quantidade": 100,
+            "fornecedor_destino": 180,
+            "responsavel": 135,
+            "observacoes": 170,
+        }
 
         self.criar_interface()
         self.carregar_historico()
@@ -122,12 +154,6 @@ class MovimentacaoView(ctk.CTkFrame):
     def abrir_usuarios(self):
         self.master.mostrar_usuario(self.usuario)
 
-    # def abrir_usuarios(self):
-    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
-
-    # def abrir_relatorios(self):
-    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
-
     def sair(self):
         confirmar = messagebox.askyesno("Sair", "Deseja realmente sair do sistema?")
         if confirmar:
@@ -139,14 +165,43 @@ class MovimentacaoView(ctk.CTkFrame):
 
     def configurar_colunas_grid(self, frame):
         for i, (_, largura) in enumerate(self.colunas_historico):
-            frame.grid_columnconfigure(i, minsize=largura, weight=0)
+            frame.grid_columnconfigure(i, minsize=largura, weight=1)
 
-    def carregar_historico(self, historico=None):
+    def atualizar_controles_paginacao(self):
+        if self.total_registros <= 0:
+            self.total_paginas = 1
+        else:
+            self.total_paginas = math.ceil(self.total_registros / self.itens_por_pagina)
+
+        if self.pagina_atual > self.total_paginas:
+            self.pagina_atual = self.total_paginas
+
+        if self.label_paginacao is not None:
+            self.label_paginacao.configure(
+                text=f"Página {self.pagina_atual} de {self.total_paginas}  •  {self.total_registros} movimentação(ões)"
+            )
+
+        if self.btn_anterior is not None:
+            self.btn_anterior.configure(
+                state="normal" if self.pagina_atual > 1 else "disabled"
+            )
+
+        if self.btn_proxima is not None:
+            self.btn_proxima.configure(
+                state="normal" if self.pagina_atual < self.total_paginas else "disabled"
+            )
+
+    def carregar_historico(self, historico=None, total=None):
         for widget in self.cards_container.winfo_children():
             widget.destroy()
 
         if historico is None:
-            historico = listar_historico()
+            historico, total = listar_historico(
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        self.total_registros = total if total is not None else len(historico)
 
         if not historico:
             ctk.CTkLabel(
@@ -155,12 +210,16 @@ class MovimentacaoView(ctk.CTkFrame):
                 font=("Segoe UI", 14),
                 text_color=self.cor_texto_secundario
             ).pack(pady=20)
+
+            self.atualizar_controles_paginacao()
             return
 
         self.criar_cabecalho_historico()
 
         for item in historico:
             self.criar_linha_movimentacao(item)
+
+        self.atualizar_controles_paginacao()
 
     def criar_cabecalho_historico(self):
         cabecalho = ctk.CTkFrame(
@@ -177,9 +236,11 @@ class MovimentacaoView(ctk.CTkFrame):
                 text=titulo,
                 font=("Segoe UI", 13, "bold"),
                 text_color=self.cor_texto,
-                anchor="w"
+                anchor="w",
+                justify="left",
+                wraplength=self.wrap_cabecalho.get(titulo, 120)
             )
-            label.grid(row=0, column=i, sticky="w", padx=(0, 10))
+            label.grid(row=0, column=i, sticky="nsew", padx=(0, 10))
 
     def criar_linha_movimentacao(self, item):
         linha = ctk.CTkFrame(
@@ -215,26 +276,30 @@ class MovimentacaoView(ctk.CTkFrame):
         quantidade = f"{item['quantidade']} {item['unidade_medida_produto']}"
 
         frame_data = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_data.grid(row=0, column=0, sticky="w", padx=(12, 10), pady=12)
+        frame_data.grid(row=0, column=0, sticky="nsew", padx=(12, 10), pady=12)
 
         ctk.CTkLabel(
             frame_data,
             text=data_parte,
             font=("Segoe UI", 13, "bold"),
             text_color=self.cor_texto,
-            anchor="w"
-        ).pack(anchor="w")
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["data"]
+        ).pack(anchor="w", fill="x")
 
         ctk.CTkLabel(
             frame_data,
             text=hora_parte,
             font=("Segoe UI", 12),
             text_color=self.cor_texto_secundario,
-            anchor="w"
-        ).pack(anchor="w")
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["hora"]
+        ).pack(anchor="w", fill="x")
 
         frame_tipo = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_tipo.grid(row=0, column=1, sticky="w", padx=(0, 10), pady=12)
+        frame_tipo.grid(row=0, column=1, sticky="nsew", padx=(0, 10), pady=12)
 
         badge = ctk.CTkLabel(
             frame_tipo,
@@ -243,9 +308,10 @@ class MovimentacaoView(ctk.CTkFrame):
             text_color="#ffffff",
             fg_color=cor_badge,
             corner_radius=20,
-            # width=100,
             width=70,
-            height=28
+            height=28,
+            justify="center",
+            wraplength=self.wrap_celulas["tipo"]
         )
         badge.pack(anchor="w")
 
@@ -254,40 +320,50 @@ class MovimentacaoView(ctk.CTkFrame):
             text=item["nome_produto"],
             font=("Segoe UI", 13, "bold"),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=2, sticky="w", padx=(0, 10), pady=12)
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["produto"]
+        ).grid(row=0, column=2, sticky="nsew", padx=(0, 10), pady=12)
 
         ctk.CTkLabel(
             linha,
             text=item["categoria"],
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=3, sticky="w", padx=(0, 10), pady=12)
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["categoria"]
+        ).grid(row=0, column=3, sticky="nsew", padx=(0, 10), pady=12)
 
         ctk.CTkLabel(
             linha,
             text=quantidade,
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=4, sticky="w", padx=(0, 10), pady=12)
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["quantidade"]
+        ).grid(row=0, column=4, sticky="nsew", padx=(0, 10), pady=12)
 
         ctk.CTkLabel(
             linha,
             text=valor_fornecedor_destino,
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=5, sticky="w", padx=(0, 10), pady=12)
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["fornecedor_destino"]
+        ).grid(row=0, column=5, sticky="nsew", padx=(0, 10), pady=12)
 
         ctk.CTkLabel(
             linha,
             text=responsavel,
             font=("Segoe UI", 13),
             text_color=self.cor_texto,
-            anchor="w"
-        ).grid(row=0, column=6, sticky="w", padx=(0, 10), pady=12)
+            anchor="w",
+            justify="left",
+            wraplength=self.wrap_celulas["responsavel"]
+        ).grid(row=0, column=6, sticky="nsew", padx=(0, 10), pady=12)
 
         ctk.CTkLabel(
             linha,
@@ -296,8 +372,8 @@ class MovimentacaoView(ctk.CTkFrame):
             text_color=self.cor_texto_secundario,
             anchor="w",
             justify="left",
-            wraplength=170
-        ).grid(row=0, column=7, sticky="w", padx=(0, 10), pady=12)
+            wraplength=self.wrap_celulas["observacoes"]
+        ).grid(row=0, column=7, sticky="nsew", padx=(0, 10), pady=12)
 
     def abrir_calendario_popup(self, chave):
         if self.calendario_popup is not None and self.calendario_popup.winfo_exists():
@@ -391,7 +467,6 @@ class MovimentacaoView(ctk.CTkFrame):
         )
         frame_input.pack(side="left", padx=(0, 10))
         frame_input.pack_propagate(False)
-        # frame_input.configure(width=170)
         frame_input.configure(width=60)
         frame_input.grid_columnconfigure(0, weight=1)
 
@@ -474,55 +549,96 @@ class MovimentacaoView(ctk.CTkFrame):
                 return
 
         try:
+            self.pagina_atual = 1
+
             if filtro == "Todos":
-                historico = listar_historico()
+                historico, total = listar_historico(
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Produto":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o ID do produto.")
                     return
-                historico = filtrar_historico_por_produto(int(valor))
+                historico, total = filtrar_historico_por_produto(
+                    int(valor),
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Categoria":
                 if not valor:
                     messagebox.showerror("Erro", "Informe a categoria.")
                     return
-                historico = filtrar_historico_por_categoria(valor)
+                historico, total = filtrar_historico_por_categoria(
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Destino":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o destino.")
                     return
-                historico = filtrar_historico_por_destino(valor)
+                historico, total = filtrar_historico_por_destino(
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Fornecedor":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o fornecedor.")
                     return
-                historico = filtrar_historico_por_fornecedor(valor)
+                historico, total = filtrar_historico_por_fornecedor(
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Lote":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o lote.")
                     return
-                historico = filtrar_historico_por_lote(valor)
+                historico, total = filtrar_historico_por_lote(
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Entrada":
-                historico = filtrar_historico_por_tipo("entrada")
+                historico, total = filtrar_historico_por_tipo(
+                    "entrada",
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Saída":
-                historico = filtrar_historico_por_tipo("saida")
+                historico, total = filtrar_historico_por_tipo(
+                    "saida",
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             elif filtro == "Por Período":
                 if not data_inicial or not data_final:
                     messagebox.showerror("Erro", "Informe a data inicial e a data final.")
                     return
-                historico = filtrar_historico_por_periodo(data_inicial, data_final)
+                historico, total = filtrar_historico_por_periodo(
+                    data_inicial,
+                    data_final,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
             else:
-                historico = listar_historico()
+                historico, total = listar_historico(
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
+                )
 
-            self.carregar_historico(historico)
+            self.carregar_historico(historico, total)
 
         except ValueError:
             messagebox.showerror("Erro", "O ID do produto deve ser um número inteiro.")
@@ -534,7 +650,104 @@ class MovimentacaoView(ctk.CTkFrame):
         self.entry_valor_filtro.delete(0, "end")
         self.entry_data_inicial.delete(0, "end")
         self.entry_data_final.delete(0, "end")
+        self.pagina_atual = 1
         self.carregar_historico()
+
+    def obter_resultado_paginado_atual(self):
+        filtro = self.combo_filtro.get()
+        valor = self.entry_valor_filtro.get().strip()
+
+        data_inicial_br = self.entry_data_inicial.get().strip()
+        data_final_br = self.entry_data_final.get().strip()
+
+        data_inicial = ""
+        data_final = ""
+
+        if data_inicial_br:
+            data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+        if data_final_br:
+            data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+        if filtro == "Todos":
+            return listar_historico(
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Produto":
+            return filtrar_historico_por_produto(
+                int(valor),
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Categoria":
+            return filtrar_historico_por_categoria(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Destino":
+            return filtrar_historico_por_destino(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Fornecedor":
+            return filtrar_historico_por_fornecedor(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Lote":
+            return filtrar_historico_por_lote(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Entrada":
+            return filtrar_historico_por_tipo(
+                "entrada",
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Saída":
+            return filtrar_historico_por_tipo(
+                "saida",
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Período":
+            return filtrar_historico_por_periodo(
+                data_inicial,
+                data_final,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        return listar_historico(
+            pagina=self.pagina_atual,
+            itens_por_pagina=self.itens_por_pagina
+        )
+
+    def ir_para_pagina_anterior(self):
+        if self.pagina_atual > 1:
+            self.pagina_atual -= 1
+            historico, total = self.obter_resultado_paginado_atual()
+            self.carregar_historico(historico, total)
+
+    def ir_para_proxima_pagina(self):
+        if self.pagina_atual < self.total_paginas:
+            self.pagina_atual += 1
+            historico, total = self.obter_resultado_paginado_atual()
+            self.carregar_historico(historico, total)
 
     def criar_interface(self):
         frame_sidebar = ctk.CTkFrame(
@@ -656,20 +869,6 @@ class MovimentacaoView(ctk.CTkFrame):
                 command=self.abrir_usuarios
             ).pack(fill="x", padx=20, pady=6)
 
-        # ctk.CTkButton(
-        #     frame_sidebar,
-        #     text="Relatórios",
-        #     height=42,
-        #     corner_radius=8,
-        #     fg_color="#ffffff",
-        #     hover_color=self.cor_hover_secundario,
-        #     text_color=self.cor_texto,
-        #     border_width=1,
-        #     border_color=self.cor_borda,
-        #     font=("Segoe UI", 14, "bold"),
-        #     command=self.abrir_relatorios
-        # ).pack(fill="x", padx=20, pady=6)
-
         ctk.CTkButton(
             frame_sidebar,
             text="Sair",
@@ -712,7 +911,6 @@ class MovimentacaoView(ctk.CTkFrame):
 
         self.combo_filtro = ctk.CTkComboBox(
             linha1,
-            # width=220,
             width=150,
             height=40,
             values=[
@@ -744,7 +942,6 @@ class MovimentacaoView(ctk.CTkFrame):
 
         self.entry_valor_filtro = ctk.CTkEntry(
             linha1,
-            # width=220,
             width=160,
             height=40,
             placeholder_text="Valor do filtro",
@@ -849,6 +1046,47 @@ class MovimentacaoView(ctk.CTkFrame):
             frame_lista,
             fg_color="transparent"
         )
-        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
         self.cards_container = scroll
+
+        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+
+        self.btn_anterior = ctk.CTkButton(
+            frame_paginacao,
+            text="← Anterior",
+            width=120,
+            height=36,
+            corner_radius=8,
+            border_width=1,
+            border_color="#d0d0d0",
+            fg_color="#ffffff",
+            hover_color="#f5f5f5",
+            text_color="#1a1a1a",
+            font=("Segoe UI", 12, "bold"),
+            command=self.ir_para_pagina_anterior
+        )
+        self.btn_anterior.pack(side="left")
+
+        self.label_paginacao = ctk.CTkLabel(
+            frame_paginacao,
+            text="Página 1 de 1  •  0 movimentação(ões)",
+            font=("Segoe UI", 13),
+            text_color=self.cor_texto_secundario
+        )
+        self.label_paginacao.pack(side="left", padx=20)
+
+        self.btn_proxima = ctk.CTkButton(
+            frame_paginacao,
+            text="Próxima →",
+            width=120,
+            height=36,
+            corner_radius=8,
+            fg_color=self.cor_roxo,
+            hover_color=self.cor_roxo_hover,
+            text_color="#ffffff",
+            font=("Segoe UI", 12, "bold"),
+            command=self.ir_para_proxima_pagina
+        )
+        self.btn_proxima.pack(side="right")

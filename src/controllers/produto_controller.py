@@ -130,7 +130,24 @@ def _enriquecer_produto(cursor, produto):
     return produto_dict
 
 
-def _listar_produtos_base(where_clause="", params=()):
+def _contar_produtos(where_clause="", params=()):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    query = f"""
+        SELECT COUNT(*) AS total
+        FROM produtos
+        {where_clause}
+    """
+
+    cursor.execute(query, params)
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    return resultado["total"] if resultado else 0
+
+
+def _listar_produtos_base(where_clause="", params=(), limite=None, offset=None):
     conexao = conectar()
     cursor = conexao.cursor()
 
@@ -141,7 +158,17 @@ def _listar_produtos_base(where_clause="", params=()):
         ORDER BY nome
     """
 
-    cursor.execute(query, params)
+    parametros = list(params)
+
+    if limite is not None:
+        query += " LIMIT ?"
+        parametros.append(limite)
+
+        if offset is not None:
+            query += " OFFSET ?"
+            parametros.append(offset)
+
+    cursor.execute(query, tuple(parametros))
     produtos = cursor.fetchall()
 
     resultado = [_enriquecer_produto(cursor, produto) for produto in produtos]
@@ -208,8 +235,18 @@ def cadastrar_produto(
         conexao.close()
 
 
-def listar_produtos():
-    return _listar_produtos_base()
+def listar_produtos(pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    offset = (pagina - 1) * itens_por_pagina
+    total = _contar_produtos()
+    produtos = _listar_produtos_base(
+        limite=itens_por_pagina,
+        offset=offset
+    )
+
+    return produtos, total
 
 
 def buscar_produto_por_id(id_produto):
@@ -222,11 +259,23 @@ def buscar_produto_por_id(id_produto):
     return produtos[0]
 
 
-def buscar_produtos_por_nome(nome):
-    return _listar_produtos_base(
-        "WHERE nome LIKE ?",
-        (f"%{nome.strip()}%",)
+def buscar_produtos_por_nome(nome, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE nome LIKE ?"
+    params = (f"%{nome.strip()}%",)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_produtos(where_clause, params)
+    produtos = _listar_produtos_base(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
+
+    return produtos, total
 
 
 def atualizar_produto(
@@ -337,11 +386,54 @@ def excluir_produto(id_produto):
         conexao.close()
 
 
-def filtrar_produtos_por_categoria(categoria):
+def filtrar_produtos_por_categoria(categoria, pagina=1, itens_por_pagina=10):
     if not categoria_valida(categoria):
-        return []
+        return [], 0
 
-    return _listar_produtos_base(
-        "WHERE categoria = ?",
-        (categoria,)
+    if pagina < 1:
+        pagina = 1
+
+    where_clause = "WHERE categoria = ?"
+    params = (categoria,)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_produtos(where_clause, params)
+    produtos = _listar_produtos_base(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
+
+    return produtos, total
+
+
+def filtrar_produtos(nome="", categoria="Todas", pagina=1, itens_por_pagina=10):
+    filtros = []
+    params = []
+
+    if nome and nome.strip():
+        filtros.append("nome LIKE ?")
+        params.append(f"%{nome.strip()}%")
+
+    if categoria and categoria != "Todas":
+        filtros.append("categoria = ?")
+        params.append(categoria)
+
+    where_clause = ""
+    if filtros:
+        where_clause = "WHERE " + " AND ".join(filtros)
+
+    if pagina < 1:
+        pagina = 1
+
+    offset = (pagina - 1) * itens_por_pagina
+    total = _contar_produtos(where_clause, tuple(params))
+    produtos = _listar_produtos_base(
+        where_clause,
+        tuple(params),
+        limite=itens_por_pagina,
+        offset=offset
+    )
+
+    return produtos, total

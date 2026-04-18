@@ -4,6 +4,51 @@ from utils.validacoes import campo_preenchido, email_valido, perfil_valido
 from utils.seguranca import gerar_hash_senha
 
 
+def _contar_usuarios(where_clause="", params=()):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    query = f"""
+        SELECT COUNT(*) AS total
+        FROM usuarios
+        {where_clause}
+    """
+
+    cursor.execute(query, params)
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    return resultado["total"] if resultado else 0
+
+
+def _listar_usuarios_base(where_clause="", params=(), limite=None, offset=None):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    query = f"""
+        SELECT id_usuario, nome, email, perfil
+        FROM usuarios
+        {where_clause}
+        ORDER BY nome
+    """
+
+    parametros = list(params)
+
+    if limite is not None:
+        query += " LIMIT ?"
+        parametros.append(limite)
+
+        if offset is not None:
+            query += " OFFSET ?"
+            parametros.append(offset)
+
+    cursor.execute(query, tuple(parametros))
+    usuarios = cursor.fetchall()
+
+    conexao.close()
+    return [dict(usuario) for usuario in usuarios]
+
+
 def cadastrar_usuario(nome, email, senha, perfil):
     if not campo_preenchido(nome):
         return False, "O nome é obrigatório."
@@ -54,59 +99,56 @@ def cadastrar_usuario(nome, email, senha, perfil):
     return True, "Usuário cadastrado com sucesso."
 
 
-def listar_usuarios():
-    conexao = conectar()
-    cursor = conexao.cursor()
+def listar_usuarios(pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
 
-    cursor.execute(
-        """
-        SELECT id_usuario, nome, email, perfil
-        FROM usuarios
-        ORDER BY nome
-        """
+    offset = (pagina - 1) * itens_por_pagina
+    total = _contar_usuarios()
+    usuarios = _listar_usuarios_base(
+        limite=itens_por_pagina,
+        offset=offset
     )
-    usuarios = cursor.fetchall()
 
-    conexao.close()
-    return [dict(usuario) for usuario in usuarios]
+    return usuarios, total
 
 
-def buscar_usuarios_por_nome(nome):
-    conexao = conectar()
-    cursor = conexao.cursor()
+def buscar_usuarios_por_nome(nome, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
 
-    cursor.execute(
-        """
-        SELECT id_usuario, nome, email, perfil
-        FROM usuarios
-        WHERE nome LIKE ?
-        ORDER BY nome
-        """,
-        (f"%{nome}%",)
+    where_clause = "WHERE nome LIKE ?"
+    params = (f"%{nome}%",)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_usuarios(where_clause, params)
+    usuarios = _listar_usuarios_base(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
-    usuarios = cursor.fetchall()
 
-    conexao.close()
-    return [dict(usuario) for usuario in usuarios]
+    return usuarios, total
 
 
-def buscar_usuarios_por_email(email):
-    conexao = conectar()
-    cursor = conexao.cursor()
+def buscar_usuarios_por_email(email, pagina=1, itens_por_pagina=10):
+    if pagina < 1:
+        pagina = 1
 
-    cursor.execute(
-        """
-        SELECT id_usuario, nome, email, perfil
-        FROM usuarios
-        WHERE email LIKE ?
-        ORDER BY nome
-        """,
-        (f"%{email}%",)
+    where_clause = "WHERE email LIKE ?"
+    params = (f"%{email}%",)
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_usuarios(where_clause, params)
+    usuarios = _listar_usuarios_base(
+        where_clause,
+        params,
+        limite=itens_por_pagina,
+        offset=offset
     )
-    usuarios = cursor.fetchall()
 
-    conexao.close()
-    return [dict(usuario) for usuario in usuarios]
+    return usuarios, total
 
 
 def buscar_usuario_por_id(id_usuario):
