@@ -4,88 +4,101 @@
 
 Os requisitos não funcionais descrevem as características de qualidade que o sistema **BemStock** deve possuir, garantindo que o sistema seja seguro, eficiente, fácil de usar e adequado ao ambiente da instituição Lar Bem.
 
+Esses requisitos complementam os requisitos funcionais e asseguram a qualidade do sistema durante sua utilização.
+
 ---
 
 ## 2. Usabilidade
 
-**RNF01.** O sistema deve possuir uma interface simples e intuitiva.
+**RNF01.** O sistema deve possuir uma interface simples, intuitiva e de fácil aprendizado.
 
-**RNF02.** O sistema deve apresentar telas organizadas e de fácil navegação.
+**RNF02.** O sistema deve apresentar telas organizadas, com navegação clara entre as funcionalidades.
 
-**RNF03.** O sistema deve utilizar linguagem clara e compreensível para os usuários.
+**RNF03.** O sistema deve utilizar linguagem clara e acessível aos usuários.
 
-**RNF04.** O sistema deve apresentar mensagens de erro e sucesso de forma clara.
+**RNF04.** O sistema deve apresentar mensagens de erro e sucesso de forma clara e objetiva.
 
-**RNF05.** O sistema deve permitir que usuários sem conhecimento técnico utilizem suas funcionalidades.
+**RNF05.** O sistema deve permitir que usuários com baixo nível de conhecimento técnico utilizem suas funcionalidades.
+
+**RNF06.** O sistema deve manter consistência visual entre as telas (cores, botões, layout).
 
 ---
 
 ## 3. Funcionamento Offline
 
-**RNF06.** O sistema deve funcionar localmente no computador da administração da instituição.
+**RNF07.** O sistema deve funcionar localmente no computador da instituição.
 
-**RNF07.** O sistema deve operar sem necessidade de conexão com a internet.
+**RNF08.** O sistema deve operar sem necessidade de conexão com a internet.
 
-**RNF08.** Os dados do sistema devem ser armazenados localmente.
+**RNF09.** Os dados devem ser armazenados localmente em banco de dados SQLite.
 
 ---
 
 ## 4. Segurança
 
-**RNF09.** O sistema deve exigir autenticação por e-mail e senha.
+**RNF10.** O sistema deve exigir autenticação por e-mail e senha para acesso.
 
-**RNF10.** O sistema deve permitir acesso apenas a usuários autorizados.
+**RNF11.** O sistema deve permitir acesso apenas a usuários cadastrados.
 
-**RNF11.** O sistema deve armazenar as senhas dos usuários de forma segura (ex.: utilizando hash).
+**RNF12.** O sistema deve armazenar as senhas de forma segura utilizando hash (SHA-256).
 
-**RNF12.** O sistema deve impedir operações inválidas no estoque.
+**RNF13.** O sistema deve aplicar validações para impedir operações inválidas.
+
+**RNF14.** O sistema deve restringir funcionalidades com base no perfil do usuário (admin ou estoque).
 
 ---
 
 ## 5. Desempenho
 
-**RNF13.** O sistema deve responder às operações principais em tempo adequado (sem atrasos perceptíveis ao usuário).
+**RNF15.** O sistema deve responder às operações principais sem atrasos perceptíveis ao usuário.
 
-**RNF14.** O sistema deve carregar as telas principais rapidamente para uso cotidiano.
+**RNF16.** O sistema deve carregar as telas rapidamente para uso cotidiano.
 
-**RNF15.** O sistema deve permitir consultas de estoque e histórico sem atrasos excessivos.
+**RNF17.** O sistema deve permitir consultas de estoque e histórico de movimentações de forma eficiente.
 
 ---
 
 ## 6. Manutenção e Organização do Código
 
-**RNF16.** O sistema deve possuir código organizado em camadas (MVC).
+**RNF18.** O sistema deve seguir arquitetura em camadas (views, controllers, models, database e utils).
 
-**RNF17.** O sistema deve possuir estrutura de pastas padronizada.
+**RNF19.** O sistema deve possuir estrutura de pastas organizada e padronizada.
 
-**RNF18.** O código deve possuir nomes claros e legíveis.
+**RNF20.** O código deve utilizar nomes claros e legíveis.
 
-**RNF19.** O projeto deve possuir documentação básica no repositório.
+**RNF21.** O sistema deve possuir documentação no repositório (README e arquivos em /docs).
 
-**RNF20.** O sistema deve utilizar tecnologias gratuitas compatíveis com o escopo acadêmico.
+**RNF22.** O sistema deve utilizar tecnologias gratuitas e adequadas ao escopo acadêmico:
+- Python  
+- CustomTkinter  
+- SQLite  
 
 ---
 
 ## 7. Confiabilidade
 
-**RNF21.** O sistema deve garantir consistência dos dados após cada operação.
+**RNF23.** O sistema deve garantir consistência dos dados após cada operação.
 
-**RNF22.** O sistema deve registrar corretamente as movimentações realizadas.
+**RNF24.** O sistema deve registrar corretamente todas as movimentações realizadas.
 
-**RNF23.** O sistema deve manter o estoque atualizado após entradas e saídas.
+**RNF25.** O sistema deve manter o estoque atualizado com base nas movimentações.
 
-**RNF24.** O sistema não deve permitir inconsistências no estoque (ex.: quantidade negativa).
+**RNF26.** O sistema não deve permitir inconsistências no estoque (ex.: valores negativos).
+
+**RNF27.** O sistema deve garantir integridade referencial entre usuários, produtos e movimentações.
 
 ---
 
 ## 8. Implantação
 
-**RNF25.** O sistema deve poder ser instalado no computador da administração da ONG.
+**RNF28.** O sistema deve poder ser executado em computadores com sistema operacional Windows.
 
-**RNF26.** O sistema deve ser empacotado de forma que facilite sua execução no ambiente local.
+**RNF29.** O sistema deve ser empacotado para facilitar sua execução (ex.: uso de PyInstaller).
+
+**RNF30.** O sistema deve permitir instalação simples no ambiente da instituição.
 
 ---
 
 ## 9. Conclusão
 
-Os requisitos não funcionais garantem que o sistema BemStock seja confiável, fácil de utilizar, seguro e adequado ao ambiente de uso da instituição Lar Bem.
+Os requisitos não funcionais garantem que o sistema BemStock seja confiável, seguro, fácil de utilizar e adequado ao ambiente de uso da instituição Lar Bem, contribuindo para o controle eficiente do estoque.

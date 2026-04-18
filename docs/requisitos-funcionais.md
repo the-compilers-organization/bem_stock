@@ -4,7 +4,7 @@
 
 Os requisitos funcionais descrevem as funcionalidades que o sistema **BemStock** deve oferecer para atender às necessidades da instituição Lar Bem no controle de estoque de alimentos, produtos de higiene e produtos de limpeza.
 
-Esses requisitos foram definidos com base no domínio do sistema e nas necessidades dos usuários responsáveis pela administração do estoque.
+Esses requisitos foram definidos com base no domínio do sistema, nas regras implementadas e nas necessidades dos usuários responsáveis pela administração do estoque.
 
 ---
 
@@ -14,118 +14,135 @@ Esses requisitos foram definidos com base no domínio do sistema e nas necessida
 
 **RF02.** O sistema deve permitir acesso apenas a usuários cadastrados.
 
-**RF03.** O sistema deve identificar o usuário responsável pelas operações realizadas no sistema.
+**RF03.** O sistema deve validar as credenciais do usuário antes de permitir o acesso.
+
+**RF04.** O sistema deve identificar o usuário responsável pelas operações realizadas.
 
 ---
 
 ## 3. Módulo de Usuários
 
-**RF04.** O sistema deve permitir que o administrador cadastre novos usuários.
+**RF05.** O sistema deve permitir que o administrador cadastre novos usuários.
 
-**RF05.** O sistema deve permitir registrar no cadastro do usuário as seguintes informações:
-- nome
-- e-mail
-- senha
-- perfil
+**RF06.** O sistema deve permitir registrar no cadastro do usuário as seguintes informações:
+- nome  
+- e-mail  
+- senha  
+- perfil (`admin` ou `estoque`)
 
-**RF06.** O sistema não deve permitir o cadastro de dois usuários com o mesmo e-mail.
+**RF07.** O sistema não deve permitir o cadastro de dois usuários com o mesmo e-mail.
+
+**RF08.** O sistema deve permitir listar usuários cadastrados.
+
+**RF09.** O sistema deve permitir buscar usuários por nome ou e-mail.
+
+**RF10.** O sistema deve permitir editar os dados de um usuário.
+
+**RF11.** O sistema deve permitir atualizar a senha de um usuário.
+
+**RF12.** O sistema deve permitir excluir usuários.
+
+**RF13.** O sistema não deve permitir excluir o usuário administrador padrão (`admin@bemstock.com`).
 
 ---
 
 ## 4. Módulo de Produtos
 
-**RF07.** O sistema deve permitir cadastrar produtos no estoque.
+**RF14.** O sistema deve permitir cadastrar produtos no estoque.
 
-**RF08.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
-- nome do produto
-- descrição
-- categoria
-- quantidade atual
-- unidade de medida
-- estoque mínimo
-- data de validade
+**RF15.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
+- nome do produto  
+- categoria  
+- unidade de medida  
+- estoque mínimo  
+- descrição  
 
-**RF09.** O sistema deve permitir listar todos os produtos cadastrados.
+**RF16.** O sistema deve permitir listar todos os produtos cadastrados.
 
-**RF10.** O sistema deve permitir buscar produtos por nome.
+**RF17.** O sistema deve permitir buscar produtos por nome.
 
-**RF11.** O sistema deve permitir filtrar produtos por categoria.
+**RF18.** O sistema deve permitir filtrar produtos por categoria.
 
-**RF12.** O sistema deve permitir editar informações de um produto.
+**RF19.** O sistema deve permitir editar informações de um produto.
 
-**RF13.** O sistema deve permitir excluir um produto do sistema.
+**RF20.** O sistema deve permitir excluir um produto.
 
-**RF14.** O sistema deve permitir utilizar apenas as categorias predefinidas no sistema:
-- Alimentos
-- Produtos de Higiene
-- Produtos de Limpeza
+**RF21.** O sistema não deve permitir excluir produtos que possuam movimentações registradas.
+
+**RF22.** O sistema deve permitir utilizar apenas categorias predefinidas:
+- Alimentos  
+- Limpeza  
+- Higiene Pessoal  
 
 ---
 
 ## 5. Módulo de Movimentação de Estoque
 
-**RF15.** O sistema deve permitir registrar entrada de produtos no estoque.
+**RF23.** O sistema deve permitir registrar entrada de produtos no estoque.
 
-**RF16.** O sistema deve permitir registrar saída de produtos do estoque.
+**RF24.** O sistema deve permitir registrar saída de produtos do estoque.
 
-**RF17.** O sistema deve atualizar automaticamente a quantidade disponível do produto após cada movimentação.
+**RF25.** O sistema deve registrar as seguintes informações na movimentação:
+- tipo de movimentação (entrada ou saída)  
+- produto  
+- categoria  
+- quantidade  
+- data da movimentação  
+- usuário responsável  
 
-**RF18.** O sistema deve registrar a data da movimentação.
+**RF26.** O sistema deve permitir registrar informações adicionais na movimentação:
+- fornecedor (opcional)  
+- data de validade (opcional)  
+- número do lote (opcional)  
+- destino (opcional, para saídas)  
+- observações (opcional)  
 
-**RF19.** O sistema deve registrar o usuário responsável pela movimentação.
+**RF27.** O sistema deve validar se o produto e o usuário existem antes de registrar a movimentação.
 
-**RF20.** O sistema deve permitir registrar observações nas movimentações.
+**RF28.** O sistema deve garantir que a categoria da movimentação seja compatível com a categoria do produto.
 
-**RF21.** O sistema não deve permitir saída de quantidade maior do que a disponível em estoque.
+**RF29.** O sistema deve registrar automaticamente a data e hora da movimentação.
 
 ---
 
 ## 6. Módulo de Controle de Estoque
 
-**RF22.** O sistema deve permitir consultar a quantidade atual de cada produto.
+**RF30.** O sistema deve calcular o estoque atual de cada produto com base nas movimentações de entrada e saída.
 
-**RF23.** O sistema deve identificar produtos com quantidade abaixo do estoque mínimo.
+**RF31.** O sistema deve permitir consultar o estoque atual dos produtos.
 
-**RF24.** O sistema deve apresentar alertas para produtos com baixo estoque.
+**RF32.** O sistema deve identificar produtos com quantidade abaixo do estoque mínimo.
+
+**RF33.** O sistema deve classificar o status do estoque (normal, baixo, esgotado).
 
 ---
 
 ## 7. Módulo de Controle de Validade
 
-**RF25.** O sistema deve permitir registrar a data de validade dos produtos.
+**RF34.** O sistema deve considerar a data de validade informada nas movimentações de entrada.
 
-**RF26.** O sistema deve identificar produtos próximos da data de vencimento.
+**RF35.** O sistema deve identificar produtos com validade próxima ou vencida.
 
-**RF27.** O sistema deve permitir consultar produtos vencidos ou próximos do vencimento.
-
----
-
-## 8. Módulo de Histórico
-
-**RF28.** O sistema deve registrar todas as movimentações de entrada e saída de produtos.
-
-**RF29.** O sistema deve permitir consultar o histórico de movimentações.
-
-**RF30.** O sistema deve permitir filtrar movimentações por produto.
-
-**RF31.** O sistema deve permitir filtrar movimentações por período.
-
-**RF32.** O sistema deve permitir filtrar movimentações por tipo (entrada ou saída).
+**RF36.** O sistema deve permitir consultar produtos com problemas de validade.
 
 ---
 
-## 9. Módulo de Relatórios
+## 8. Módulo de Histórico de Movimentações
 
-**RF33.** O sistema deve permitir visualizar relatório de produtos em estoque.
+**RF37.** O sistema deve registrar todas as movimentações de entrada e saída de produtos.
 
-**RF34.** O sistema deve permitir visualizar relatório de produtos com estoque baixo.
+**RF38.** O sistema deve permitir consultar o histórico de movimentações.
 
-**RF35.** O sistema deve permitir visualizar relatório de produtos próximos da validade.
-
-**RF36.** O sistema deve permitir visualizar relatório de movimentações realizadas.
+**RF39.** O sistema deve permitir filtrar movimentações por:
+- produto  
+- categoria  
+- período  
+- tipo de movimentação  
+- fornecedor  
+- número de lote  
 
 ---
 
-## 10. Conclusão
+## 9. Conclusão
 
-Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque de alimentos, produtos de higiene e produtos de limpeza.
+Os requisitos funcionais definidos garantem que o sistema BemStock atenda às necessidades principais da instituição Lar Bem, permitindo o controle eficiente do estoque por meio de movimentações, com rastreabilidade e organização das operações.

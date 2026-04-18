@@ -24,6 +24,7 @@ class MovimentacaoView(ctk.CTkFrame):
         self.cor_sidebar = "#ffffff"
         self.cor_card = "#ffffff"
         self.cor_borda = "#e0e0e0"
+        self.cor_borda_foco = "#C084FC"
         self.cor_texto = "#1a1a1a"
         self.cor_texto_secundario = "#666666"
         self.cor_roxo = "#a855f7"
@@ -58,6 +59,60 @@ class MovimentacaoView(ctk.CTkFrame):
         self.criar_interface()
         self.carregar_historico()
 
+    def destacar_foco_widget(self, widget):
+        try:
+            widget.configure(border_color=self.cor_borda_foco)
+        except Exception:
+            pass
+
+    def remover_foco_widget(self, widget):
+        try:
+            widget.configure(border_color="#d0d0d0")
+        except Exception:
+            pass
+
+    def configurar_foco_entry(self, entry):
+        entry.bind(
+            "<FocusIn>",
+            lambda e: self.destacar_foco_widget(entry),
+            add="+"
+        )
+        entry.bind(
+            "<FocusOut>",
+            lambda e: self.remover_foco_widget(entry),
+            add="+"
+        )
+
+    def abrir_dropdown_combobox(self, combo):
+        try:
+            combo._open_dropdown_menu()
+        except Exception:
+            try:
+                combo._clicked()
+            except Exception:
+                pass
+
+    def configurar_foco_combobox(self, combo):
+        combo.bind(
+            "<FocusIn>",
+            lambda e: self.destacar_foco_widget(combo),
+            add="+"
+        )
+        combo.bind(
+            "<FocusOut>",
+            lambda e: self.remover_foco_widget(combo),
+            add="+"
+        )
+
+        combo.bind(
+            "<Button-1>",
+            lambda e: (
+                self.destacar_foco_widget(combo),
+                self.after(1, lambda: self.abrir_dropdown_combobox(combo))
+            ),
+            add="+"
+        )
+
     def abrir_dashboard(self):
         self.master.mostrar_dashboard(self.usuario)
 
@@ -65,10 +120,13 @@ class MovimentacaoView(ctk.CTkFrame):
         self.master.mostrar_produto(self.usuario)
 
     def abrir_usuarios(self):
-        messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
+        self.master.mostrar_usuario(self.usuario)
 
-    def abrir_relatorios(self):
-        messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
+    # def abrir_usuarios(self):
+    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
+
+    # def abrir_relatorios(self):
+    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
 
     def sair(self):
         confirmar = messagebox.askyesno("Sair", "Deseja realmente sair do sistema?")
@@ -185,7 +243,8 @@ class MovimentacaoView(ctk.CTkFrame):
             text_color="#ffffff",
             fg_color=cor_badge,
             corner_radius=20,
-            width=100,
+            # width=100,
+            width=70,
             height=28
         )
         badge.pack(anchor="w")
@@ -248,7 +307,7 @@ class MovimentacaoView(ctk.CTkFrame):
         frame_input = self.campos_datas_frames.get(chave)
 
         if frame_input is not None:
-            frame_input.configure(border_color=self.cor_roxo)
+            frame_input.configure(border_color=self.cor_borda_foco)
 
         popup = ctk.CTkToplevel(self)
         popup.title("Selecionar data")
@@ -332,8 +391,15 @@ class MovimentacaoView(ctk.CTkFrame):
         )
         frame_input.pack(side="left", padx=(0, 10))
         frame_input.pack_propagate(False)
-        frame_input.configure(width=170)
+        # frame_input.configure(width=170)
+        frame_input.configure(width=60)
         frame_input.grid_columnconfigure(0, weight=1)
+
+        frame_input.bind(
+            "<Button-1>",
+            lambda e: frame_input.configure(border_color=self.cor_borda_foco),
+            add="+"
+        )
 
         entry = ctk.CTkEntry(
             frame_input,
@@ -346,6 +412,17 @@ class MovimentacaoView(ctk.CTkFrame):
             placeholder_text=placeholder
         )
         entry.grid(row=0, column=0, sticky="nsew", padx=(8, 0), pady=4)
+
+        entry.bind(
+            "<FocusIn>",
+            lambda e: frame_input.configure(border_color=self.cor_borda_foco),
+            add="+"
+        )
+        entry.bind(
+            "<FocusOut>",
+            lambda e: frame_input.configure(border_color="#d0d0d0"),
+            add="+"
+        )
 
         botao_calendario = ctk.CTkButton(
             frame_input,
@@ -579,19 +656,19 @@ class MovimentacaoView(ctk.CTkFrame):
                 command=self.abrir_usuarios
             ).pack(fill="x", padx=20, pady=6)
 
-        ctk.CTkButton(
-            frame_sidebar,
-            text="Relatórios",
-            height=42,
-            corner_radius=8,
-            fg_color="#ffffff",
-            hover_color=self.cor_hover_secundario,
-            text_color=self.cor_texto,
-            border_width=1,
-            border_color=self.cor_borda,
-            font=("Segoe UI", 14, "bold"),
-            command=self.abrir_relatorios
-        ).pack(fill="x", padx=20, pady=6)
+        # ctk.CTkButton(
+        #     frame_sidebar,
+        #     text="Relatórios",
+        #     height=42,
+        #     corner_radius=8,
+        #     fg_color="#ffffff",
+        #     hover_color=self.cor_hover_secundario,
+        #     text_color=self.cor_texto,
+        #     border_width=1,
+        #     border_color=self.cor_borda,
+        #     font=("Segoe UI", 14, "bold"),
+        #     command=self.abrir_relatorios
+        # ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
             frame_sidebar,
@@ -635,7 +712,8 @@ class MovimentacaoView(ctk.CTkFrame):
 
         self.combo_filtro = ctk.CTkComboBox(
             linha1,
-            width=220,
+            # width=220,
+            width=150,
             height=40,
             values=[
                 "Todos",
@@ -662,10 +740,12 @@ class MovimentacaoView(ctk.CTkFrame):
         )
         self.combo_filtro.pack(side="left", padx=(0, 10))
         self.combo_filtro.set("Todos")
+        self.configurar_foco_combobox(self.combo_filtro)
 
         self.entry_valor_filtro = ctk.CTkEntry(
             linha1,
-            width=220,
+            # width=220,
+            width=160,
             height=40,
             placeholder_text="Valor do filtro",
             corner_radius=6,
@@ -676,6 +756,7 @@ class MovimentacaoView(ctk.CTkFrame):
             font=("Segoe UI", 14)
         )
         self.entry_valor_filtro.pack(side="left", padx=(0, 10))
+        self.configurar_foco_entry(self.entry_valor_filtro)
 
         self.entry_data_inicial = self.criar_campo_data_filtro(
             linha1,

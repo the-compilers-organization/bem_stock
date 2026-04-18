@@ -48,6 +48,7 @@ from views.produto_view import ProdutoView
 from views.cadastro_produto_view import CadastroProdutoView
 from views.movimentacao_view import MovimentacaoView
 from views.cadastro_movimentacao_view import CadastroMovimentacaoView
+from views.usuario_view import UsuarioView
 
 
 class BemStockApp(ctk.CTk):
@@ -83,11 +84,11 @@ class BemStockApp(ctk.CTk):
         self.frame_atual = LoginView(self)
         self.frame_atual.pack(fill="both", expand=True)
 
-    def mostrar_cadastro(self):
-        self.limpar_tela()
-        self.title("BemStock - Cadastro de Usuário")
-        self.frame_atual = CadastroUsuarioView(self)
-        self.frame_atual.pack(fill="both", expand=True)
+    # def mostrar_cadastro(self):
+    #     self.limpar_tela()
+    #     self.title("BemStock - Cadastro de Usuário")
+    #     self.frame_atual = CadastroUsuarioView(self)
+    #     self.frame_atual.pack(fill="both", expand=True)
 
     def mostrar_dashboard(self, usuario):
         self.usuario_logado = usuario
@@ -122,6 +123,20 @@ class BemStockApp(ctk.CTk):
         self.limpar_tela()
         self.title("BemStock - Cadastro de Movimentação")
         self.frame_atual = CadastroMovimentacaoView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_usuario(self, usuario):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Usuários")
+        self.frame_atual = UsuarioView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_cadastro_usuario(self, usuario, usuario_edicao=None):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Cadastro de Usuário")
+        self.frame_atual = CadastroUsuarioView(self, usuario, usuario_edicao)
         self.frame_atual.pack(fill="both", expand=True)
 
 

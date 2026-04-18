@@ -4,86 +4,86 @@
 
 Este documento descreve a arquitetura do sistema **BemStock**, desenvolvido para auxiliar no gerenciamento de estoque de alimentos, produtos de higiene e produtos de limpeza da instituição **Lar Bem**.
 
-A arquitetura foi definida para organizar o desenvolvimento do sistema, separando responsabilidades entre módulos e facilitando a manutenção e evolução do projeto.
+A arquitetura foi definida com o objetivo de organizar o sistema em camadas, separando responsabilidades e facilitando a manutenção, evolução e entendimento do código.
 
 ---
 
 ## 2. Visão geral da arquitetura
 
-O sistema BemStock será uma aplicação **desktop**, executada localmente no computador da administração da instituição.
+O sistema BemStock é uma aplicação **desktop**, executada localmente no computador da instituição.
 
-A arquitetura foi planejada utilizando uma estrutura em camadas, permitindo separar:
+A arquitetura segue uma organização em camadas, permitindo separar:
 
-- interface com o usuário
-- controle das operações
-- regras de negócio
-- acesso ao banco de dados
+- interface com o usuário  
+- controle das operações  
+- manipulação dos dados  
+- acesso ao banco de dados  
 
-Essa organização facilita o desenvolvimento em equipe e torna o código mais organizado e compreensível.
+Essa abordagem melhora a organização do sistema e facilita o desenvolvimento e manutenção.
 
 ---
 
 ## 3. Tecnologias utilizadas
 
-## Linguagem principal
+### Linguagem principal
 
 **Python**
 
-Python foi escolhido por ser uma linguagem gratuita, de fácil aprendizado e adequada para desenvolvimento de aplicações desktop e integração com banco de dados.
+Python foi escolhido por ser uma linguagem gratuita, de fácil aprendizado e adequada para desenvolvimento de aplicações desktop.
 
 ---
 
-## Interface gráfica
+### Interface gráfica
 
 **CustomTkinter**
 
-A biblioteca CustomTkinter será utilizada para desenvolver a interface gráfica do sistema.
-
-Ela foi escolhida porque:
-
-- é gratuita
-- possui visual moderno
-- é baseada no Tkinter
-- é simples de usar em projetos acadêmicos
-- permite criar interfaces amigáveis para o usuário
-
----
-
-## Banco de dados
-
-**SQLite**
-
-O SQLite será utilizado como banco de dados do sistema.
+A biblioteca CustomTkinter é utilizada para desenvolver a interface gráfica do sistema.
 
 Motivos da escolha:
 
-- é gratuito
-- funciona localmente
-- não exige instalação de servidor
-- é simples de configurar
-- é ideal para aplicações desktop
+- gratuita  
+- visual moderno  
+- baseada no Tkinter  
+- fácil integração com Python  
+- adequada para projetos acadêmicos  
 
 ---
 
-## Acesso ao banco de dados
+### Banco de dados
 
-O acesso ao banco será feito utilizando:
+**SQLite**
+
+O SQLite é utilizado como banco de dados do sistema.
+
+Motivos da escolha:
+
+- gratuito  
+- funcionamento local  
+- não necessita servidor  
+- simples configuração  
+- ideal para aplicações desktop  
+
+---
+
+### Acesso ao banco de dados
+
+O acesso ao banco é realizado utilizando:
 
 - **sqlite3** (biblioteca nativa do Python)
 
-Essa escolha foi feita para simplificar o desenvolvimento inicial do projeto e reduzir a curva de aprendizado da equipe.
+Essa abordagem simplifica o desenvolvimento e reduz a complexidade do projeto.
 
 ---
 
 ## 4. Organização em camadas
 
-A arquitetura do sistema será dividida nas seguintes camadas:
+A arquitetura do sistema é dividida nas seguintes camadas:
 
-- View
-- Controller
-- Model
-- Database
-- Utils
+- View  
+- Controller  
+- Model  
+- Database  
+- Utils  
 
 Essa organização segue uma adaptação do padrão **MVC (Model-View-Controller)** para aplicações desktop.
 
@@ -91,134 +91,134 @@ Essa organização segue uma adaptação do padrão **MVC (Model-View-Controller
 
 ## 5. Responsabilidade de cada camada
 
-## 5.1 View
+### 5.1 View
 
 A camada **View** é responsável pela interface gráfica do sistema.
 
 Funções principais:
 
-- exibir telas
-- coletar dados do usuário
-- mostrar mensagens de erro ou sucesso
-- apresentar informações do sistema
-
-Exemplos de telas:
-
-- tela de login
-- tela principal (dashboard)
-- cadastro de usuários
-- cadastro de produtos
-- registro de entrada de produtos
-- registro de saída de produtos
-- consulta de estoque
-- histórico de movimentações
-
-A View não deve conter regras de negócio complexas.
-
----
-
-## 5.2 Controller
-
-A camada **Controller** funciona como intermediária entre a interface e as regras do sistema.
-
-Funções principais:
-
-- receber ações da interface
-- validar dados recebidos
-- chamar funções da camada Model
-- retornar respostas para a interface
-
-Exemplos de operações:
-
-- cadastrar usuário
-- cadastrar produto
-- registrar entrada de produto
-- registrar saída de produto
-- buscar produtos
-- listar movimentações
-
----
-
-## 5.3 Model
-
-A camada **Model** representa as entidades do sistema e as regras de negócio.
-
-Funções principais:
-
-- representar os dados do sistema
-- aplicar regras relacionadas ao estoque
-- organizar dados antes de salvar ou consultar no banco
-
-Principais entidades do sistema:
-
-- Usuário
-- Produto
-- Movimentação
-
-Exemplos de regras de negócio:
-
-- impedir saída maior que o estoque disponível
-- identificar produtos abaixo do estoque mínimo
-- verificar produtos próximos da validade
-- permitir apenas categorias predefinidas no cadastro de produtos
-
----
-
-## 5.4 Database
-
-A camada **Database** é responsável pela comunicação com o banco de dados.
-
-Funções principais:
-
-- criar conexão com o banco SQLite
-- criar tabelas
-- inserir dados
-- atualizar dados
-- consultar dados
-- excluir registros
-
-Essa camada centraliza o acesso ao banco para manter o sistema organizado.
-
----
-
-## 5.5 Utils
-
-A camada **Utils** contém funções auxiliares reutilizáveis no sistema.
+- exibir telas  
+- coletar dados do usuário  
+- apresentar informações  
+- exibir mensagens de erro e sucesso  
+- controlar navegação entre telas  
 
 Exemplos:
 
-- validações de dados
-- formatação de datas
-- mensagens padrão
-- funções de apoio
+- login  
+- dashboard  
+- usuários  
+- produtos  
+- movimentações  
 
-Essa camada evita repetição de código.
+A View não contém regras de negócio, apenas interação com o usuário.
+
+---
+
+### 5.2 Controller
+
+A camada **Controller** é responsável pela lógica de controle do sistema.
+
+Funções principais:
+
+- receber ações da View  
+- validar dados  
+- aplicar regras de negócio  
+- interagir com o banco de dados  
+- retornar resultados para a View  
+
+Exemplos:
+
+- autenticar usuário  
+- cadastrar usuário  
+- cadastrar produto  
+- registrar movimentação  
+- buscar e listar dados  
+
+---
+
+### 5.3 Model
+
+A camada **Model** representa a estrutura dos dados do sistema.
+
+Funções principais:
+
+- organizar os dados em formato estruturado (dict)  
+- preparar dados para inserção no banco  
+- converter dados para tuplas compatíveis com SQL  
+
+Principais entidades:
+
+- Usuário  
+- Produto  
+- Movimentação  
+
+> Observação: neste sistema, as regras de negócio estão concentradas nos Controllers.
+
+---
+
+### 5.4 Database
+
+A camada **Database** é responsável pelo acesso ao banco de dados.
+
+Funções principais:
+
+- criar conexão com SQLite  
+- definir e criar tabelas  
+- executar comandos SQL  
+- garantir persistência dos dados  
+
+Arquivos principais:
+
+- `connection.py`  
+- `schema.py`  
+
+---
+
+### 5.5 Utils
+
+A camada **Utils** contém funções auxiliares reutilizáveis.
+
+Funções principais:
+
+- validações de dados  
+- formatação de datas  
+- constantes do sistema  
+- segurança (hash de senha)  
+
+Exemplos:
+
+- validação de e-mail  
+- validação de quantidade  
+- formatação de datas  
+- hash de senha  
 
 ---
 
 ## 6. Fluxo da aplicação
 
-O funcionamento básico do sistema seguirá o fluxo abaixo:
+O funcionamento do sistema segue o fluxo abaixo:
 
-1. O usuário interage com a interface (View)
-2. A View envia a ação para o Controller
-3. O Controller valida os dados e chama o Model
-4. O Model executa as regras de negócio
-5. O Model acessa a camada Database
-6. O Database realiza operações no SQLite
-7. O resultado retorna para o Controller
-8. O Controller retorna a resposta para a View
-9. A View exibe o resultado ao usuário
+1. O usuário interage com a interface (View)  
+2. A View envia a ação para o Controller  
+3. O Controller valida os dados  
+4. O Controller executa regras de negócio  
+5. O Controller acessa o banco de dados  
+6. O banco executa a operação  
+7. O resultado retorna para o Controller  
+8. O Controller retorna a resposta para a View  
+9. A View exibe o resultado ao usuário  
 
 ---
 
-## 7. Estrutura inicial de pastas
+## 7. Estrutura do projeto
 
-A estrutura inicial sugerida para o projeto é:
+A estrutura do projeto BemStock é organizada da seguinte forma:
 
 ```text
 bemstock/
 │
+├── assets/
 ├── docs/
 │   ├── dominio-do-projeto.md
 │   ├── entidades-do-dominio.md
@@ -233,8 +233,11 @@ bemstock/
 │   │   ├── login_view.py
 │   │   ├── dashboard_view.py
 │   │   ├── usuario_view.py
+│   │   ├── cadastro_usuario_view.py
 │   │   ├── produto_view.py
-│   │   └── movimentacao_view.py
+│   │   ├── cadastro_produto_view.py
+│   │   ├── movimentacao_view.py
+│   │   └── cadastro_movimentacao_view.py
 │
 │   ├── controllers/
 │   │   ├── login_controller.py
@@ -252,15 +255,16 @@ bemstock/
 │   │   └── schema.py
 │
 │   └── utils/
+│       ├── constantes.py
 │       ├── validacoes.py
-│       └── formatadores.py
+│       ├── formatadores.py
+│       └── seguranca.py
 │
-├── assets/
-│   └── logo.png
-│
-├── requirements.txt
-└── README.md
- ```
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
 
 ---
 
@@ -288,15 +292,13 @@ Fluxo detalhado:
 ```text
 [Usuário]
     ↓
-[Telas em CustomTkinter]
+[Interface - CustomTkinter]
     ↓
 [Controllers]
     ↓
-[Models / Regras de negócio]
+[Database / SQLite]
     ↓
-[Camada de banco de dados]
-    ↓
-[SQLite]
+[Banco de dados]
 ```
 
 ---

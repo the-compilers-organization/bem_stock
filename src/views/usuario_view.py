@@ -1,10 +1,11 @@
 import customtkinter as ctk
 from tkinter import messagebox
 
-from controllers.produto_controller import (
-    listar_produtos,
-    buscar_produtos_por_nome,
-    excluir_produto
+from controllers.usuario_controller import (
+    listar_usuarios,
+    buscar_usuarios_por_nome,
+    buscar_usuarios_por_email,
+    excluir_usuario
 )
 
 
@@ -70,7 +71,7 @@ class ToolTip:
             self.tooltip_window = None
 
 
-class ProdutoView(ctk.CTkFrame):
+class UsuarioView(ctk.CTkFrame):
     def __init__(self, master, usuario):
         super().__init__(master, fg_color="#F5E6F3")
         self.master = master
@@ -90,41 +91,18 @@ class ProdutoView(ctk.CTkFrame):
         self.perfil_usuario = self.usuario.get("perfil", "N/A")
 
         self.entry_busca = None
-        self.combo_categoria = None
+        self.combo_tipo_busca = None
         self.lista_container = None
 
         self.colunas_tabela = [
-            ("Produto", 4, 260),
-            ("Categoria", 2, 140),
-            ("Unidade", 2, 120),
-            ("Estoque\nAtual", 2, 140),
-            ("Estoque\nMínimo", 2, 140),
-            ("Status", 2, 150),
-            ("Validade", 2, 170),
+            ("Nome", 3, 230),
+            ("E-mail", 3, 280),
+            ("Perfil", 2, 140),
             ("Ações", 2, 180),
         ]
 
-        self.wrap_cabecalho = {
-            "Produto": 230,
-            "Categoria": 120,
-            "Unidade": 100,
-            "Estoque\nAtual": 110,
-            "Estoque\nMínimo": 110,
-            "Status": 110,
-            "Validade": 120,
-            "Ações": 100,
-        }
-
-        self.wrap_celulas = {
-            "produto_nome": 240,
-            "produto_descricao": 240,
-            "categoria": 130,
-            "unidade": 110,
-            "validade": 150,
-        }
-
         self.criar_interface()
-        self.carregar_produtos()
+        self.carregar_usuarios()
 
     def destacar_foco_widget(self, widget):
         try:
@@ -183,17 +161,14 @@ class ProdutoView(ctk.CTkFrame):
     def abrir_dashboard(self):
         self.master.mostrar_dashboard(self.usuario)
 
+    def abrir_produtos(self):
+        self.master.mostrar_produto(self.usuario)
+
     def abrir_movimentacao(self):
         self.master.mostrar_movimentacao(self.usuario)
 
     def abrir_usuarios(self):
         self.master.mostrar_usuario(self.usuario)
-
-    # def abrir_usuarios(self):
-    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
-
-    # def abrir_relatorios(self):
-    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
 
     def sair(self):
         confirmar = messagebox.askyesno("Sair", "Deseja realmente sair do sistema?")
@@ -201,11 +176,11 @@ class ProdutoView(ctk.CTkFrame):
             self.master.usuario_logado = None
             self.master.mostrar_login()
 
-    def abrir_cadastro_produto(self):
-        self.master.mostrar_cadastro_produto(self.usuario)
+    def abrir_cadastro_usuario(self):
+        self.master.mostrar_cadastro_usuario(self.usuario)
 
-    def abrir_edicao_produto(self, produto):
-        self.master.mostrar_cadastro_produto(self.usuario, produto)
+    def abrir_edicao_usuario(self, usuario_edicao):
+        self.master.mostrar_cadastro_usuario(self.usuario, usuario_edicao)
 
     def configurar_colunas_grid(self, frame):
         for i, (_, peso, largura_minima) in enumerate(self.colunas_tabela):
@@ -216,17 +191,17 @@ class ProdutoView(ctk.CTkFrame):
             )
         frame.grid_rowconfigure(0, weight=1)
 
-    def carregar_produtos(self, produtos=None):
+    def carregar_usuarios(self, usuarios=None):
         for widget in self.lista_container.winfo_children():
             widget.destroy()
 
-        if produtos is None:
-            produtos = listar_produtos()
+        if usuarios is None:
+            usuarios = listar_usuarios()
 
-        if not produtos:
+        if not usuarios:
             ctk.CTkLabel(
                 self.lista_container,
-                text="Nenhum produto encontrado.",
+                text="Nenhum usuário encontrado.",
                 font=("Segoe UI", 14),
                 text_color=self.cor_texto_secundario
             ).pack(pady=20)
@@ -234,8 +209,8 @@ class ProdutoView(ctk.CTkFrame):
 
         self.criar_cabecalho_tabela()
 
-        for produto in produtos:
-            self.criar_linha_produto(produto)
+        for usuario in usuarios:
+            self.criar_linha_usuario(usuario)
 
     def criar_cabecalho_tabela(self):
         cabecalho = ctk.CTkFrame(self.lista_container, fg_color="transparent")
@@ -247,7 +222,7 @@ class ProdutoView(ctk.CTkFrame):
             anchor = "w"
             justify = "left"
 
-            if titulo in ("Estoque\nAtual", "Estoque\nMínimo", "Ações"):
+            if titulo == "Ações":
                 anchor = "center"
                 justify = "center"
 
@@ -257,47 +232,30 @@ class ProdutoView(ctk.CTkFrame):
                 font=("Segoe UI", 13, "bold"),
                 text_color=self.cor_texto,
                 anchor=anchor,
-                justify=justify,
-                wraplength=self.wrap_cabecalho.get(titulo, 120)
+                justify=justify
             ).grid(row=0, column=i, sticky="nsew", padx=10, pady=4)
 
-    def obter_estilo_status(self, produto):
-        status = produto.get("status_estoque", "Normal")
+    def criar_badge_perfil(self, parent, perfil):
+        cor = "#2563eb"
 
-        if status == "Normal":
-            return "#22c55e", "#ffffff"
-        if status == "Baixo":
-            return "#f97316", "#ffffff"
-        if status == "Próximo ao Mínimo":
-            return "#eab308", "#ffffff"
-        if status == "Esgotado":
-            return "#e11d48", "#ffffff"
+        if perfil == "admin":
+            cor = "#a855f7"
+        elif perfil == "estoque":
+            # cor = "#22c55e"
+            cor = "#e240d0"
 
-        return "#9ca3af", "#ffffff"
+        ctk.CTkLabel(
+            parent,
+            text=perfil,
+            font=("Segoe UI", 12, "bold"),
+            text_color="#ffffff",
+            fg_color=cor,
+            corner_radius=16,
+            width=110,
+            height=30
+        ).pack(anchor="center")
 
-    def obter_estilo_validade(self, produto):
-        status_validade = produto.get("status_validade", "normal")
-
-        if status_validade == "vencido":
-            return "#ef4444", "#ffffff"
-        if status_validade == "proximo":
-            return "#f59e0b", "#ffffff"
-
-        return None, self.cor_texto
-
-    def formatar_validade(self, produto):
-        validade = produto.get("validade_exibicao") or "-"
-        dias = produto.get("dias_para_vencer")
-
-        if validade == "Vencido":
-            return "Vencido"
-
-        if dias is not None and produto.get("status_validade") == "proximo":
-            return f"{validade} ({dias}d)"
-
-        return validade
-
-    def criar_linha_produto(self, produto):
+    def criar_linha_usuario(self, usuario):
         linha = ctk.CTkFrame(
             self.lista_container,
             fg_color="#ffffff",
@@ -309,112 +267,30 @@ class ProdutoView(ctk.CTkFrame):
 
         self.configurar_colunas_grid(linha)
 
-        frame_produto = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_produto.grid(row=0, column=0, sticky="nsew", padx=10, pady=14)
-
         ctk.CTkLabel(
-            frame_produto,
-            text=produto.get("nome", "-"),
+            linha,
+            text=usuario.get("nome", "-"),
             font=("Segoe UI", 13, "bold"),
             text_color=self.cor_texto,
             anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["produto_nome"]
-        ).pack(anchor="w", fill="x")
+            justify="left"
+        ).grid(row=0, column=0, sticky="nsew", padx=10, pady=14)
 
         ctk.CTkLabel(
-            frame_produto,
-            text=produto.get("descricao") or "-",
-            font=("Segoe UI", 12),
+            linha,
+            text=usuario.get("email", "-"),
+            font=("Segoe UI", 13),
             text_color=self.cor_texto_secundario,
             anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["produto_descricao"]
-        ).pack(anchor="w", fill="x", pady=(2, 0))
-
-        ctk.CTkLabel(
-            linha,
-            text=produto.get("categoria", "-"),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["categoria"]
+            justify="left"
         ).grid(row=0, column=1, sticky="nsew", padx=10, pady=14)
 
-        ctk.CTkLabel(
-            linha,
-            text=(produto.get("unidade_medida", "-") or "-").title(),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["unidade"]
-        ).grid(row=0, column=2, sticky="nsew", padx=10, pady=14)
-
-        ctk.CTkLabel(
-            linha,
-            text=str(produto.get("estoque_atual", 0)),
-            font=("Segoe UI", 13, "bold"),
-            text_color=self.cor_texto,
-            anchor="center",
-            justify="center"
-        ).grid(row=0, column=3, sticky="nsew", padx=10, pady=14)
-
-        ctk.CTkLabel(
-            linha,
-            text=str(produto.get("estoque_minimo", 0)),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="center",
-            justify="center"
-        ).grid(row=0, column=4, sticky="nsew", padx=10, pady=14)
-
-        cor_status, cor_texto_status = self.obter_estilo_status(produto)
-        frame_status = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_status.grid(row=0, column=5, sticky="nsew", padx=10, pady=14)
-
-        ctk.CTkLabel(
-            frame_status,
-            text=produto.get("status_estoque", "Normal"),
-            font=("Segoe UI", 12, "bold"),
-            text_color=cor_texto_status,
-            fg_color=cor_status,
-            corner_radius=16,
-            width=130,
-            height=30
-        ).pack(anchor="center")
-
-        cor_validade, cor_texto_validade = self.obter_estilo_validade(produto)
-        frame_validade = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_validade.grid(row=0, column=6, sticky="nsew", padx=10, pady=14)
-
-        texto_validade = self.formatar_validade(produto)
-
-        if cor_validade:
-            ctk.CTkLabel(
-                frame_validade,
-                text=texto_validade,
-                font=("Segoe UI", 12, "bold"),
-                text_color=cor_texto_validade,
-                fg_color=cor_validade,
-                corner_radius=16,
-                width=150,
-                height=30
-            ).pack(anchor="center")
-        else:
-            ctk.CTkLabel(
-                frame_validade,
-                text=texto_validade,
-                font=("Segoe UI", 13),
-                text_color=self.cor_texto,
-                anchor="center",
-                justify="center",
-                wraplength=self.wrap_celulas["validade"]
-            ).pack(anchor="center")
+        frame_perfil = ctk.CTkFrame(linha, fg_color="transparent")
+        frame_perfil.grid(row=0, column=2, sticky="nsew", padx=10, pady=14)
+        self.criar_badge_perfil(frame_perfil, usuario.get("perfil", "-"))
 
         frame_acoes = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_acoes.grid(row=0, column=7, sticky="nsew", padx=4, pady=14)
+        frame_acoes.grid(row=0, column=3, sticky="nsew", padx=4, pady=14)
 
         container_acoes = ctk.CTkFrame(frame_acoes, fg_color="transparent")
         container_acoes.pack(anchor="center")
@@ -426,13 +302,11 @@ class ProdutoView(ctk.CTkFrame):
             height=38,
             corner_radius=8,
             fg_color="#ffffff",
-            # hover_color="#f3f4f6",
             hover_color="#e4f2f7",
-            # text_color="#111111",
             text_color="#0000ff",
             border_width=0,
             font=("Segoe UI", 16),
-            command=lambda p=produto: self.abrir_edicao_produto(p)
+            command=lambda u=usuario: self.abrir_edicao_usuario(u)
         )
         btn_editar.pack(side="left", padx=(0, 4))
 
@@ -447,53 +321,62 @@ class ProdutoView(ctk.CTkFrame):
             text_color="#dc2626",
             border_width=0,
             font=("Segoe UI", 16),
-            command=lambda p=produto: self.confirmar_exclusao(p)
+            command=lambda u=usuario: self.confirmar_exclusao(u)
         )
         btn_excluir.pack(side="left")
 
         ToolTip(btn_editar, "Editar")
         ToolTip(btn_excluir, "Excluir")
 
-    def confirmar_exclusao(self, produto):
+    def confirmar_exclusao(self, usuario):
         confirmar = messagebox.askyesno(
-            "Excluir produto",
-            f"Deseja realmente excluir o produto '{produto.get('nome', '')}'?"
+            "Excluir usuário",
+            f"Deseja realmente excluir o usuário '{usuario.get('nome', '')}'?"
         )
         if not confirmar:
             return
 
-        sucesso, mensagem = excluir_produto(produto["id_produto"])
+        sucesso, mensagem = excluir_usuario(usuario["id_usuario"])
 
         if sucesso:
             messagebox.showinfo("Sucesso", mensagem)
-            self.carregar_produtos()
+            self.carregar_usuarios()
         else:
             messagebox.showerror("Erro", mensagem)
 
     def aplicar_filtros(self):
         termo = self.entry_busca.get().strip()
-        categoria = self.combo_categoria.get().strip()
+        tipo_busca = self.combo_tipo_busca.get().strip()
 
         try:
-            produtos = listar_produtos()
+            usuarios = listar_usuarios()
 
             if termo:
-                produtos = buscar_produtos_por_nome(termo)
+                if tipo_busca == "Nome":
+                    usuarios = buscar_usuarios_por_nome(termo)
+                elif tipo_busca == "E-mail":
+                    usuarios = buscar_usuarios_por_email(termo)
 
-            if categoria and categoria != "Todas":
-                produtos = [p for p in produtos if p.get("categoria") == categoria]
-
-            self.carregar_produtos(produtos)
+            self.carregar_usuarios(usuarios)
 
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao aplicar filtros: {str(e)}")
 
     def limpar_filtros(self):
         self.entry_busca.delete(0, "end")
-        self.combo_categoria.set("Todas")
-        self.carregar_produtos()
+        self.combo_tipo_busca.set("Nome")
+        self.carregar_usuarios()
 
     def criar_interface(self):
+        if self.perfil_usuario != "admin":
+            ctk.CTkLabel(
+                self,
+                text="Acesso restrito a administradores.",
+                font=("Segoe UI", 18, "bold"),
+                text_color="#b91c1c"
+            ).pack(expand=True)
+            return
+
         frame_sidebar = ctk.CTkFrame(
             self,
             width=260,
@@ -578,10 +461,13 @@ class ProdutoView(ctk.CTkFrame):
             text="Produtos",
             height=42,
             corner_radius=8,
-            fg_color=self.cor_roxo,
-            hover_color=self.cor_roxo_hover,
-            text_color="#ffffff",
-            font=("Segoe UI", 14, "bold")
+            fg_color="#ffffff",
+            hover_color=self.cor_hover_secundario,
+            text_color=self.cor_texto,
+            border_width=1,
+            border_color=self.cor_borda,
+            font=("Segoe UI", 14, "bold"),
+            command=self.abrir_produtos
         ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
@@ -598,34 +484,16 @@ class ProdutoView(ctk.CTkFrame):
             command=self.abrir_movimentacao
         ).pack(fill="x", padx=20, pady=6)
 
-        if self.perfil_usuario == "admin":
-            ctk.CTkButton(
-                frame_sidebar,
-                text="Usuários",
-                height=42,
-                corner_radius=8,
-                fg_color="#ffffff",
-                hover_color=self.cor_hover_secundario,
-                text_color=self.cor_texto,
-                border_width=1,
-                border_color=self.cor_borda,
-                font=("Segoe UI", 14, "bold"),
-                command=self.abrir_usuarios
-            ).pack(fill="x", padx=20, pady=6)
-
-        # ctk.CTkButton(
-        #     frame_sidebar,
-        #     text="Relatórios",
-        #     height=42,
-        #     corner_radius=8,
-        #     fg_color="#ffffff",
-        #     hover_color=self.cor_hover_secundario,
-        #     text_color=self.cor_texto,
-        #     border_width=1,
-        #     border_color=self.cor_borda,
-        #     font=("Segoe UI", 14, "bold"),
-        #     command=self.abrir_relatorios
-        # ).pack(fill="x", padx=20, pady=6)
+        ctk.CTkButton(
+            frame_sidebar,
+            text="Usuários",
+            height=42,
+            corner_radius=8,
+            fg_color=self.cor_roxo,
+            hover_color=self.cor_roxo_hover,
+            text_color="#ffffff",
+            font=("Segoe UI", 14, "bold")
+        ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
             frame_sidebar,
@@ -643,7 +511,7 @@ class ProdutoView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             frame_conteudo,
-            text="Produtos",
+            text="Usuários",
             font=("Segoe UI", 28, "bold"),
             text_color=self.cor_texto
         ).pack(anchor="w", pady=(0, 10))
@@ -671,7 +539,7 @@ class ProdutoView(ctk.CTkFrame):
             linha1,
             width=280,
             height=40,
-            placeholder_text="Buscar por nome do produto",
+            placeholder_text="Buscar usuário",
             corner_radius=6,
             border_width=1,
             border_color="#d0d0d0",
@@ -682,11 +550,11 @@ class ProdutoView(ctk.CTkFrame):
         self.entry_busca.pack(side="left", padx=(0, 10))
         self.configurar_foco_entry(self.entry_busca)
 
-        self.combo_categoria = ctk.CTkComboBox(
+        self.combo_tipo_busca = ctk.CTkComboBox(
             linha1,
-            width=220,
+            width=180,
             height=40,
-            values=["Todas", "Alimentos", "Limpeza", "Higiene Pessoal"],
+            values=["Nome", "E-mail"],
             corner_radius=6,
             border_width=1,
             border_color="#d0d0d0",
@@ -699,9 +567,9 @@ class ProdutoView(ctk.CTkFrame):
             dropdown_hover_color="#f0f0f0",
             font=("Segoe UI", 14)
         )
-        self.combo_categoria.pack(side="left", padx=(0, 10))
-        self.combo_categoria.set("Todas")
-        self.configurar_foco_combobox(self.combo_categoria)
+        self.combo_tipo_busca.pack(side="left", padx=(0, 10))
+        self.combo_tipo_busca.set("Nome")
+        self.configurar_foco_combobox(self.combo_tipo_busca)
 
         ctk.CTkButton(
             linha1,
@@ -751,7 +619,7 @@ class ProdutoView(ctk.CTkFrame):
 
         ctk.CTkButton(
             frame_botoes_topo,
-            text="+ Novo Produto",
+            text="+ Novo Usuário",
             width=180,
             height=42,
             corner_radius=8,
@@ -759,7 +627,7 @@ class ProdutoView(ctk.CTkFrame):
             hover_color=self.cor_roxo_hover,
             text_color="#ffffff",
             font=("Segoe UI", 13, "bold"),
-            command=self.abrir_cadastro_produto
+            command=self.abrir_cadastro_usuario
         ).pack(side="right")
 
         frame_lista = ctk.CTkFrame(
@@ -773,7 +641,7 @@ class ProdutoView(ctk.CTkFrame):
 
         ctk.CTkLabel(
             frame_lista,
-            text="Lista de Produtos",
+            text="Lista de Usuários",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
         ).pack(anchor="w", padx=20, pady=(20, 10))

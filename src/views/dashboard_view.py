@@ -41,10 +41,13 @@ class DashboardView(ctk.CTkFrame):
         self.master.mostrar_movimentacao(self.usuario)
 
     def abrir_usuarios(self):
-        messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
+        self.master.mostrar_usuario(self.usuario)
 
-    def abrir_relatorios(self):
-        messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
+    # def abrir_usuarios(self):
+    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
+
+    # def abrir_relatorios(self):
+    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
 
     def obter_indicadores(self):
         try:
@@ -238,19 +241,19 @@ class DashboardView(ctk.CTkFrame):
                 command=self.abrir_usuarios
             ).pack(fill="x", padx=20, pady=6)
 
-        ctk.CTkButton(
-            frame_sidebar,
-            text="Relatórios",
-            height=42,
-            corner_radius=8,
-            fg_color="#ffffff",
-            hover_color=self.cor_hover_secundario,
-            text_color=self.cor_texto,
-            border_width=1,
-            border_color=self.cor_borda,
-            font=("Segoe UI", 14, "bold"),
-            command=self.abrir_relatorios
-        ).pack(fill="x", padx=20, pady=6)
+        # ctk.CTkButton(
+        #     frame_sidebar,
+        #     text="Relatórios",
+        #     height=42,
+        #     corner_radius=8,
+        #     fg_color="#ffffff",
+        #     hover_color=self.cor_hover_secundario,
+        #     text_color=self.cor_texto,
+        #     border_width=1,
+        #     border_color=self.cor_borda,
+        #     font=("Segoe UI", 14, "bold"),
+        #     command=self.abrir_relatorios
+        # ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
             frame_sidebar,
