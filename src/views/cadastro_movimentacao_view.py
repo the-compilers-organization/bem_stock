@@ -5,7 +5,7 @@ from datetime import datetime
 from tkcalendar import Calendar
 
 from controllers.movimentacao_controller import registrar_entrada, registrar_saida
-from controllers.produto_controller import listar_produtos
+from controllers.produto_controller import listar_produtos_para_combobox
 
 
 class CadastroMovimentacaoView(ctk.CTkFrame):
@@ -35,7 +35,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
 
     def carregar_produtos(self):
         try:
-            self.produtos = listar_produtos()
+            self.produtos = listar_produtos_para_combobox()
             self.produtos_map = {
                 f"{produto['id_produto']} - {produto['nome']}": produto
                 for produto in self.produtos
@@ -58,6 +58,15 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
             widget.configure(border_color=self.cor_borda)
         except Exception:
             pass
+
+    def abrir_dropdown_combobox(self, combo):
+        try:
+            combo._open_dropdown_menu()
+        except Exception:
+            try:
+                combo._clicked()
+            except Exception:
+                pass
 
     def marcar_erro(self, chave, mensagem="Campo obrigatório."):
         widget = self.campos.get(chave)
@@ -198,8 +207,16 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         elif values:
             combo.set(values[0])
 
-        combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c))
-        combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o))
+        combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c), add="+")
+        combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o), add="+")
+        combo.bind(
+            "<Button-1>",
+            lambda event, c=chave, cb=combo: (
+                self.ao_entrar_no_campo(c),
+                self.after(1, lambda: self.abrir_dropdown_combobox(cb))
+            ),
+            add="+"
+        )
 
         self.campos[chave] = combo
         self.criar_label_erro(parent, chave)

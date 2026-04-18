@@ -44,6 +44,15 @@ class CadastroProdutoView(ctk.CTkFrame):
         except Exception:
             pass
 
+    def abrir_dropdown_combobox(self, combo):
+        try:
+            combo._open_dropdown_menu()
+        except Exception:
+            try:
+                combo._clicked()
+            except Exception:
+                pass
+
     def marcar_erro(self, chave, mensagem="Campo obrigatório."):
         widget = self.campos.get(chave)
         label_erro = self.labels_erro.get(chave)
@@ -248,8 +257,16 @@ class CadastroProdutoView(ctk.CTkFrame):
         elif values:
             combo.set(values[0])
 
-        combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c))
-        combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o))
+        combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c), add="+")
+        combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o), add="+")
+        combo.bind(
+            "<Button-1>",
+            lambda event, c=chave, cb=combo: (
+                self.ao_entrar_no_campo(c),
+                self.after(1, lambda: self.abrir_dropdown_combobox(cb))
+            ),
+            add="+"
+        )
 
         self.campos[chave] = combo
         self.criar_label_erro(parent, chave)

@@ -249,6 +249,10 @@ def listar_produtos(pagina=1, itens_por_pagina=10):
     return produtos, total
 
 
+def listar_produtos_para_combobox():
+    return _listar_produtos_base()
+
+
 def buscar_produto_por_id(id_produto):
     produtos = _listar_produtos_base(
         "WHERE id_produto = ?",
