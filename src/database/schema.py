@@ -6,9 +6,8 @@ def criar_tabelas():
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # =========================
+   
     # USUÁRIOS
-    # =========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
             id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,9 +18,8 @@ def criar_tabelas():
         )
     """)
 
-    # =========================
+  
     # PRODUTOS
-    # =========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS produtos (
             id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,9 +47,8 @@ def criar_tabelas():
         )
     """)
 
-    # =========================
-    # MOVIMENTAÇÕES (ATUALIZADA)
-    # =========================
+
+    # MOVIMENTAÇÕES 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS movimentacoes (
             id_movimentacao INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -105,9 +102,8 @@ def criar_tabelas():
     conexao.close()
 
 
-# =========================
+
 # ADMIN PADRÃO
-# =========================
 def criar_admin_inicial():
     conexao = conectar()
     cursor = conexao.cursor()
@@ -134,9 +130,7 @@ def criar_admin_inicial():
     conexao.close()
 
 
-# =========================
 # INICIALIZAÇÃO
-# =========================
 def inicializar_banco():
     criar_tabelas()
     criar_admin_inicial()
