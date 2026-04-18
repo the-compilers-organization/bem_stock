@@ -1,4 +1,4 @@
-<h1 align="center">📦 BemStock</h1>
+<h1>BemStock</h1>
 
 <p align="center">
   <img src="http://img.shields.io/static/v1?label=Python&message=3.x&color=3776AB&style=for-the-badge&logo=python"/>
@@ -10,73 +10,113 @@
   <img src="http://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>
 </p>
 
----
-
-# 📌 Contexto
-
-O projeto **BemStock** é um sistema de gerenciamento de estoque desenvolvido para auxiliar a instituição **Lar Bem**, localizada no Recife, no controle de alimentos, produtos de higiene e produtos de limpeza utilizados no dia a dia.
-
-O sistema é executado localmente e permite registrar movimentações, controlar estoque e acompanhar validade de produtos.
+> Status do Projeto: :heavy_check_mark: (concluído) | :warning: (em desenvolvimento) | :x: (não iniciada)
 
 ---
 
-# ❗ Problema
+# Tópicos
 
-O controle manual de estoque pode gerar:
+:small_blue_diamond: [Contexto](#contexto-information_source) 
 
-- falta de organização  
-- dificuldade na identificação de itens em falta  
-- ausência de controle de validade  
-- falta de rastreabilidade  
+:small_blue_diamond: [Problema](#problema-writing_hand)  
 
-O BemStock resolve esse problema oferecendo um sistema simples, organizado e confiável.
+:small_blue_diamond: [Público-Alvo](#público-alvo-busts_in_silhouette)  
+
+:small_blue_diamond: [Objetivo](#objetivo-dart)  
+
+:small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)  
+
+:small_blue_diamond: [Primeiro Acesso](#primeiro-acesso-closed_lock_with_key) 
+
+:small_blue_diamond: [Protótipo do Sistema](#protótipo-do-sistema-art) 
+
+:small_blue_diamond: [Arquitetura](#arquitetura-computer)  
+
+:small_blue_diamond: [Estrutura do Projeto](#estrutura-do-projeto-file_folder)  
+
+:small_blue_diamond: [Instalação](#instalação-rocket)  
+
+:small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)  
+
+:small_blue_diamond: [Documentação](#documentação-book)  
+
+:small_blue_diamond: [Desenvolvedores](#desenvolvedorescontribuintes-octocat)  
+
+:small_blue_diamond: [Licença](#licença)
 
 ---
 
-# 👥 Público-Alvo
+# Contexto :information_source:
 
-- Funcionários administrativos  
-- Responsáveis pelo estoque  
-- Coordenação da instituição  
+<p align="justify">
+O projeto <strong>BemStock</strong> é um sistema de gerenciamento de estoque desenvolvido para auxiliar a instituição <strong>Lar Bem</strong>, localizada no Recife, no controle de alimentos, produtos de higiene e produtos de limpeza utilizados no dia a dia da instituição.
+</p>
 
----
-
-# 🎯 Objetivo
-
-Organizar e controlar o estoque da instituição por meio de:
-
-- registro de entradas e saídas  
-- cálculo automático de estoque  
-- controle de validade  
-- histórico de movimentações  
+<p align="justify">
+O sistema será executado em um computador da administração da instituição e permitirá registrar entradas e saídas de produtos, acompanhar a quantidade disponível em estoque e controlar a validade dos itens armazenados.
+</p>
 
 ---
 
-# 🚀 Funcionalidades
+# Problema :writing_hand:
 
-### Funcionalidades principais
+<p align="justify">
+Instituições de acolhimento utilizam diversos itens essenciais para seu funcionamento diário, como alimentos, produtos de higiene e produtos de limpeza. Muitas vezes, o controle desses materiais é realizado de forma manual ou pouco estruturada, o que pode dificultar o acompanhamento do estoque e a identificação de itens em falta ou próximos do vencimento.
+</p>
+
+<p align="justify">
+O BemStock busca resolver esse problema oferecendo uma ferramenta simples e organizada para registrar movimentações de estoque e acompanhar os recursos disponíveis na instituição.
+</p>
+
+---
+
+# Público-Alvo :busts_in_silhouette:
+
+- Funcionários administrativos da instituição
+- Responsáveis pelo controle de estoque
+- Coordenação da instituição Lar Bem
+
+---
+
+# Objetivo :dart:
+
+<p align="justify">
+O objetivo do sistema BemStock é organizar e controlar o estoque de alimentos, produtos de higiene e produtos de limpeza utilizados pela instituição Lar Bem.
+</p>
+
+<p align="justify">
+O sistema permitirá registrar entradas e saídas de produtos, acompanhar quantidades disponíveis, controlar validade dos itens e manter histórico de movimentações, contribuindo para uma gestão mais eficiente dos recursos da instituição.
+</p>
+
+---
+
+# Funcionalidades :video_game:
+
+### Funcionalidades principais (MVP)
 
 - Login de usuário  
 - Primeiro acesso obrigatório (configuração de segurança)  
 - Cadastro de usuários (admin)  
 - Cadastro de produtos  
 - Edição e exclusão de produtos  
-- Registro de entrada e saída  
+- Registro de entrada de produtos  
+- Registro de saída de produtos  
+- Consulta de estoque (calculado por movimentações)  
 - Controle de estoque mínimo  
 - Controle de validade  
-- Histórico de movimentações com filtros  
+- Histórico de movimentações com filtros
 - Paginação de dados  
 
 ---
 
-# 🔐 Primeiro Acesso
+# Primeiro Acesso :closed_lock_with_key:
 
 Ao iniciar o sistema pela primeira vez, será criado automaticamente um usuário administrador:
 
 - **E-mail:** `teste@bemstock.com`  
 - **Senha:** `123456`  
 
-### ⚠️ Regra obrigatória
+### Regra obrigatória ⚠️
 
 No primeiro login:
 
@@ -89,23 +129,25 @@ Somente após isso o sistema será liberado.
 
 ---
 
-# 🎨 Protótipo
+# Protótipo do Sistema :art:
 
-🔗 [Acessar protótipo no Figma](https://drawn-award-18708393.figma.site/)
+O protótipo visual do sistema BemStock foi desenvolvido no Figma e pode ser acessado no link abaixo:
+
+🔗 [Acessar protótipo do BemStock no Figma](https://drawn-award-18708393.figma.site/)
 
 ---
 
-# 🏗️ Arquitetura
+# Arquitetura :computer:
 
-O sistema utiliza arquitetura em camadas baseada em **MVC**:
+O sistema BemStock utiliza uma arquitetura organizada em camadas inspirada no padrão **MVC**, composta por:
 
-- **View** → Interface gráfica  
-- **Controller** → Regras de negócio  
-- **Model** → Estrutura de dados  
-- **Database** → Acesso ao banco  
-- **Utils** → Funções auxiliares  
+- **View** → Interface gráfica do sistema
+- **Controller** → Controle das operações do sistema
+- **Model** → Representação das entidades e regras de negócio
+- **Database** → Comunicação com o banco de dados
+- **Utils** → Funções auxiliares
 
-### Fluxo:
+Fluxo simplificado da aplicação:
 
 ```text
 Usuário
@@ -113,6 +155,8 @@ Usuário
 Interface (CustomTkinter)
   ↓
 Controller
+  ↓
+Model
   ↓
 Database
   ↓
@@ -170,16 +214,6 @@ cd bemstock
 python -m venv venv
 
 ---
-
-
-### 4️⃣ Ativar ambiente virtual
-
-Windows:
-### 3️⃣ Criar ambiente virtual
-
-
-python -m venv venv
-
 
 ### 4️⃣ Ativar ambiente virtual
 
