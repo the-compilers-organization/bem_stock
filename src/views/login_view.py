@@ -72,9 +72,6 @@ class LoginView(ctk.CTkFrame):
     def toggle_senha(self):
         self.entry_senha.configure(show="" if self.mostrar_senha_var.get() else "●")
 
-    # def abrir_cadastro(self):
-    #     self.master.mostrar_cadastro()
-
     def fazer_login(self, event=None):
         self.limpar_erros()
 
@@ -95,7 +92,11 @@ class LoginView(ctk.CTkFrame):
 
             if sucesso:
                 usuario = resultado
-                self.master.mostrar_dashboard(usuario)
+
+                if usuario.get("primeiro_acesso", 0) == 1:
+                    self.master.mostrar_primeiro_acesso(usuario)
+                else:
+                    self.master.mostrar_dashboard(usuario)
             else:
                 mensagem = resultado
                 self.entry_email.configure(border_color=self.cor_erro)
@@ -245,20 +246,5 @@ class LoginView(ctk.CTkFrame):
             command=self.fazer_login
         )
         self.btn_entrar.grid(row=5, column=0, sticky="ew", pady=(0, 14))
-
-        # btn_cadastrar = ctk.CTkButton(
-        #     frame_form,
-        #     text="Cadastrar novo usuário",
-        #     height=45,
-        #     corner_radius=6,
-        #     border_width=1,
-        #     border_color="#d0d0d0",
-        #     fg_color="#ffffff",
-        #     hover_color=self.cor_hover_secundario,
-        #     text_color="#1a1a1a",
-        #     font=("Segoe UI", 14, "bold"),
-        #     command=self.abrir_cadastro
-        # )
-        # btn_cadastrar.grid(row=6, column=0, sticky="ew")
 
         self.entry_email.focus()

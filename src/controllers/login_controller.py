@@ -17,8 +17,18 @@ def autenticar_usuario(email, senha):
     cursor = conexao.cursor()
 
     cursor.execute(
-        "SELECT * FROM usuarios WHERE email = ?",
-        (email,)
+        """
+        SELECT
+            id_usuario,
+            nome,
+            email,
+            senha,
+            perfil,
+            primeiro_acesso
+        FROM usuarios
+        WHERE email = ?
+        """,
+        (email.strip(),)
     )
     usuario = cursor.fetchone()
 
@@ -27,7 +37,9 @@ def autenticar_usuario(email, senha):
     if usuario is None:
         return False, "Usuário não encontrado."
 
+    usuario = dict(usuario)
+
     if not verificar_senha(senha, usuario["senha"]):
         return False, "Senha incorreta."
 
-    return True, dict(usuario)
+    return True, usuario

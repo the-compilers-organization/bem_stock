@@ -1,4 +1,4 @@
-# Arquitetura do Sistema — BemStock
+# 🏗️ Arquitetura do Sistema — BemStock
 
 ## 1. Introdução
 
@@ -19,7 +19,7 @@ A arquitetura segue uma organização em camadas, permitindo separar:
 - manipulação dos dados  
 - acesso ao banco de dados  
 
-Essa abordagem melhora a organização do sistema e facilita o desenvolvimento e manutenção.
+Além disso, o sistema possui um fluxo especial de segurança no primeiro acesso, garantindo a configuração inicial do administrador.
 
 ---
 
@@ -71,8 +71,6 @@ O acesso ao banco é realizado utilizando:
 
 - **sqlite3** (biblioteca nativa do Python)
 
-Essa abordagem simplifica o desenvolvimento e reduz a complexidade do projeto.
-
 ---
 
 ## 4. Organização em camadas
@@ -103,9 +101,10 @@ Funções principais:
 - exibir mensagens de erro e sucesso  
 - controlar navegação entre telas  
 
-Exemplos:
+Telas principais:
 
 - login  
+- primeiro acesso (configuração obrigatória)  
 - dashboard  
 - usuários  
 - produtos  
@@ -130,10 +129,11 @@ Funções principais:
 Exemplos:
 
 - autenticar usuário  
+- concluir primeiro acesso  
 - cadastrar usuário  
 - cadastrar produto  
 - registrar movimentação  
-- buscar e listar dados  
+- buscar e listar dados com paginação  
 
 ---
 
@@ -153,7 +153,7 @@ Principais entidades:
 - Produto  
 - Movimentação  
 
-> Observação: neste sistema, as regras de negócio estão concentradas nos Controllers.
+> Observação: as regras de negócio estão centralizadas nos Controllers.
 
 ---
 
@@ -186,23 +186,16 @@ Funções principais:
 - constantes do sistema  
 - segurança (hash de senha)  
 
-Exemplos:
-
-- validação de e-mail  
-- validação de quantidade  
-- formatação de datas  
-- hash de senha  
-
 ---
 
 ## 6. Fluxo da aplicação
 
-O funcionamento do sistema segue o fluxo abaixo:
+### Fluxo geral
 
 1. O usuário interage com a interface (View)  
 2. A View envia a ação para o Controller  
 3. O Controller valida os dados  
-4. O Controller executa regras de negócio  
+4. O Controller aplica regras de negócio  
 5. O Controller acessa o banco de dados  
 6. O banco executa a operação  
 7. O resultado retorna para o Controller  
@@ -211,9 +204,23 @@ O funcionamento do sistema segue o fluxo abaixo:
 
 ---
 
-## 7. Estrutura do projeto
+### Fluxo de primeiro acesso (segurança)
 
-A estrutura do projeto BemStock é organizada da seguinte forma:
+1. Usuário faz login com credenciais padrão  
+2. Controller autentica o usuário  
+3. Sistema verifica o campo `primeiro_acesso`  
+4. Se for `1`:
+   - redireciona para a tela de primeiro acesso  
+5. Usuário é obrigado a:
+   - alterar e-mail  
+   - alterar senha  
+6. Controller atualiza o banco:
+   - `primeiro_acesso = 0`  
+7. Usuário é redirecionado para o dashboard  
+
+---
+
+## 7. Estrutura do projeto
 
 ```text
 bemstock/
@@ -231,6 +238,7 @@ bemstock/
 │
 │   ├── views/
 │   │   ├── login_view.py
+│   │   ├── primeiro_acesso_view.py
 │   │   ├── dashboard_view.py
 │   │   ├── usuario_view.py
 │   │   ├── cadastro_usuario_view.py
@@ -303,53 +311,57 @@ Fluxo detalhado:
 
 ---
 
-# 9. Viabilidade da arquitetura
+## 9. Viabilidade da arquitetura
 
 A arquitetura escolhida é adequada ao projeto porque:
 
-- utiliza tecnologias gratuitas
-- é simples de implementar
-- organiza bem o código
-- facilita a manutenção futura
-- permite a divisão de tarefas entre os membros da equipe
+- utiliza tecnologias gratuitas  
+- é simples de implementar  
+- organiza bem o código  
+- facilita a manutenção futura  
+- permite separação clara de responsabilidades  
+- suporta evolução (novas telas, regras e funcionalidades)  
 
-Ela atende ao escopo do sistema BemStock, que inclui:
+Ela atende ao escopo do sistema BemStock, incluindo:
 
-- cadastro de usuários
-- cadastro de produtos
-- entrada de produtos
-- saída de produtos
-- controle de estoque mínimo
-- controle de validade
-- histórico de movimentações
+- autenticação de usuários  
+- primeiro acesso obrigatório  
+- cadastro de usuários  
+- cadastro de produtos  
+- entrada e saída de produtos  
+- controle de estoque mínimo  
+- controle de validade  
+- histórico de movimentações  
+- paginação de dados  
 
 ---
 
-# 10. Conclusão
+## 10. Conclusão
 
 A arquitetura do sistema BemStock foi definida para garantir organização, clareza e viabilidade no desenvolvimento do projeto.
 
 A solução utiliza:
 
-- Python como linguagem principal
-- CustomTkinter para interface gráfica
-- SQLite como banco de dados local
-- arquitetura em camadas para separação de responsabilidades
+- Python como linguagem principal  
+- CustomTkinter para interface gráfica  
+- SQLite como banco de dados local  
+- arquitetura em camadas para separação de responsabilidades  
 
-Essa estrutura fornece uma base sólida para o desenvolvimento do sistema de gerenciamento de estoque da instituição Lar Bem.
+Além disso, incorpora uma camada adicional de segurança por meio do fluxo de primeiro acesso obrigatório.
 
 ---
 
-# Critério de pronto
+## Critério de pronto
 
 Esta etapa é considerada concluída quando:
 
-- a linguagem principal do projeto está definida
-- a biblioteca da interface gráfica está definida
-- o banco de dados está definido
-- a arquitetura em camadas está documentada
-- as responsabilidades de cada camada estão descritas
-- a arquitetura inicial está representada
-- o grupo confirma que a arquitetura é viável para o desenvolvimento do projeto
+- a linguagem principal do projeto está definida  
+- a biblioteca da interface gráfica está definida  
+- o banco de dados está definido  
+- a arquitetura em camadas está documentada  
+- as responsabilidades de cada camada estão descritas  
+- os fluxos principais estão definidos  
+- o fluxo de segurança (primeiro acesso) está documentado  
+- o grupo confirma que a arquitetura é viável para o desenvolvimento do projeto  
 
 

@@ -1,4 +1,4 @@
-# Requisitos Não Funcionais — BemStock
+# ⚙️ Requisitos Não Funcionais — BemStock
 
 ## 1. Introdução
 
@@ -22,53 +22,64 @@ Esses requisitos complementam os requisitos funcionais e asseguram a qualidade d
 
 **RNF06.** O sistema deve manter consistência visual entre as telas (cores, botões, layout).
 
+**RNF07.** O sistema deve permitir interação fluida com os campos (ex.: dropdowns abrindo ao clicar em qualquer área do campo).
+
+**RNF08.** O sistema deve exibir corretamente conteúdos longos nas tabelas, utilizando quebra de linha quando necessário.
+
 ---
 
 ## 3. Funcionamento Offline
 
-**RNF07.** O sistema deve funcionar localmente no computador da instituição.
+**RNF09.** O sistema deve funcionar localmente no computador da instituição.
 
-**RNF08.** O sistema deve operar sem necessidade de conexão com a internet.
+**RNF10.** O sistema deve operar sem necessidade de conexão com a internet.
 
-**RNF09.** Os dados devem ser armazenados localmente em banco de dados SQLite.
+**RNF11.** Os dados devem ser armazenados localmente em banco de dados SQLite.
 
 ---
 
 ## 4. Segurança
 
-**RNF10.** O sistema deve exigir autenticação por e-mail e senha para acesso.
+**RNF12.** O sistema deve exigir autenticação por e-mail e senha para acesso.
 
-**RNF11.** O sistema deve permitir acesso apenas a usuários cadastrados.
+**RNF13.** O sistema deve permitir acesso apenas a usuários cadastrados.
 
-**RNF12.** O sistema deve armazenar as senhas de forma segura utilizando hash (SHA-256).
+**RNF14.** O sistema deve armazenar as senhas de forma segura utilizando hash (SHA-256).
 
-**RNF13.** O sistema deve aplicar validações para impedir operações inválidas.
+**RNF15.** O sistema deve aplicar validações para impedir operações inválidas.
 
-**RNF14.** O sistema deve restringir funcionalidades com base no perfil do usuário (admin ou estoque).
+**RNF16.** O sistema deve restringir funcionalidades com base no perfil do usuário (`admin` ou `estoque`).
+
+**RNF17.** O sistema deve implementar um fluxo de primeiro acesso obrigatório para o usuário administrador inicial.
+
+**RNF18.** O sistema deve impedir o uso de credenciais padrão após o primeiro login.
 
 ---
 
 ## 5. Desempenho
 
-**RNF15.** O sistema deve responder às operações principais sem atrasos perceptíveis ao usuário.
+**RNF19.** O sistema deve responder às operações principais sem atrasos perceptíveis ao usuário.
 
-**RNF16.** O sistema deve carregar as telas rapidamente para uso cotidiano.
+**RNF20.** O sistema deve carregar as telas rapidamente para uso cotidiano.
 
-**RNF17.** O sistema deve permitir consultas de estoque e histórico de movimentações de forma eficiente.
+**RNF21.** O sistema deve permitir consultas de estoque e histórico de movimentações de forma eficiente.
+
+**RNF22.** O sistema deve suportar paginação de dados para evitar sobrecarga na interface.
 
 ---
 
 ## 6. Manutenção e Organização do Código
 
-**RNF18.** O sistema deve seguir arquitetura em camadas (views, controllers, models, database e utils).
+**RNF23.** O sistema deve seguir arquitetura em camadas (views, controllers, models, database e utils).
 
-**RNF19.** O sistema deve possuir estrutura de pastas organizada e padronizada.
+**RNF24.** O sistema deve possuir estrutura de pastas organizada e padronizada.
 
-**RNF20.** O código deve utilizar nomes claros e legíveis.
+**RNF25.** O código deve utilizar nomes claros e legíveis.
 
-**RNF21.** O sistema deve possuir documentação no repositório (README e arquivos em /docs).
+**RNF26.** O sistema deve possuir documentação no repositório (README e arquivos em /docs).
 
-**RNF22.** O sistema deve utilizar tecnologias gratuitas e adequadas ao escopo acadêmico:
+**RNF27.** O sistema deve utilizar tecnologias gratuitas e adequadas ao escopo acadêmico:
+
 - Python  
 - CustomTkinter  
 - SQLite  
@@ -77,25 +88,25 @@ Esses requisitos complementam os requisitos funcionais e asseguram a qualidade d
 
 ## 7. Confiabilidade
 
-**RNF23.** O sistema deve garantir consistência dos dados após cada operação.
+**RNF28.** O sistema deve garantir consistência dos dados após cada operação.
 
-**RNF24.** O sistema deve registrar corretamente todas as movimentações realizadas.
+**RNF29.** O sistema deve registrar corretamente todas as movimentações realizadas.
 
-**RNF25.** O sistema deve manter o estoque atualizado com base nas movimentações.
+**RNF30.** O sistema deve manter o estoque atualizado com base nas movimentações.
 
-**RNF26.** O sistema não deve permitir inconsistências no estoque (ex.: valores negativos).
+**RNF31.** O sistema não deve permitir inconsistências no estoque (ex.: valores negativos).
 
-**RNF27.** O sistema deve garantir integridade referencial entre usuários, produtos e movimentações.
+**RNF32.** O sistema deve garantir integridade referencial entre usuários, produtos e movimentações.
 
 ---
 
 ## 8. Implantação
 
-**RNF28.** O sistema deve poder ser executado em computadores com sistema operacional Windows.
+**RNF33.** O sistema deve poder ser executado em computadores com sistema operacional Windows.
 
-**RNF29.** O sistema deve ser empacotado para facilitar sua execução (ex.: uso de PyInstaller).
+**RNF34.** O sistema deve ser empacotado para facilitar sua execução (ex.: uso de PyInstaller).
 
-**RNF30.** O sistema deve permitir instalação simples no ambiente da instituição.
+**RNF35.** O sistema deve permitir instalação simples no ambiente da instituição.
 
 ---
 

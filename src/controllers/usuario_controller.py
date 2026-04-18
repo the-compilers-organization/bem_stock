@@ -26,7 +26,7 @@ def _listar_usuarios_base(where_clause="", params=(), limite=None, offset=None):
     cursor = conexao.cursor()
 
     query = f"""
-        SELECT id_usuario, nome, email, perfil
+        SELECT id_usuario, nome, email, perfil, primeiro_acesso
         FROM usuarios
         {where_clause}
         ORDER BY nome
@@ -70,7 +70,7 @@ def cadastrar_usuario(nome, email, senha, perfil):
 
     cursor.execute(
         "SELECT id_usuario FROM usuarios WHERE email = ?",
-        (email,)
+        (email.strip(),)
     )
     usuario_existente = cursor.fetchone()
 
@@ -79,16 +79,17 @@ def cadastrar_usuario(nome, email, senha, perfil):
         return False, "Já existe um usuário com esse e-mail."
 
     usuario = criar_usuario(
-        nome=nome,
-        email=email,
+        nome=nome.strip(),
+        email=email.strip(),
         senha=gerar_hash_senha(senha),
-        perfil=perfil
+        perfil=perfil,
+        primeiro_acesso=0
     )
 
     cursor.execute(
         """
-        INSERT INTO usuarios (nome, email, senha, perfil)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO usuarios (nome, email, senha, perfil, primeiro_acesso)
+        VALUES (?, ?, ?, ?, ?)
         """,
         usuario_para_tupla(usuario)
     )
@@ -118,7 +119,7 @@ def buscar_usuarios_por_nome(nome, pagina=1, itens_por_pagina=10):
         pagina = 1
 
     where_clause = "WHERE nome LIKE ?"
-    params = (f"%{nome}%",)
+    params = (f"%{nome.strip()}%",)
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_usuarios(where_clause, params)
@@ -137,7 +138,7 @@ def buscar_usuarios_por_email(email, pagina=1, itens_por_pagina=10):
         pagina = 1
 
     where_clause = "WHERE email LIKE ?"
-    params = (f"%{email}%",)
+    params = (f"%{email.strip()}%",)
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_usuarios(where_clause, params)
@@ -157,7 +158,7 @@ def buscar_usuario_por_id(id_usuario):
 
     cursor.execute(
         """
-        SELECT id_usuario, nome, email, perfil
+        SELECT id_usuario, nome, email, perfil, primeiro_acesso
         FROM usuarios
         WHERE id_usuario = ?
         """,
@@ -204,7 +205,7 @@ def atualizar_usuario(id_usuario, nome, email, perfil):
         SELECT id_usuario FROM usuarios
         WHERE email = ? AND id_usuario != ?
         """,
-        (email, id_usuario)
+        (email.strip(), id_usuario)
     )
     email_existente = cursor.fetchone()
 
@@ -218,7 +219,7 @@ def atualizar_usuario(id_usuario, nome, email, perfil):
         SET nome = ?, email = ?, perfil = ?
         WHERE id_usuario = ?
         """,
-        (nome, email, perfil, id_usuario)
+        (nome.strip(), email.strip(), perfil, id_usuario)
     )
 
     conexao.commit()
@@ -261,6 +262,79 @@ def atualizar_senha_usuario(id_usuario, nova_senha):
     return True, "Senha atualizada com sucesso."
 
 
+def concluir_primeiro_acesso(id_usuario, novo_email, nova_senha):
+    if not campo_preenchido(novo_email):
+        return False, "O e-mail é obrigatório."
+
+    if not email_valido(novo_email):
+        return False, "Informe um e-mail válido."
+
+    if not campo_preenchido(nova_senha):
+        return False, "A senha é obrigatória."
+
+    novo_email = novo_email.strip()
+
+    if novo_email.lower() == "teste@bemstock.com":
+        return False, "Informe um novo e-mail diferente do temporário."
+
+    if nova_senha == "123456":
+        return False, "Informe uma nova senha diferente da temporária."
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        """
+        SELECT id_usuario, perfil, primeiro_acesso
+        FROM usuarios
+        WHERE id_usuario = ?
+        """,
+        (id_usuario,)
+    )
+    usuario = cursor.fetchone()
+
+    if usuario is None:
+        conexao.close()
+        return False, "Usuário não encontrado."
+
+    cursor.execute(
+        """
+        SELECT id_usuario
+        FROM usuarios
+        WHERE email = ? AND id_usuario != ?
+        """,
+        (novo_email, id_usuario)
+    )
+    email_existente = cursor.fetchone()
+
+    if email_existente is not None:
+        conexao.close()
+        return False, "Já existe um usuário com esse e-mail."
+
+    try:
+        cursor.execute(
+            """
+            UPDATE usuarios
+            SET email = ?, senha = ?, primeiro_acesso = 0
+            WHERE id_usuario = ?
+            """,
+            (
+                novo_email,
+                gerar_hash_senha(nova_senha),
+                id_usuario
+            )
+        )
+
+        conexao.commit()
+        return True, "Primeiro acesso concluído com sucesso."
+
+    except Exception as e:
+        return False, f"Erro ao concluir primeiro acesso: {str(e)}"
+
+    finally:
+        conexao.close()
+
+
 def excluir_usuario(id_usuario):
     conexao = conectar()
     cursor = conexao.cursor()
@@ -275,9 +349,9 @@ def excluir_usuario(id_usuario):
         conexao.close()
         return False, "Usuário não encontrado."
 
-    if usuario["email"] == "admin@bemstock.com":
+    if usuario["email"] == "teste@bemstock.com":
         conexao.close()
-        return False, "O usuário administrador padrão não pode ser excluído."
+        return False, "O usuário administrador temporário não pode ser excluído."
 
     cursor.execute(
         "DELETE FROM usuarios WHERE id_usuario = ?",

@@ -6,20 +6,33 @@ def criar_tabelas():
     conexao = conectar()
     cursor = conexao.cursor()
 
-   
+    # =========================
     # USUÁRIOS
+    # =========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
             id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             senha TEXT NOT NULL,
-            perfil TEXT NOT NULL CHECK (perfil IN ('admin', 'estoque'))
+            perfil TEXT NOT NULL CHECK (perfil IN ('admin', 'estoque')),
+            primeiro_acesso INTEGER NOT NULL DEFAULT 1
         )
     """)
 
-  
+    # GARANTIR COLUNA EM BANCOS ANTIGOS
+    cursor.execute("PRAGMA table_info(usuarios)")
+    colunas = [coluna[1] for coluna in cursor.fetchall()]
+
+    if "primeiro_acesso" not in colunas:
+        cursor.execute("""
+            ALTER TABLE usuarios
+            ADD COLUMN primeiro_acesso INTEGER NOT NULL DEFAULT 1
+        """)
+
+    # =========================
     # PRODUTOS
+    # =========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS produtos (
             id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,13 +60,13 @@ def criar_tabelas():
         )
     """)
 
-
-    # MOVIMENTAÇÕES 
+    # =========================
+    # MOVIMENTAÇÕES
+    # =========================
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS movimentacoes (
             id_movimentacao INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            
             tipo_movimentacao TEXT NOT NULL CHECK (
                 tipo_movimentacao IN ('entrada', 'saida')
             ),
@@ -70,12 +83,10 @@ def criar_tabelas():
 
             quantidade INTEGER NOT NULL,
 
-            
             fornecedor TEXT,
             data_validade TEXT,
             numero_lote TEXT,
 
-            
             destino TEXT CHECK (
                 destino IN (
                     'cozinha',
@@ -102,16 +113,20 @@ def criar_tabelas():
     conexao.close()
 
 
-
-# ADMIN PADRÃO
+# =========================
+# ADMIN TEMPORÁRIO (PRIMEIRO ACESSO)
+# =========================
 def criar_admin_inicial():
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute(
-        "SELECT id_usuario FROM usuarios WHERE email = ?",
-        ("admin@bemstock.com",)
-    )
+    # verifica se já existe algum admin
+    cursor.execute("""
+        SELECT id_usuario
+        FROM usuarios
+        WHERE perfil = 'admin'
+        LIMIT 1
+    """)
     admin = cursor.fetchone()
 
     if admin is None:
@@ -119,10 +134,16 @@ def criar_admin_inicial():
 
         cursor.execute(
             """
-            INSERT INTO usuarios (nome, email, senha, perfil)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO usuarios (nome, email, senha, perfil, primeiro_acesso)
+            VALUES (?, ?, ?, ?, ?)
             """,
-            ("Administrador", "admin@bemstock.com", senha_hash, "admin")
+            (
+                "Administrador",
+                "teste@bemstock.com",
+                senha_hash,
+                "admin",
+                1
+            )
         )
 
         conexao.commit()
@@ -130,7 +151,9 @@ def criar_admin_inicial():
     conexao.close()
 
 
+# =========================
 # INICIALIZAÇÃO
+# =========================
 def inicializar_banco():
     criar_tabelas()
     criar_admin_inicial()

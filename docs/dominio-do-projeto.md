@@ -1,4 +1,4 @@
-# Domínio do Projeto — BemStock
+# 📦 Domínio do Projeto — BemStock
 
 ## Problema
 
@@ -22,14 +22,15 @@ O sistema BemStock tem como objetivo organizar e controlar o estoque de alimento
 
 O sistema permitirá:
 
-- realizar login no sistema
-- cadastrar produtos
-- registrar entradas de itens
-- registrar saídas de itens
-- consultar o estoque disponível
-- identificar produtos com estoque baixo
-- controlar a validade dos produtos por meio de registros de entrada
-- acompanhar o histórico de movimentações
+- realizar login no sistema  
+- realizar configuração inicial obrigatória do administrador  
+- cadastrar produtos  
+- registrar entradas de itens  
+- registrar saídas de itens  
+- consultar o estoque disponível  
+- identificar produtos com estoque baixo  
+- controlar a validade dos produtos por meio de registros de entrada  
+- acompanhar o histórico de movimentações  
 
 ---
 
@@ -37,10 +38,34 @@ O sistema permitirá:
 
 Os principais usuários do sistema serão:
 
-- administradores do sistema (perfil `admin`)
-- responsáveis pelo controle de estoque (perfil `estoque`)
+- administradores do sistema (perfil `admin`)  
+- responsáveis pelo controle de estoque (perfil `estoque`)  
 
 Cada usuário terá permissões de acordo com seu perfil.
+
+---
+
+## Primeiro acesso ao sistema
+
+Ao instalar o sistema pela primeira vez, é criado automaticamente um usuário administrador temporário com as seguintes credenciais:
+
+- e-mail: `teste@bemstock.com`  
+- senha: `123456`  
+- perfil: `admin`  
+
+### Regra de segurança
+
+No primeiro login:
+
+- o usuário **não terá acesso ao sistema imediatamente**
+- será **obrigado a alterar o e-mail e a senha**
+- somente após essa atualização poderá acessar o dashboard
+
+Essa regra garante:
+
+- maior segurança no sistema  
+- eliminação de credenciais padrão  
+- controle inicial adequado do administrador  
 
 ---
 
@@ -49,8 +74,8 @@ Cada usuário terá permissões de acordo com seu perfil.
 O sistema controlará três categorias fixas predefinidas:
 
 - Alimentos  
-- Produtos de Higiene  
-- Produtos de Limpeza  
+- Limpeza  
+- Higiene Pessoal  
 
 Essas categorias não poderão ser alteradas pelo usuário, garantindo padronização dos dados.
 
@@ -60,64 +85,92 @@ Essas categorias não poderão ser alteradas pelo usuário, garantindo padroniza
 
 O sistema BemStock permitirá realizar as seguintes operações:
 
+---
+
 ### Login
-- acessar o sistema por meio de autenticação com e-mail e senha
+
+- acessar o sistema por meio de autenticação com e-mail e senha  
+- validar credenciais criptografadas  
+- redirecionar o usuário conforme o estado de acesso:
+  - primeiro acesso → configuração obrigatória  
+  - acesso normal → dashboard  
+
+---
 
 ### Cadastro de produtos
+
 - cadastrar itens do estoque com:
-  - nome
-  - categoria
-  - unidade de medida
-  - estoque mínimo
-  - descrição
+  - nome  
+  - categoria  
+  - unidade de medida  
+  - estoque mínimo  
+  - descrição  
 
 > Observação: a quantidade de produtos não é armazenada diretamente, sendo calculada a partir das movimentações.
 
 ---
 
 ### Consulta de estoque
-- visualizar os produtos cadastrados
-- verificar o estoque atual com base nas movimentações registradas
-- identificar o status do estoque (normal, baixo, esgotado)
+
+- visualizar os produtos cadastrados  
+- verificar o estoque atual com base nas movimentações registradas  
+- identificar o status do estoque:
+  - normal  
+  - próximo do mínimo  
+  - baixo  
+  - esgotado  
 
 ---
 
 ### Registro de entrada de produtos
-- registrar a entrada de novos itens no estoque
+
+- registrar a entrada de novos itens no estoque  
 - informar dados como:
-  - quantidade
-  - fornecedor (opcional)
-  - data de validade (opcional)
-  - número do lote (opcional)
+  - quantidade  
+  - fornecedor (opcional)  
+  - data de validade (opcional)  
+  - número do lote (opcional)  
 
 ---
 
 ### Registro de saída de produtos
-- registrar a retirada de itens do estoque
-- informar o destino do item (ex.: cozinha, refeitório, etc.)
+
+- registrar a retirada de itens do estoque  
+- informar o destino do item, como:
+  - cozinha  
+  - banheiros  
+  - área de serviço  
+  - lavanderia  
+  - refeitório  
+  - outros  
 
 ---
 
 ### Controle de estoque mínimo
-- identificar automaticamente produtos com quantidade abaixo do nível mínimo definido
+
+- identificar automaticamente produtos com quantidade abaixo do nível mínimo definido  
 
 ---
 
 ### Controle de validade
-- acompanhar a validade dos produtos com base nos registros de entrada
-- identificar produtos próximos do vencimento ou vencidos
+
+- acompanhar a validade dos produtos com base nos registros de entrada  
+- identificar produtos:
+  - próximos do vencimento  
+  - vencidos  
 
 ---
 
 ### Histórico de movimentações
-- consultar todas as entradas e saídas realizadas
+
+- consultar todas as entradas e saídas realizadas  
 - aplicar filtros por:
-  - produto
-  - categoria
-  - período
-  - tipo de movimentação
-  - fornecedor
-  - lote
+  - produto  
+  - categoria  
+  - período  
+  - tipo de movimentação  
+  - fornecedor  
+  - lote  
 
 ---
 
@@ -125,14 +178,16 @@ O sistema BemStock permitirá realizar as seguintes operações:
 
 O controle de estoque no sistema BemStock é baseado em **movimentações**, ou seja:
 
-- o estoque não é armazenado diretamente no produto
-- ele é calculado a partir das entradas e saídas registradas
+- o estoque não é armazenado diretamente no produto  
+- ele é calculado a partir das entradas e saídas registradas  
 
 Essa abordagem permite:
 
-- maior controle e rastreabilidade
-- histórico completo de operações
-- melhor suporte para auditoria e análise
+- maior controle e rastreabilidade  
+- histórico completo de operações  
+- melhor suporte para auditoria e análise  
+
+Além disso, o sistema incorpora uma regra de segurança inicial obrigatória, garantindo que o administrador configure corretamente o acesso ao sistema logo no primeiro uso.
 
 ---
 
@@ -153,4 +208,5 @@ Esta etapa é considerada concluída quando:
 - os objetivos do sistema estão alinhados com a solução proposta  
 - os usuários do sistema foram identificados  
 - as operações do sistema estão documentadas  
+- as regras de segurança (primeiro acesso) estão definidas  
 - o domínio está consistente com a implementação do sistema  

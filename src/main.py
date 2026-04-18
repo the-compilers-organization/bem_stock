@@ -42,6 +42,7 @@ import customtkinter as ctk
 
 from database.schema import inicializar_banco
 from views.login_view import LoginView
+from views.primeiro_acesso_view import PrimeiroAcessoView
 from views.cadastro_usuario_view import CadastroUsuarioView
 from views.dashboard_view import DashboardView
 from views.produto_view import ProdutoView
@@ -79,16 +80,18 @@ class BemStockApp(ctk.CTk):
             self.frame_atual = None
 
     def mostrar_login(self):
+        self.usuario_logado = None
         self.limpar_tela()
         self.title("BemStock - Login")
         self.frame_atual = LoginView(self)
         self.frame_atual.pack(fill="both", expand=True)
 
-    # def mostrar_cadastro(self):
-    #     self.limpar_tela()
-    #     self.title("BemStock - Cadastro de Usuário")
-    #     self.frame_atual = CadastroUsuarioView(self)
-    #     self.frame_atual.pack(fill="both", expand=True)
+    def mostrar_primeiro_acesso(self, usuario):
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Primeiro Acesso")
+        self.frame_atual = PrimeiroAcessoView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
 
     def mostrar_dashboard(self, usuario):
         self.usuario_logado = usuario

@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
 
-from controllers.produto_controller import listar_produtos
+from controllers.produto_controller import listar_produtos_para_combobox
 from controllers.movimentacao_controller import listar_historico
 
 
@@ -43,19 +43,12 @@ class DashboardView(ctk.CTkFrame):
     def abrir_usuarios(self):
         self.master.mostrar_usuario(self.usuario)
 
-    # def abrir_usuarios(self):
-    #     messagebox.showinfo("Usuários", "Tela de usuários ainda será conectada.")
-
-    # def abrir_relatorios(self):
-    #     messagebox.showinfo("Relatórios", "Tela de relatórios ainda será conectada.")
-
     def obter_indicadores(self):
         try:
-            produtos = listar_produtos()
-            historico = listar_historico()
+            produtos = listar_produtos_para_combobox()
+            historico, total_movimentacoes = listar_historico()
 
             total_produtos = len(produtos)
-            total_movimentacoes = len(historico)
 
             total_alimentos = len([p for p in produtos if p["categoria"] == "Alimentos"])
             total_limpeza = len([p for p in produtos if p["categoria"] == "Limpeza"])
@@ -240,20 +233,6 @@ class DashboardView(ctk.CTkFrame):
                 font=("Segoe UI", 14, "bold"),
                 command=self.abrir_usuarios
             ).pack(fill="x", padx=20, pady=6)
-
-        # ctk.CTkButton(
-        #     frame_sidebar,
-        #     text="Relatórios",
-        #     height=42,
-        #     corner_radius=8,
-        #     fg_color="#ffffff",
-        #     hover_color=self.cor_hover_secundario,
-        #     text_color=self.cor_texto,
-        #     border_width=1,
-        #     border_color=self.cor_borda,
-        #     font=("Segoe UI", 14, "bold"),
-        #     command=self.abrir_relatorios
-        # ).pack(fill="x", padx=20, pady=6)
 
         ctk.CTkButton(
             frame_sidebar,

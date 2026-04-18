@@ -1,4 +1,4 @@
-# Entidades e Informações do Domínio — BemStock
+# 📦 Entidades e Informações do Domínio — BemStock
 
 ## 1. Visão geral
 
@@ -20,7 +20,7 @@ Essas entidades servem de base para a modelagem do banco de dados e para a arqui
 
 ## 2.1 Usuário
 
-A entidade **Usuário** representa a pessoa responsável por acessar o sistema e realizar operações como cadastro de produtos e registro de movimentações.
+A entidade **Usuário** representa a pessoa responsável por acessar o sistema e realizar operações como cadastro de produtos, registro de movimentações e administração do sistema.
 
 ### Atributos
 
@@ -29,6 +29,18 @@ A entidade **Usuário** representa a pessoa responsável por acessar o sistema e
 - **email** – e-mail utilizado para autenticação (único)  
 - **senha** – senha criptografada do usuário  
 - **perfil** – tipo de usuário (valores possíveis: `admin` ou `estoque`)  
+- **primeiro_acesso** – indica se o usuário ainda precisa realizar a configuração inicial:
+  - `1` → usuário em primeiro acesso (obrigatório alterar e-mail e senha)  
+  - `0` → usuário já configurado  
+
+### Observações importantes
+
+- O sistema cria automaticamente um **usuário administrador temporário** no primeiro uso:
+  - e-mail: `teste@bemstock.com`
+  - senha: `123456`
+  - perfil: `admin`
+- Esse usuário **não pode utilizar o sistema normalmente** até atualizar suas credenciais.
+- O campo `primeiro_acesso` é responsável por controlar esse comportamento.
 
 ---
 
@@ -36,7 +48,7 @@ A entidade **Usuário** representa a pessoa responsável por acessar o sistema e
 
 A entidade **Produto** representa cada item armazenado no estoque da instituição.
 
-Diferente da versão anterior, o sistema **não armazena a quantidade diretamente no produto**, pois o controle é feito através das movimentações.
+O sistema **não armazena a quantidade diretamente no produto**, pois o controle é realizado por meio das movimentações.
 
 ### Atributos
 
@@ -57,13 +69,18 @@ Diferente da versão anterior, o sistema **não armazena a quantidade diretament
 - **estoque_minimo** – quantidade mínima recomendada  
 - **descricao** – descrição opcional  
 
+### Observações importantes
+
+- O estoque atual é **calculado dinamicamente** com base nas movimentações.
+- O sistema utiliza o `estoque_minimo` para identificar produtos com baixo estoque.
+
 ---
 
 ## 2.3 Movimentação
 
 A entidade **Movimentação** representa cada operação de entrada ou saída de produtos no estoque.
 
-Essa entidade é **a principal responsável pelo controle de estoque**, pois registra todo o histórico.
+Essa entidade é **responsável pelo controle completo do estoque**, registrando todo o histórico.
 
 ### Atributos
 
@@ -88,7 +105,7 @@ Essa entidade é **a principal responsável pelo controle de estoque**, pois reg
 - **destino** – local de destino (usado em saídas):
   - cozinha  
   - banheiros  
-  - área de serviço  
+  - area de servico  
   - lavanderia  
   - refeitório  
   - outros  
@@ -98,6 +115,11 @@ Essa entidade é **a principal responsável pelo controle de estoque**, pois reg
 - **data_movimentacao** – data em que a movimentação ocorreu  
 
 - **id_usuario** – usuário responsável pela movimentação  
+
+### Observações importantes
+
+- Cada movimentação registra **quem realizou a ação**, garantindo rastreabilidade.
+- O controle de validade é feito por lote, permitindo melhor gestão de alimentos e produtos perecíveis.
 
 ---
 
@@ -123,7 +145,21 @@ Usuário **1 : N** Movimentação
 
 ---
 
-# 4. Resumo das entidades
+# 4. Regras de negócio importantes
+
+- O sistema **não permite acessar o dashboard no primeiro login** do usuário administrador temporário.
+- O usuário deve obrigatoriamente:
+  - alterar o e-mail
+  - alterar a senha
+- Após essa alteração, o campo `primeiro_acesso` é atualizado para `0`.
+
+- Produtos não podem ser removidos se possuírem histórico de movimentações.
+- A categoria da movimentação deve corresponder à categoria do produto.
+- Quantidades devem ser sempre valores inteiros positivos (ou zero para estoque mínimo).
+
+---
+
+# 5. Resumo das entidades
 
 ## Usuário
 
@@ -132,6 +168,7 @@ Usuário **1 : N** Movimentação
 - email  
 - senha  
 - perfil  
+- primeiro_acesso  
 
 ---
 
@@ -163,7 +200,7 @@ Usuário **1 : N** Movimentação
 
 ---
 
-# 5. Validação das entidades em relação ao domínio
+# 6. Validação das entidades em relação ao domínio
 
 As entidades identificadas atendem às necessidades do sistema porque permitem representar:
 
@@ -173,11 +210,11 @@ As entidades identificadas atendem às necessidades do sistema porque permitem r
 
 A decisão de **não armazenar a quantidade diretamente no produto** permite maior controle e rastreabilidade, já que o estoque pode ser calculado com base no histórico de movimentações.
 
-As categorias e demais valores são predefinidos no sistema, evitando inconsistências nos dados.
+O uso do campo `primeiro_acesso` garante maior segurança no sistema, evitando o uso de credenciais padrão.
 
 ---
 
-# 6. Conclusão
+# 7. Conclusão
 
 A identificação das entidades e seus atributos estabelece uma base sólida para o desenvolvimento do sistema.
 
@@ -197,4 +234,5 @@ Esta etapa é considerada concluída quando:
 - as entidades principais estão identificadas  
 - os atributos estão alinhados com o banco de dados  
 - os relacionamentos estão definidos  
+- as regras de negócio estão documentadas  
 - a equipe valida que o modelo representa corretamente o domínio do sistema  

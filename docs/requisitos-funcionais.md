@@ -1,4 +1,4 @@
-# Requisitos Funcionais — BemStock
+# 📋 Requisitos Funcionais — BemStock
 
 ## 1. Introdução
 
@@ -18,58 +18,74 @@ Esses requisitos foram definidos com base no domínio do sistema, nas regras imp
 
 **RF04.** O sistema deve identificar o usuário responsável pelas operações realizadas.
 
+**RF05.** O sistema deve verificar se o usuário está em primeiro acesso.
+
+**RF06.** O sistema deve impedir o acesso ao dashboard caso o usuário esteja em primeiro acesso.
+
+**RF07.** O sistema deve redirecionar o usuário em primeiro acesso para a tela de configuração inicial.
+
+**RF08.** O sistema deve permitir que o usuário altere o e-mail no primeiro acesso.
+
+**RF09.** O sistema deve permitir que o usuário altere a senha no primeiro acesso.
+
+**RF10.** O sistema deve atualizar o status de primeiro acesso após a alteração dos dados.
+
 ---
 
 ## 3. Módulo de Usuários
 
-**RF05.** O sistema deve permitir que o administrador cadastre novos usuários.
+**RF11.** O sistema deve permitir que o administrador cadastre novos usuários.
 
-**RF06.** O sistema deve permitir registrar no cadastro do usuário as seguintes informações:
+**RF12.** O sistema deve permitir registrar no cadastro do usuário as seguintes informações:
 - nome  
 - e-mail  
 - senha  
 - perfil (`admin` ou `estoque`)
 
-**RF07.** O sistema não deve permitir o cadastro de dois usuários com o mesmo e-mail.
+**RF13.** O sistema não deve permitir o cadastro de dois usuários com o mesmo e-mail.
 
-**RF08.** O sistema deve permitir listar usuários cadastrados.
+**RF14.** O sistema deve permitir listar usuários cadastrados.
 
-**RF09.** O sistema deve permitir buscar usuários por nome ou e-mail.
+**RF15.** O sistema deve permitir paginação na listagem de usuários.
 
-**RF10.** O sistema deve permitir editar os dados de um usuário.
+**RF16.** O sistema deve permitir buscar usuários por nome ou e-mail.
 
-**RF11.** O sistema deve permitir atualizar a senha de um usuário.
+**RF17.** O sistema deve permitir editar os dados de um usuário.
 
-**RF12.** O sistema deve permitir excluir usuários.
+**RF18.** O sistema deve permitir atualizar a senha de um usuário.
 
-**RF13.** O sistema não deve permitir excluir o usuário administrador padrão (`admin@bemstock.com`).
+**RF19.** O sistema deve permitir excluir usuários.
+
+**RF20.** O sistema não deve permitir excluir o usuário administrador temporário (`teste@bemstock.com`).
 
 ---
 
 ## 4. Módulo de Produtos
 
-**RF14.** O sistema deve permitir cadastrar produtos no estoque.
+**RF21.** O sistema deve permitir cadastrar produtos no estoque.
 
-**RF15.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
+**RF22.** O sistema deve permitir registrar no cadastro do produto as seguintes informações:
 - nome do produto  
 - categoria  
 - unidade de medida  
 - estoque mínimo  
 - descrição  
 
-**RF16.** O sistema deve permitir listar todos os produtos cadastrados.
+**RF23.** O sistema deve permitir listar todos os produtos cadastrados.
 
-**RF17.** O sistema deve permitir buscar produtos por nome.
+**RF24.** O sistema deve permitir paginação na listagem de produtos.
 
-**RF18.** O sistema deve permitir filtrar produtos por categoria.
+**RF25.** O sistema deve permitir buscar produtos por nome.
 
-**RF19.** O sistema deve permitir editar informações de um produto.
+**RF26.** O sistema deve permitir filtrar produtos por categoria.
 
-**RF20.** O sistema deve permitir excluir um produto.
+**RF27.** O sistema deve permitir editar informações de um produto.
 
-**RF21.** O sistema não deve permitir excluir produtos que possuam movimentações registradas.
+**RF28.** O sistema deve permitir excluir um produto.
 
-**RF22.** O sistema deve permitir utilizar apenas categorias predefinidas:
+**RF29.** O sistema não deve permitir excluir produtos que possuam movimentações registradas.
+
+**RF30.** O sistema deve permitir utilizar apenas categorias predefinidas:
 - Alimentos  
 - Limpeza  
 - Higiene Pessoal  
@@ -78,11 +94,11 @@ Esses requisitos foram definidos com base no domínio do sistema, nas regras imp
 
 ## 5. Módulo de Movimentação de Estoque
 
-**RF23.** O sistema deve permitir registrar entrada de produtos no estoque.
+**RF31.** O sistema deve permitir registrar entrada de produtos no estoque.
 
-**RF24.** O sistema deve permitir registrar saída de produtos do estoque.
+**RF32.** O sistema deve permitir registrar saída de produtos do estoque.
 
-**RF25.** O sistema deve registrar as seguintes informações na movimentação:
+**RF33.** O sistema deve registrar as seguintes informações na movimentação:
 - tipo de movimentação (entrada ou saída)  
 - produto  
 - categoria  
@@ -90,50 +106,56 @@ Esses requisitos foram definidos com base no domínio do sistema, nas regras imp
 - data da movimentação  
 - usuário responsável  
 
-**RF26.** O sistema deve permitir registrar informações adicionais na movimentação:
+**RF34.** O sistema deve permitir registrar informações adicionais na movimentação:
 - fornecedor (opcional)  
 - data de validade (opcional)  
 - número do lote (opcional)  
 - destino (opcional, para saídas)  
 - observações (opcional)  
 
-**RF27.** O sistema deve validar se o produto e o usuário existem antes de registrar a movimentação.
+**RF35.** O sistema deve validar se o produto e o usuário existem antes de registrar a movimentação.
 
-**RF28.** O sistema deve garantir que a categoria da movimentação seja compatível com a categoria do produto.
+**RF36.** O sistema deve garantir que a categoria da movimentação seja compatível com a categoria do produto.
 
-**RF29.** O sistema deve registrar automaticamente a data e hora da movimentação.
+**RF37.** O sistema deve registrar automaticamente a data e hora da movimentação.
 
 ---
 
 ## 6. Módulo de Controle de Estoque
 
-**RF30.** O sistema deve calcular o estoque atual de cada produto com base nas movimentações de entrada e saída.
+**RF38.** O sistema deve calcular o estoque atual de cada produto com base nas movimentações de entrada e saída.
 
-**RF31.** O sistema deve permitir consultar o estoque atual dos produtos.
+**RF39.** O sistema deve permitir consultar o estoque atual dos produtos.
 
-**RF32.** O sistema deve identificar produtos com quantidade abaixo do estoque mínimo.
+**RF40.** O sistema deve identificar produtos com quantidade abaixo do estoque mínimo.
 
-**RF33.** O sistema deve classificar o status do estoque (normal, baixo, esgotado).
+**RF41.** O sistema deve classificar o status do estoque:
+- normal  
+- próximo do mínimo  
+- baixo  
+- esgotado  
 
 ---
 
 ## 7. Módulo de Controle de Validade
 
-**RF34.** O sistema deve considerar a data de validade informada nas movimentações de entrada.
+**RF42.** O sistema deve considerar a data de validade informada nas movimentações de entrada.
 
-**RF35.** O sistema deve identificar produtos com validade próxima ou vencida.
+**RF43.** O sistema deve identificar produtos com validade próxima ou vencida.
 
-**RF36.** O sistema deve permitir consultar produtos com problemas de validade.
+**RF44.** O sistema deve permitir consultar produtos com problemas de validade.
 
 ---
 
 ## 8. Módulo de Histórico de Movimentações
 
-**RF37.** O sistema deve registrar todas as movimentações de entrada e saída de produtos.
+**RF45.** O sistema deve registrar todas as movimentações de entrada e saída de produtos.
 
-**RF38.** O sistema deve permitir consultar o histórico de movimentações.
+**RF46.** O sistema deve permitir consultar o histórico de movimentações.
 
-**RF39.** O sistema deve permitir filtrar movimentações por:
+**RF47.** O sistema deve permitir paginação no histórico de movimentações.
+
+**RF48.** O sistema deve permitir filtrar movimentações por:
 - produto  
 - categoria  
 - período  
