@@ -340,13 +340,15 @@ class DashboardView(ctk.CTkFrame):
         )
         card_atalho_1.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
         card_atalho_1.pack_propagate(False)
+        card_atalho_1.grid_rowconfigure(1, weight=1)
+        card_atalho_1.grid_columnconfigure(0, weight=1)
 
         ctk.CTkLabel(
             card_atalho_1,
             text="Gerenciar Produtos",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(20, 8))
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(20, 8))
 
         ctk.CTkLabel(
             card_atalho_1,
@@ -354,7 +356,7 @@ class DashboardView(ctk.CTkFrame):
             font=("Segoe UI", 13),
             text_color=self.cor_texto_secundario,
             justify="left"
-        ).pack(anchor="w", padx=20)
+        ).grid(row=1, column=0, sticky="nw", padx=20)
 
         ctk.CTkButton(
             card_atalho_1,
@@ -366,7 +368,7 @@ class DashboardView(ctk.CTkFrame):
             text_color="#ffffff",
             font=("Segoe UI", 13, "bold"),
             command=self.abrir_produtos
-        ).pack(anchor="w", padx=20, pady=(18, 0))
+        ).grid(row=2, column=0, sticky="w", padx=20, pady=(10, 20))
 
         card_atalho_2 = ctk.CTkFrame(
             frame_acoes,
@@ -378,13 +380,15 @@ class DashboardView(ctk.CTkFrame):
         )
         card_atalho_2.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
         card_atalho_2.pack_propagate(False)
+        card_atalho_2.grid_rowconfigure(1, weight=1)
+        card_atalho_2.grid_columnconfigure(0, weight=1)
 
         ctk.CTkLabel(
             card_atalho_2,
             text="Registrar Movimentações",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(20, 8))
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(20, 8))
 
         ctk.CTkLabel(
             card_atalho_2,
@@ -396,7 +400,7 @@ class DashboardView(ctk.CTkFrame):
             font=("Segoe UI", 13),
             text_color=self.cor_texto_secundario,
             justify="left"
-        ).pack(anchor="w", padx=20)
+        ).grid(row=1, column=0, sticky="nw", padx=20)
 
         ctk.CTkButton(
             card_atalho_2,
@@ -408,34 +412,34 @@ class DashboardView(ctk.CTkFrame):
             text_color="#ffffff",
             font=("Segoe UI", 13, "bold"),
             command=self.abrir_movimentacoes
-        ).pack(anchor="w", padx=20, pady=(18, 0))
+        ).grid(row=2, column=0, sticky="w", padx=20, pady=(10, 20))
 
-        frame_info = ctk.CTkFrame(
-            frame_central,
-            corner_radius=12,
-            fg_color="#fcfcfc",
-            border_width=1,
-            border_color=self.cor_borda
-        )
-        frame_info.pack(fill="x", padx=25, pady=(0, 25))
+        # frame_info = ctk.CTkFrame(
+        #     frame_central,
+        #     corner_radius=12,
+        #     fg_color="#fcfcfc",
+        #     border_width=1,
+        #     border_color=self.cor_borda
+        # )
+        # frame_info.pack(fill="x", padx=25, pady=(0, 25))
 
-        ctk.CTkLabel(
-            frame_info,
-            text="Informações do usuário logado",
-            font=("Segoe UI", 15, "bold"),
-            text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(18, 10))
+        # ctk.CTkLabel(
+        #     frame_info,
+        #     text="Informações do usuário logado",
+        #     font=("Segoe UI", 15, "bold"),
+        #     text_color=self.cor_texto
+        # ).pack(anchor="w", padx=20, pady=(18, 10))
 
-        ctk.CTkLabel(
-            frame_info,
-            text=f"Nome: {self.nome_usuario}",
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto_secundario
-        ).pack(anchor="w", padx=20, pady=2)
+        # ctk.CTkLabel(
+        #     frame_info,
+        #     text=f"Nome: {self.nome_usuario}",
+        #     font=("Segoe UI", 13),
+        #     text_color=self.cor_texto_secundario
+        # ).pack(anchor="w", padx=20, pady=2)
 
-        ctk.CTkLabel(
-            frame_info,
-            text=f"Perfil: {self.perfil_usuario}",
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto_secundario
-        ).pack(anchor="w", padx=20, pady=(2, 18))
+        # ctk.CTkLabel(
+        #     frame_info,
+        #     text=f"Perfil: {self.perfil_usuario}",
+        #     font=("Segoe UI", 13),
+        #     text_color=self.cor_texto_secundario
+        # ).pack(anchor="w", padx=20, pady=(2, 18))
