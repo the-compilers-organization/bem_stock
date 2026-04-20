@@ -13,6 +13,6 @@ from controllers.usuario_controller import (
 class ToolTip:
     pass
 
-
+## em construção:
 class UsuarioView(ctk.CTkFrame):
    pass
