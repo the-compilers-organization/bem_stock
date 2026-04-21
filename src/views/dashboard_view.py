@@ -46,10 +46,9 @@ class DashboardView(ctk.CTkFrame):
     def obter_indicadores(self):
         try:
             produtos = listar_produtos_para_combobox()
-            historico, total_movimentacoes = listar_historico()
+            _, total_movimentacoes = listar_historico()
 
             total_produtos = len(produtos)
-
             total_alimentos = len([p for p in produtos if p["categoria"] == "Alimentos"])
             total_limpeza = len([p for p in produtos if p["categoria"] == "Limpeza"])
             total_higiene = len([p for p in produtos if p["categoria"] == "Higiene Pessoal"])
@@ -275,7 +274,6 @@ class DashboardView(ctk.CTkFrame):
 
         frame_cards = ctk.CTkFrame(frame_conteudo, fg_color="transparent")
         frame_cards.pack(fill="x", pady=(0, 20))
-
         frame_cards.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         self.criar_card_resumo(
@@ -312,21 +310,27 @@ class DashboardView(ctk.CTkFrame):
         )
         frame_central.pack(fill="both", expand=True)
 
-        ctk.CTkLabel(
+        conteudo_scroll = ctk.CTkScrollableFrame(
             frame_central,
+            fg_color="transparent"
+        )
+        conteudo_scroll.pack(fill="both", expand=True)
+
+        ctk.CTkLabel(
+            conteudo_scroll,
             text=f"Olá, {self.nome_usuario} 👋",
             font=("Segoe UI", 24, "bold"),
             text_color=self.cor_texto
         ).pack(anchor="w", padx=25, pady=(25, 8))
 
         ctk.CTkLabel(
-            frame_central,
+            conteudo_scroll,
             text="Seja bem-vindo(a) ao painel principal do BemStock.",
             font=("Segoe UI", 14),
             text_color=self.cor_texto_secundario
         ).pack(anchor="w", padx=25)
 
-        frame_acoes = ctk.CTkFrame(frame_central, fg_color="transparent")
+        frame_acoes = ctk.CTkFrame(conteudo_scroll, fg_color="transparent")
         frame_acoes.pack(fill="x", padx=25, pady=(25, 20))
         frame_acoes.grid_columnconfigure((0, 1), weight=1)
 
@@ -414,32 +418,32 @@ class DashboardView(ctk.CTkFrame):
             command=self.abrir_movimentacoes
         ).grid(row=2, column=0, sticky="w", padx=20, pady=(10, 20))
 
-        # frame_info = ctk.CTkFrame(
-        #     frame_central,
-        #     corner_radius=12,
-        #     fg_color="#fcfcfc",
-        #     border_width=1,
-        #     border_color=self.cor_borda
-        # )
-        # frame_info.pack(fill="x", padx=25, pady=(0, 25))
+        frame_info = ctk.CTkFrame(
+            conteudo_scroll,
+            corner_radius=12,
+            fg_color="#fcfcfc",
+            border_width=1,
+            border_color=self.cor_borda
+        )
+        frame_info.pack(fill="x", padx=25, pady=(0, 25))
 
-        # ctk.CTkLabel(
-        #     frame_info,
-        #     text="Informações do usuário logado",
-        #     font=("Segoe UI", 15, "bold"),
-        #     text_color=self.cor_texto
-        # ).pack(anchor="w", padx=20, pady=(18, 10))
+        ctk.CTkLabel(
+            frame_info,
+            text="Informações do usuário logado",
+            font=("Segoe UI", 15, "bold"),
+            text_color=self.cor_texto
+        ).pack(anchor="w", padx=20, pady=(18, 10))
 
-        # ctk.CTkLabel(
-        #     frame_info,
-        #     text=f"Nome: {self.nome_usuario}",
-        #     font=("Segoe UI", 13),
-        #     text_color=self.cor_texto_secundario
-        # ).pack(anchor="w", padx=20, pady=2)
+        ctk.CTkLabel(
+            frame_info,
+            text=f"Nome: {self.nome_usuario}",
+            font=("Segoe UI", 13),
+            text_color=self.cor_texto_secundario
+        ).pack(anchor="w", padx=20, pady=2)
 
-        # ctk.CTkLabel(
-        #     frame_info,
-        #     text=f"Perfil: {self.perfil_usuario}",
-        #     font=("Segoe UI", 13),
-        #     text_color=self.cor_texto_secundario
-        # ).pack(anchor="w", padx=20, pady=(2, 18))
+        ctk.CTkLabel(
+            frame_info,
+            text=f"Perfil: {self.perfil_usuario}",
+            font=("Segoe UI", 13),
+            text_color=self.cor_texto_secundario
+        ).pack(anchor="w", padx=20, pady=(2, 18))
