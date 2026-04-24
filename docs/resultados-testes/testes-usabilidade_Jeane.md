@@ -1573,5 +1573,3 @@ O sistema será reprovado se:
 # 🎯 8. Conclusão
 
 Este plano de testes cobre as principais situações de usabilidade do sistema BemStock, incluindo login, dashboard, produtos, movimentações, histórico, usuários, navegação, layout, edição, exclusão e consistência de estoque.
-
-Ele foi criado para ser executado por iniciantes, com passos detalhados e campos para registrar o resultado de cada caso de teste.
