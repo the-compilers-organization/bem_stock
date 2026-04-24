@@ -204,7 +204,7 @@ git clone https://github.com/the-compilers-organization/bem_stock.git
 
 ### 2️⃣ Entrar na pasta do projeto
 
-cd bemstock
+cd bem_stock
 
 ---
 
