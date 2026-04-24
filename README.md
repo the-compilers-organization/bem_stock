@@ -281,7 +281,7 @@ A documentação do projeto está disponível na pasta **docs** do repositório:
 - [Requisitos Funcionais](docs/requisitos-funcionais.md)
 - [Requisitos Não Funcionais](docs/requisitos-nao-funcionais.md)
 - [Arquitetura do Sistema](docs/arquitetura-do-sistema.md)
-- [Atores e Casos de Uso](docs/atores-e-casos-de-uso.png)
+- [Atores e Casos de Uso](docs/casos_de_uso_bem_stock.png)
 
 ---
 
