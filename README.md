@@ -225,6 +225,13 @@ source venv/bin/activate
 
 ---
 
+### 5️⃣ Instalar dependências
+
+pip install -r requirements.txt
+
+---
+
+
 # Como Rodar o Projeto :computer:
 
 Com o ambiente virtual ativado, execute:
@@ -232,12 +239,6 @@ Com o ambiente virtual ativado, execute:
 python src/main.py
 
 Após executar o comando, a interface gráfica do sistema será aberta automaticamente.
-
----
-
-### 5️⃣ Instalar dependências
-
-pip install -r requirements.txt
 
 ---
 
