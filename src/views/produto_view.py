@@ -1,4 +1,5 @@
 import math
+import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox
 
@@ -92,48 +93,82 @@ class ProdutoView(ctk.CTkFrame):
 
         self.entry_busca = None
         self.combo_categoria = None
-        self.lista_container = None
         self.label_paginacao = None
         self.btn_anterior = None
         self.btn_proxima = None
+
+        self.canvas_cabecalho = None
+        self.canvas_corpo = None
+        self.frame_cabecalho = None
+        self.frame_corpo = None
+        self.scroll_x = None
+        self.scroll_y = None
+        self.canvas_window_id_cabecalho = None
+        self.canvas_window_id_corpo = None
+        self._sincronizando_scroll_x = False
 
         self.pagina_atual = 1
         self.itens_por_pagina = 10
         self.total_registros = 0
         self.total_paginas = 1
 
+        # Mesma lógica usada em movimentacao_view.py:
+        # cada coluna possui largura fixa e weight=0.
         self.colunas_tabela = [
-            ("Produto", 4, 260),
-            ("Categoria", 2, 140),
-            ("Unidade", 2, 120),
-            ("Estoque\nAtual", 2, 140),
-            ("Estoque\nMínimo", 2, 140),
-            ("Status", 2, 150),
-            ("Validade", 2, 170),
-            ("Ações", 2, 180),
+            ("Produto", 260),
+            ("Categoria", 150),
+            ("Unidade", 130),
+            ("Estoque\nAtual", 140),
+            ("Estoque\nMínimo", 150),
+            ("Status", 190),
+            ("Validade", 220),
+            ("Ações", 170),
         ]
 
         self.wrap_cabecalho = {
-            "Produto": 230,
+            "Produto": 220,
             "Categoria": 120,
             "Unidade": 100,
-            "Estoque\nAtual": 110,
+            "Estoque\nAtual": 100,
             "Estoque\nMínimo": 110,
-            "Status": 110,
-            "Validade": 120,
-            "Ações": 100,
+            "Status": 150,
+            "Validade": 160,
+            "Ações": 120,
         }
 
         self.wrap_celulas = {
-            "produto_nome": 240,
-            "produto_descricao": 240,
-            "categoria": 130,
-            "unidade": 110,
-            "estoque_atual": 100,
-            "estoque_minimo": 100,
-            "status": 120,
-            "validade": 150,
+            "produto_nome": 220,
+            "produto_descricao": 220,
+            "categoria": 120,
+            "unidade": 100,
+            "estoque_atual": 90,
+            "estoque_minimo": 90,
+            "status": 150,
+            "validade": 160,
+            "Ações": 120,
         }
+
+        # Não usamos padx externo nas colunas da tabela.
+        # A largura de cada coluna é controlada apenas por colunas_tabela.
+        # Isso evita desalinhamento entre cabeçalho e células, principalmente
+        # nas colunas Status, Validade e Ações.
+        self.paddings_colunas = {
+            0: (0, 0),
+            1: (0, 0),
+            2: (0, 0),
+            3: (0, 0),
+            4: (0, 0),
+            5: (0, 0),
+            6: (0, 0),
+            7: (0, 0),
+        }
+
+        self.colunas_centralizadas = {1, 2, 3, 4, 5, 6, 7}
+
+        # Largura real da tabela.
+        # Esse valor é usado igualmente no canvas do cabeçalho e no canvas do corpo,
+        # garantindo que os dois rolem juntos na horizontal sem desalinhamento.
+        self.largura_conteudo_tabela = sum(largura for _, largura in self.colunas_tabela)
 
         self.criar_interface()
         self.carregar_produtos()
@@ -151,16 +186,8 @@ class ProdutoView(ctk.CTkFrame):
             pass
 
     def configurar_foco_entry(self, entry):
-        entry.bind(
-            "<FocusIn>",
-            lambda event: self.destacar_foco_widget(entry),
-            add="+"
-        )
-        entry.bind(
-            "<FocusOut>",
-            lambda event: self.remover_foco_widget(entry),
-            add="+"
-        )
+        entry.bind("<FocusIn>", lambda event: self.destacar_foco_widget(entry), add="+")
+        entry.bind("<FocusOut>", lambda event: self.remover_foco_widget(entry), add="+")
 
     def abrir_dropdown_combobox(self, combo):
         try:
@@ -172,17 +199,8 @@ class ProdutoView(ctk.CTkFrame):
                 pass
 
     def configurar_foco_combobox(self, combo):
-        combo.bind(
-            "<FocusIn>",
-            lambda event: self.destacar_foco_widget(combo),
-            add="+"
-        )
-        combo.bind(
-            "<FocusOut>",
-            lambda event: self.remover_foco_widget(combo),
-            add="+"
-        )
-
+        combo.bind("<FocusIn>", lambda event: self.destacar_foco_widget(combo), add="+")
+        combo.bind("<FocusOut>", lambda event: self.remover_foco_widget(combo), add="+")
         combo.bind(
             "<Button-1>",
             lambda event: (
@@ -214,12 +232,176 @@ class ProdutoView(ctk.CTkFrame):
         self.master.mostrar_cadastro_produto(self.usuario, produto)
 
     def configurar_colunas_grid(self, frame):
-        for i, (_, peso, largura_minima) in enumerate(self.colunas_tabela):
-            frame.grid_columnconfigure(
-                i,
-                weight=peso,
-                minsize=largura_minima
+        for i, (_, largura) in enumerate(self.colunas_tabela):
+            frame.grid_columnconfigure(i, minsize=largura, weight=0)
+
+    def obter_alinhamento_coluna(self, indice_coluna):
+        if indice_coluna in self.colunas_centralizadas:
+            return "center", "center"
+        return "w", "left"
+
+    def criar_container_coluna(self, parent, coluna, pady=(0, 0), altura=None):
+        """
+        Cria uma célula com largura fixa para o cabeçalho e para as linhas.
+        Isso evita que badges, textos ou botões empurrem a coluna e deixem
+        o cabeçalho desalinhado em relação ao conteúdo.
+        """
+        largura = self.colunas_tabela[coluna][1]
+
+        if altura is None:
+            altura = 78 if pady == (14, 14) else 48
+
+        frame = ctk.CTkFrame(
+            parent,
+            fg_color="transparent",
+            width=largura,
+            height=altura
+        )
+        frame.grid(
+            row=0,
+            column=coluna,
+            sticky="nsew",
+            padx=self.paddings_colunas[coluna],
+            pady=pady
+        )
+        frame.grid_propagate(False)
+        return frame
+
+    def criar_label_padrao(self, parent, texto, coluna, fonte, cor_texto, wraplength):
+        anchor, justify = self.obter_alinhamento_coluna(coluna)
+
+        label = ctk.CTkLabel(
+            parent,
+            text=texto,
+            font=fonte,
+            text_color=cor_texto,
+            anchor=anchor,
+            justify=justify,
+            wraplength=wraplength
+        )
+        label.pack(
+            anchor="center" if coluna in self.colunas_centralizadas else "w",
+            fill="both",
+            expand=True,
+            padx=8
+        )
+        return label
+
+    def sync_xview(self, *args):
+        if self._sincronizando_scroll_x:
+            return
+
+        self._sincronizando_scroll_x = True
+        try:
+            if self.canvas_cabecalho is not None:
+                self.canvas_cabecalho.xview(*args)
+            if self.canvas_corpo is not None:
+                self.canvas_corpo.xview(*args)
+        finally:
+            self._sincronizando_scroll_x = False
+
+    def on_cabecalho_xscroll(self, first, last):
+        if self.scroll_x is not None:
+            self.scroll_x.set(first, last)
+
+        if self._sincronizando_scroll_x:
+            return
+
+        self._sincronizando_scroll_x = True
+        try:
+            if self.canvas_corpo is not None:
+                self.canvas_corpo.xview_moveto(first)
+        finally:
+            self._sincronizando_scroll_x = False
+
+    def on_corpo_xscroll(self, first, last):
+        if self.scroll_x is not None:
+            self.scroll_x.set(first, last)
+
+        if self._sincronizando_scroll_x:
+            return
+
+        self._sincronizando_scroll_x = True
+        try:
+            if self.canvas_cabecalho is not None:
+                self.canvas_cabecalho.xview_moveto(first)
+        finally:
+            self._sincronizando_scroll_x = False
+
+    def atualizar_scrollregion_cabecalho(self, event=None):
+        if self.canvas_cabecalho is not None and self.frame_cabecalho is not None:
+            largura = max(self.largura_conteudo_tabela, self.canvas_cabecalho.winfo_width())
+            self.canvas_cabecalho.configure(
+                scrollregion=(0, 0, largura, self.frame_cabecalho.winfo_reqheight())
             )
+
+    def atualizar_scrollregion_corpo(self, event=None):
+        if self.canvas_corpo is not None and self.frame_corpo is not None:
+            largura = max(self.largura_conteudo_tabela, self.canvas_corpo.winfo_width())
+            self.canvas_corpo.configure(
+                scrollregion=(0, 0, largura, self.frame_corpo.winfo_reqheight())
+            )
+
+    def ajustar_largura_cabecalho(self, event):
+        if self.canvas_cabecalho is None or self.canvas_window_id_cabecalho is None:
+            return
+
+        largura = max(self.largura_conteudo_tabela, event.width)
+        self.canvas_cabecalho.itemconfigure(
+            self.canvas_window_id_cabecalho,
+            width=largura
+        )
+        self.atualizar_scrollregion_cabecalho()
+
+    def ajustar_largura_corpo(self, event):
+        if self.canvas_corpo is None or self.canvas_window_id_corpo is None:
+            return
+
+        largura = max(self.largura_conteudo_tabela, event.width)
+        self.canvas_corpo.itemconfigure(
+            self.canvas_window_id_corpo,
+            width=largura
+        )
+        self.atualizar_scrollregion_corpo()
+
+    def ativar_scroll_mouse(self, event=None):
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.bind_all("<MouseWheel>", self.rolar_tabela_mouse)
+            self.canvas_corpo.bind_all("<Button-4>", self.rolar_tabela_mouse)
+            self.canvas_corpo.bind_all("<Button-5>", self.rolar_tabela_mouse)
+
+    def desativar_scroll_mouse(self, event=None):
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.unbind_all("<MouseWheel>")
+            self.canvas_corpo.unbind_all("<Button-4>")
+            self.canvas_corpo.unbind_all("<Button-5>")
+
+    def rolar_tabela_mouse(self, event):
+        if self.canvas_corpo is None:
+            return
+
+        if getattr(event, "num", None) == 4:
+            self.canvas_corpo.yview_scroll(-1, "units")
+        elif getattr(event, "num", None) == 5:
+            self.canvas_corpo.yview_scroll(1, "units")
+        else:
+            self.canvas_corpo.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+
+    def resetar_scroll_horizontal(self):
+        """Garante que cabeçalho e corpo comecem exatamente no mesmo ponto horizontal."""
+        if self.canvas_cabecalho is not None:
+            self.canvas_cabecalho.xview_moveto(0)
+
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.xview_moveto(0)
+
+        if self.scroll_x is not None:
+            try:
+                first, last = self.canvas_corpo.xview() if self.canvas_corpo is not None else (0, 1)
+                self.scroll_x.set(first, last)
+            except Exception:
+                pass
 
     def obter_filtros_atuais(self):
         termo = self.entry_busca.get().strip() if self.entry_busca else ""
@@ -248,7 +430,9 @@ class ProdutoView(ctk.CTkFrame):
             )
 
     def carregar_produtos(self):
-        for widget in self.lista_container.winfo_children():
+        for widget in self.frame_cabecalho.winfo_children():
+            widget.destroy()
+        for widget in self.frame_corpo.winfo_children():
             widget.destroy()
 
         termo, categoria = self.obter_filtros_atuais()
@@ -268,51 +452,50 @@ class ProdutoView(ctk.CTkFrame):
                 )
 
             self.total_registros = total
+            self.criar_cabecalho_tabela()
 
             if not produtos:
                 ctk.CTkLabel(
-                    self.lista_container,
+                    self.frame_corpo,
                     text="Nenhum produto encontrado.",
                     font=("Segoe UI", 14),
                     text_color=self.cor_texto_secundario
                 ).pack(pady=20)
-
                 self.atualizar_controles_paginacao()
+                self.after(50, self.atualizar_scrollregion_cabecalho)
+                self.after(50, self.atualizar_scrollregion_corpo)
+                self.after(80, self.resetar_scroll_horizontal)
                 return
-
-            self.criar_cabecalho_tabela()
 
             for produto in produtos:
                 self.criar_linha_produto(produto)
 
             self.atualizar_controles_paginacao()
+            self.after(50, self.atualizar_scrollregion_cabecalho)
+            self.after(50, self.atualizar_scrollregion_corpo)
+            self.after(80, self.resetar_scroll_horizontal)
 
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao carregar produtos: {str(e)}")
 
     def criar_cabecalho_tabela(self):
-        cabecalho = ctk.CTkFrame(self.lista_container, fg_color="transparent")
-        cabecalho.pack(fill="x", padx=14, pady=(0, 8))
+        cabecalho = ctk.CTkFrame(self.frame_cabecalho, fg_color="transparent")
+        cabecalho.pack(fill="x", padx=0, pady=(0, 8))
 
         self.configurar_colunas_grid(cabecalho)
+        cabecalho.grid_rowconfigure(0, weight=1)
 
-        for i, (titulo, _, _) in enumerate(self.colunas_tabela):
-            anchor = "w"
-            justify = "left"
+        for i, (titulo, _) in enumerate(self.colunas_tabela):
+            frame_coluna = self.criar_container_coluna(cabecalho, i, pady=(0, 0))
 
-            if titulo in ("Estoque\nAtual", "Estoque\nMínimo", "Ações"):
-                anchor = "center"
-                justify = "center"
-
-            ctk.CTkLabel(
-                cabecalho,
-                text=titulo,
-                font=("Segoe UI", 13, "bold"),
-                text_color=self.cor_texto,
-                anchor=anchor,
-                justify=justify,
+            self.criar_label_padrao(
+                parent=frame_coluna,
+                texto=titulo,
+                coluna=i,
+                fonte=("Segoe UI", 13, "bold"),
+                cor_texto=self.cor_texto,
                 wraplength=self.wrap_cabecalho.get(titulo, 120)
-            ).grid(row=0, column=i, sticky="nsew", padx=10, pady=4)
+            )
 
     def obter_estilo_status(self, produto):
         status = produto.get("status_estoque", "Normal")
@@ -342,28 +525,28 @@ class ProdutoView(ctk.CTkFrame):
         validade = produto.get("validade_exibicao") or "-"
         dias = produto.get("dias_para_vencer")
 
-        if validade == "Vencido":
-            return "Vencido"
+        if produto.get("status_validade") == "vencido":
+            return f"{validade}\n(Vencido)"
 
         if dias is not None and produto.get("status_validade") == "proximo":
-            return f"{validade} ({dias}d)"
+            return f"{validade}\n({dias} dias)"
 
         return validade
 
     def criar_linha_produto(self, produto):
         linha = ctk.CTkFrame(
-            self.lista_container,
+            self.frame_corpo,
             fg_color="#ffffff",
             corner_radius=12,
             border_width=1,
             border_color="#eeeeee"
         )
-        linha.pack(fill="x", padx=14, pady=6)
+        linha.pack(fill="x", padx=0, pady=6)
 
         self.configurar_colunas_grid(linha)
+        linha.grid_rowconfigure(0, weight=1)
 
-        frame_produto = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_produto.grid(row=0, column=0, sticky="nsew", padx=10, pady=14)
+        frame_produto = self.criar_container_coluna(linha, 0, pady=(14, 14))
 
         ctk.CTkLabel(
             frame_produto,
@@ -383,51 +566,50 @@ class ProdutoView(ctk.CTkFrame):
             anchor="w",
             justify="left",
             wraplength=self.wrap_celulas["produto_descricao"]
-        ).pack(anchor="w", fill="x", pady=(2, 0))
+        ).pack(anchor="w", fill="x", pady=(4, 0))
 
-        ctk.CTkLabel(
-            linha,
-            text=produto.get("categoria", "-"),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["categoria"]
-        ).grid(row=0, column=1, sticky="nsew", padx=10, pady=14)
+        frame_categoria = self.criar_container_coluna(linha, 1, pady=(14, 14))
+        self.criar_label_padrao(
+            frame_categoria,
+            produto.get("categoria", "-"),
+            1,
+            ("Segoe UI", 13),
+            self.cor_texto,
+            self.wrap_celulas["categoria"]
+        )
 
-        ctk.CTkLabel(
-            linha,
-            text=(produto.get("unidade_medida", "-") or "-").title(),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="w",
-            justify="left",
-            wraplength=self.wrap_celulas["unidade"]
-        ).grid(row=0, column=2, sticky="nsew", padx=10, pady=14)
+        frame_unidade = self.criar_container_coluna(linha, 2, pady=(14, 14))
+        self.criar_label_padrao(
+            frame_unidade,
+            (produto.get("unidade_medida", "-") or "-").title(),
+            2,
+            ("Segoe UI", 13),
+            self.cor_texto,
+            self.wrap_celulas["unidade"]
+        )
 
-        ctk.CTkLabel(
-            linha,
-            text=str(produto.get("estoque_atual", 0)),
-            font=("Segoe UI", 13, "bold"),
-            text_color=self.cor_texto,
-            anchor="center",
-            justify="center",
-            wraplength=self.wrap_celulas["estoque_atual"]
-        ).grid(row=0, column=3, sticky="nsew", padx=10, pady=14)
+        frame_estoque_atual = self.criar_container_coluna(linha, 3, pady=(14, 14))
+        self.criar_label_padrao(
+            frame_estoque_atual,
+            str(produto.get("estoque_atual", 0)),
+            3,
+            ("Segoe UI", 13, "bold"),
+            self.cor_texto,
+            self.wrap_celulas["estoque_atual"]
+        )
 
-        ctk.CTkLabel(
-            linha,
-            text=str(produto.get("estoque_minimo", 0)),
-            font=("Segoe UI", 13),
-            text_color=self.cor_texto,
-            anchor="center",
-            justify="center",
-            wraplength=self.wrap_celulas["estoque_minimo"]
-        ).grid(row=0, column=4, sticky="nsew", padx=10, pady=14)
+        frame_estoque_minimo = self.criar_container_coluna(linha, 4, pady=(14, 14))
+        self.criar_label_padrao(
+            frame_estoque_minimo,
+            str(produto.get("estoque_minimo", 0)),
+            4,
+            ("Segoe UI", 13),
+            self.cor_texto,
+            self.wrap_celulas["estoque_minimo"]
+        )
 
         cor_status, cor_texto_status = self.obter_estilo_status(produto)
-        frame_status = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_status.grid(row=0, column=5, sticky="nsew", padx=10, pady=14)
+        frame_status = self.criar_container_coluna(linha, 5, pady=(14, 14))
 
         ctk.CTkLabel(
             frame_status,
@@ -435,18 +617,17 @@ class ProdutoView(ctk.CTkFrame):
             font=("Segoe UI", 12, "bold"),
             text_color=cor_texto_status,
             fg_color=cor_status,
-            corner_radius=16,
-            width=130,
-            height=30,
-            justify="center",
-            wraplength=self.wrap_celulas["status"]
-        ).pack(anchor="center")
+            corner_radius=10,
+            height=34,
+            padx=16,
+            pady=6,
+            anchor="center",
+            justify="center"
+        ).pack(anchor="center", expand=True)
 
         cor_validade, cor_texto_validade = self.obter_estilo_validade(produto)
-        frame_validade = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_validade.grid(row=0, column=6, sticky="nsew", padx=10, pady=14)
-
         texto_validade = self.formatar_validade(produto)
+        frame_validade = self.criar_container_coluna(linha, 6, pady=(14, 14))
 
         if cor_validade:
             ctk.CTkLabel(
@@ -455,12 +636,12 @@ class ProdutoView(ctk.CTkFrame):
                 font=("Segoe UI", 12, "bold"),
                 text_color=cor_texto_validade,
                 fg_color=cor_validade,
-                corner_radius=16,
-                width=150,
-                height=30,
-                justify="center",
-                wraplength=self.wrap_celulas["validade"]
-            ).pack(anchor="center")
+                corner_radius=10,
+                padx=14,
+                pady=8,
+                anchor="center",
+                justify="center"
+            ).pack(anchor="center", expand=True)
         else:
             ctk.CTkLabel(
                 frame_validade,
@@ -468,45 +649,46 @@ class ProdutoView(ctk.CTkFrame):
                 font=("Segoe UI", 13),
                 text_color=self.cor_texto,
                 anchor="center",
-                justify="center",
-                wraplength=self.wrap_celulas["validade"]
-            ).pack(anchor="center")
+                justify="center"
+            ).pack(anchor="center", expand=True)
 
-        frame_acoes = ctk.CTkFrame(linha, fg_color="transparent")
-        frame_acoes.grid(row=0, column=7, sticky="nsew", padx=4, pady=14)
+        frame_acoes = self.criar_container_coluna(linha, 7, pady=(14, 14))
 
-        container_acoes = ctk.CTkFrame(frame_acoes, fg_color="transparent")
-        container_acoes.pack(anchor="center")
+        container_acoes = ctk.CTkFrame(
+            frame_acoes,
+            fg_color="transparent"
+        )
+        container_acoes.pack(anchor="center", expand=True)
 
         btn_editar = ctk.CTkButton(
             container_acoes,
             text="✎",
-            width=38,
-            height=38,
+            width=32,
+            height=32,
             corner_radius=8,
             fg_color="#ffffff",
             hover_color="#e4f2f7",
             text_color="#0000ff",
             border_width=0,
-            font=("Segoe UI", 16),
+            font=("Segoe UI", 14),
             command=lambda p=produto: self.abrir_edicao_produto(p)
         )
-        btn_editar.pack(side="left", padx=(0, 4))
+        btn_editar.pack(side="left", padx=4)
 
         btn_excluir = ctk.CTkButton(
             container_acoes,
             text="🗑",
-            width=38,
-            height=38,
+            width=32,
+            height=32,
             corner_radius=8,
             fg_color="#ffffff",
             hover_color="#fef2f2",
             text_color="#dc2626",
             border_width=0,
-            font=("Segoe UI", 16),
+            font=("Segoe UI", 14),
             command=lambda p=produto: self.confirmar_exclusao(p)
         )
-        btn_excluir.pack(side="left")
+        btn_excluir.pack(side="left", padx=4)
 
         ToolTip(btn_editar, "Editar")
         ToolTip(btn_excluir, "Excluir")
@@ -523,10 +705,8 @@ class ProdutoView(ctk.CTkFrame):
 
         if sucesso:
             messagebox.showinfo("Sucesso", mensagem)
-
             if self.pagina_atual > 1 and self.total_registros == 1:
                 self.pagina_atual -= 1
-
             self.carregar_produtos()
         else:
             messagebox.showerror("Erro", mensagem)
@@ -822,13 +1002,73 @@ class ProdutoView(ctk.CTkFrame):
             text_color=self.cor_texto
         ).pack(anchor="w", padx=20, pady=(20, 10))
 
-        scroll = ctk.CTkScrollableFrame(
-            frame_lista,
-            fg_color="transparent"
-        )
-        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+        frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
-        self.lista_container = scroll
+        frame_tabela_area.grid_rowconfigure(1, weight=1)
+        frame_tabela_area.grid_columnconfigure(0, weight=1)
+
+        self.canvas_cabecalho = tk.Canvas(
+            frame_tabela_area,
+            bg="#ffffff",
+            highlightthickness=0,
+            bd=0,
+            height=56
+        )
+        self.canvas_cabecalho.grid(row=0, column=0, sticky="ew")
+
+        self.frame_cabecalho = ctk.CTkFrame(self.canvas_cabecalho, fg_color="#ffffff")
+        self.canvas_window_id_cabecalho = self.canvas_cabecalho.create_window(
+            (0, 0),
+            window=self.frame_cabecalho,
+            anchor="nw",
+            width=self.largura_conteudo_tabela
+        )
+
+        self.canvas_corpo = tk.Canvas(
+            frame_tabela_area,
+            bg="#ffffff",
+            highlightthickness=0,
+            bd=0
+        )
+        self.canvas_corpo.grid(row=1, column=0, sticky="nsew")
+
+        self.canvas_corpo.bind("<Enter>", self.ativar_scroll_mouse)
+        self.canvas_corpo.bind("<Leave>", self.desativar_scroll_mouse)
+
+        self.scroll_y = ctk.CTkScrollbar(
+            frame_tabela_area,
+            orientation="vertical",
+            command=self.canvas_corpo.yview
+        )
+        self.scroll_y.grid(row=1, column=1, sticky="ns")
+
+        self.scroll_x = ctk.CTkScrollbar(
+            frame_tabela_area,
+            orientation="horizontal",
+            command=self.sync_xview
+        )
+        self.scroll_x.grid(row=2, column=0, sticky="ew")
+
+        self.canvas_cabecalho.configure(xscrollcommand=self.on_cabecalho_xscroll)
+        self.canvas_corpo.configure(
+            yscrollcommand=self.scroll_y.set,
+            xscrollcommand=self.on_corpo_xscroll
+        )
+
+        self.frame_corpo = ctk.CTkFrame(self.canvas_corpo, fg_color="#ffffff")
+        self.canvas_window_id_corpo = self.canvas_corpo.create_window(
+            (0, 0),
+            window=self.frame_corpo,
+            anchor="nw",
+            width=self.largura_conteudo_tabela
+        )
+
+        self.frame_cabecalho.bind("<Configure>", self.atualizar_scrollregion_cabecalho)
+        self.frame_corpo.bind("<Configure>", self.atualizar_scrollregion_corpo)
+
+        self.canvas_cabecalho.bind("<Configure>", self.ajustar_largura_cabecalho)
+        self.canvas_corpo.bind("<Configure>", self.ajustar_largura_corpo)
 
         frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
         frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))

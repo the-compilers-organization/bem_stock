@@ -1,18 +1,23 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from datetime import datetime
-
 from tkcalendar import Calendar
 
-from controllers.movimentacao_controller import registrar_entrada, registrar_saida
+from controllers.movimentacao_controller import (
+    registrar_entrada,
+    registrar_saida,
+    atualizar_movimentacao_entrada,
+    atualizar_movimentacao_saida
+)
 from controllers.produto_controller import listar_produtos_para_combobox
 
 
 class CadastroMovimentacaoView(ctk.CTkFrame):
-    def __init__(self, master, usuario):
+    def __init__(self, master, usuario, movimentacao_edicao=None):
         super().__init__(master, fg_color="#F5E6F3")
         self.master = master
         self.usuario = usuario
+        self.movimentacao_edicao = movimentacao_edicao
 
         self.cor_texto = "#1a1a1a"
         self.cor_texto_secundario = "#666666"
@@ -32,6 +37,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
 
         self.carregar_produtos()
         self.criar_interface()
+        self.preencher_campos_edicao()
 
     def carregar_produtos(self):
         try:
@@ -374,6 +380,56 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
 
         self.campos["categoria"].configure(state="disabled")
 
+    def preencher_campos_edicao(self):
+        if self.movimentacao_edicao is None:
+            self.atualizar_categoria_do_produto()
+            self.atualizar_tipo_movimentacao()
+            return
+
+        tipo = self.movimentacao_edicao.get("tipo_movimentacao", "").lower()
+        if tipo == "entrada":
+            tipo = "entrada"
+        elif tipo == "saída":
+            tipo = "saida"
+
+        if tipo:
+            self.campos["tipo_movimentacao"].set(tipo)
+
+        id_produto = self.movimentacao_edicao.get("id_produto")
+        nome_produto = self.movimentacao_edicao.get("nome_produto", "")
+        texto_produto = f"{id_produto} - {nome_produto}"
+
+        if texto_produto in self.produtos_map:
+            self.campos["produto"].set(texto_produto)
+
+        self.atualizar_categoria_do_produto()
+
+        self.campos["quantidade"].delete(0, "end")
+        self.campos["quantidade"].insert(0, str(self.movimentacao_edicao.get("quantidade", "")))
+
+        self.atualizar_tipo_movimentacao()
+
+        if tipo == "entrada":
+            data_validade = self.movimentacao_edicao.get("data_validade_formatada", "")
+            if data_validade and data_validade != "-":
+                self.campos["data_validade"].insert(0, data_validade)
+
+            if self.movimentacao_edicao.get("fornecedor"):
+                self.campos["fornecedor"].insert(0, self.movimentacao_edicao["fornecedor"])
+
+            if self.movimentacao_edicao.get("numero_lote"):
+                self.campos["numero_lote"].insert(0, self.movimentacao_edicao["numero_lote"])
+
+            if self.movimentacao_edicao.get("observacoes"):
+                self.campos["observacoes_entrada"].insert(0, self.movimentacao_edicao["observacoes"])
+        else:
+            destino = self.movimentacao_edicao.get("destino")
+            if destino:
+                self.campos["destino"].set(destino)
+
+            if self.movimentacao_edicao.get("observacoes"):
+                self.campos["observacoes_saida"].insert(0, self.movimentacao_edicao["observacoes"])
+
     def validar_campos(self):
         self.limpar_todos_erros()
         valido = True
@@ -464,24 +520,47 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
                 self.marcar_erro("data_validade", "A data de validade informada é inválida.")
                 return
 
-            sucesso, mensagem = registrar_entrada(
-                id_produto=produto["id_produto"],
-                categoria=produto["categoria"],
-                quantidade=quantidade,
-                data_validade=data_validade_formatada,
-                fornecedor=self.campos["fornecedor"].get().strip(),
-                numero_lote=self.campos["numero_lote"].get().strip(),
-                observacoes=self.campos["observacoes_entrada"].get().strip(),
-                id_usuario=id_usuario
-            )
+            if self.movimentacao_edicao is None:
+                sucesso, mensagem = registrar_entrada(
+                    id_produto=produto["id_produto"],
+                    categoria=produto["categoria"],
+                    quantidade=quantidade,
+                    data_validade=data_validade_formatada,
+                    fornecedor=self.campos["fornecedor"].get().strip(),
+                    numero_lote=self.campos["numero_lote"].get().strip(),
+                    observacoes=self.campos["observacoes_entrada"].get().strip(),
+                    id_usuario=id_usuario
+                )
+            else:
+                sucesso, mensagem = atualizar_movimentacao_entrada(
+                    id_movimentacao=self.movimentacao_edicao["id_movimentacao"],
+                    id_produto=produto["id_produto"],
+                    categoria=produto["categoria"],
+                    quantidade=quantidade,
+                    data_validade=data_validade_formatada,
+                    fornecedor=self.campos["fornecedor"].get().strip(),
+                    numero_lote=self.campos["numero_lote"].get().strip(),
+                    observacoes=self.campos["observacoes_entrada"].get().strip(),
+                    id_usuario=id_usuario
+                )
         else:
-            sucesso, mensagem = registrar_saida(
-                id_produto=produto["id_produto"],
-                quantidade=quantidade,
-                destino=self.campos["destino"].get().strip(),
-                observacoes=self.campos["observacoes_saida"].get().strip(),
-                id_usuario=id_usuario
-            )
+            if self.movimentacao_edicao is None:
+                sucesso, mensagem = registrar_saida(
+                    id_produto=produto["id_produto"],
+                    quantidade=quantidade,
+                    destino=self.campos["destino"].get().strip(),
+                    observacoes=self.campos["observacoes_saida"].get().strip(),
+                    id_usuario=id_usuario
+                )
+            else:
+                sucesso, mensagem = atualizar_movimentacao_saida(
+                    id_movimentacao=self.movimentacao_edicao["id_movimentacao"],
+                    id_produto=produto["id_produto"],
+                    quantidade=quantidade,
+                    destino=self.campos["destino"].get().strip(),
+                    observacoes=self.campos["observacoes_saida"].get().strip(),
+                    id_usuario=id_usuario
+                )
 
         if sucesso:
             messagebox.showinfo("Sucesso", mensagem)
@@ -505,9 +584,11 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         topo.pack(fill="x", pady=(0, 20))
         topo.pack_propagate(False)
 
+        titulo = "Cadastrar Movimentação" if self.movimentacao_edicao is None else "Editar Movimentação"
+
         ctk.CTkLabel(
             topo,
-            text="Cadastrar Movimentação",
+            text=titulo,
             font=("Segoe UI", 28, "bold"),
             text_color=self.cor_texto
         ).pack(anchor="w", padx=25, pady=(18, 0))
@@ -657,9 +738,11 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         )
         btn_voltar.pack(side="left", expand=True, fill="x", padx=(0, 6))
 
+        texto_botao = "Salvar Movimentação" if self.movimentacao_edicao is None else "Salvar Alterações"
+
         btn_salvar = ctk.CTkButton(
             frame_botoes,
-            text="Salvar Movimentação",
+            text=texto_botao,
             height=45,
             corner_radius=6,
             fg_color=self.cor_roxo,

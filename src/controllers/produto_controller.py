@@ -91,7 +91,7 @@ def _calcular_status_validade(data_validade):
 
     if dias_para_vencer < 0:
         return {
-            "validade_exibicao": "Vencido",
+            "validade_exibicao": formatar_data_para_exibicao(data_validade),
             "status_validade": "vencido",
             "dias_para_vencer": dias_para_vencer
         }

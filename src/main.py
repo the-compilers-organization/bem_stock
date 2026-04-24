@@ -39,18 +39,17 @@
 
 
 import customtkinter as ctk
-from tkinter import messagebox
 
 from database.schema import inicializar_banco
 from views.login_view import LoginView
 from views.primeiro_acesso_view import PrimeiroAcessoView
-# from views.cadastro_usuario_view import CadastroUsuarioView
+from views.cadastro_usuario_view import CadastroUsuarioView
 from views.dashboard_view import DashboardView
 from views.produto_view import ProdutoView
 from views.cadastro_produto_view import CadastroProdutoView
 from views.movimentacao_view import MovimentacaoView
 from views.cadastro_movimentacao_view import CadastroMovimentacaoView
-# from views.usuario_view import UsuarioView
+from views.usuario_view import UsuarioView
 
 
 class BemStockApp(ctk.CTk):
@@ -122,37 +121,33 @@ class BemStockApp(ctk.CTk):
         self.frame_atual = MovimentacaoView(self, usuario)
         self.frame_atual.pack(fill="both", expand=True)
 
-    def mostrar_cadastro_movimentacao(self, usuario):
+    # def mostrar_cadastro_movimentacao(self, usuario):
+    #     self.usuario_logado = usuario
+    #     self.limpar_tela()
+    #     self.title("BemStock - Cadastro de Movimentação")
+    #     self.frame_atual = CadastroMovimentacaoView(self, usuario)
+    #     self.frame_atual.pack(fill="both", expand=True)
+
+    def mostrar_cadastro_movimentacao(self, usuario, movimentacao=None):
         self.usuario_logado = usuario
         self.limpar_tela()
         self.title("BemStock - Cadastro de Movimentação")
-        self.frame_atual = CadastroMovimentacaoView(self, usuario)
+        self.frame_atual = CadastroMovimentacaoView(self, usuario, movimentacao)
         self.frame_atual.pack(fill="both", expand=True)
 
-    ## em construção
     def mostrar_usuario(self, usuario):
-        # self.usuario_logado = usuario
-        # self.limpar_tela()
-        # self.title("BemStock - Usuários")
-        # self.frame_atual = UsuarioView(self, usuario)
-        # self.frame_atual.pack(fill="both", expand=True)
-        messagebox.showinfo("Em construção", 
-        "Página de usuários em construção"
-        )
-        print("Página de usuários em construção")
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Usuários")
+        self.frame_atual = UsuarioView(self, usuario)
+        self.frame_atual.pack(fill="both", expand=True)
 
-    ## em construção
     def mostrar_cadastro_usuario(self, usuario, usuario_edicao=None):
-        # self.usuario_logado = usuario
-        # self.limpar_tela()
-        # self.title("BemStock - Cadastro de Usuário")
-        # self.frame_atual = CadastroUsuarioView(self, usuario, usuario_edicao)
-        # self.frame_atual.pack(fill="both", expand=True)
-        messagebox.showinfo(
-        "Em construção",
-        "Página de cadastro e atualização em construção"
-        )
-        print("Página de cadastro e atualização em construção")
+        self.usuario_logado = usuario
+        self.limpar_tela()
+        self.title("BemStock - Cadastro de Usuário")
+        self.frame_atual = CadastroUsuarioView(self, usuario, usuario_edicao)
+        self.frame_atual.pack(fill="both", expand=True)
 
 
 def main():
