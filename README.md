@@ -26,8 +26,6 @@
 
 :small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)  
 
-:small_blue_diamond: [Primeiro Acesso](#primeiro-acesso-closed_lock_with_key) 
-
 :small_blue_diamond: [Protótipo do Sistema](#protótipo-do-sistema-art) 
 
 :small_blue_diamond: [Arquitetura](#arquitetura-computer)  
@@ -38,7 +36,9 @@
 
 :small_blue_diamond: [Instalação](#instalação-rocket)  
 
-:small_blue_diamond: [Como Rodar o Projeto](como-rodar-o-projeto-computer)
+:small_blue_diamond: [Como Rodar o Projeto](#como-rodar-o-projeto-computer)
+
+:small_blue_diamond: [Primeiro Acesso](#primeiro-acesso-closed_lock_with_key) 
 
 :small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)  
 
@@ -113,26 +113,6 @@ O sistema permitirá registrar entradas e saídas de produtos, acompanhar quanti
 
 ---
 
-# Primeiro Acesso :closed_lock_with_key:
-
-Ao iniciar o sistema pela primeira vez, será criado automaticamente um usuário administrador:
-
-- **E-mail:** `teste@bemstock.com`  
-- **Senha:** `123456`  
-
-### Regra obrigatória ⚠️
-
-No primeiro login:
-
-- o sistema **não libera acesso ao dashboard**
-- o usuário deve obrigatoriamente:
-  - alterar o e-mail  
-  - alterar a senha  
-
-Somente após isso o sistema será liberado.
-
----
-
 # Protótipo do Sistema :art:
 
 O protótipo visual do sistema BemStock foi desenvolvido no Figma e pode ser acessado no link abaixo:
@@ -203,9 +183,14 @@ bemstock/
 
 Antes de clonar o repositório e executar o projeto, é necessário ter instalado:
 
-Python 3.x
-Git
-VS Code (ou outra IDE)
+**1. Python 3.x:**
+  - Caso não tenha python, instale: https://www.python.org/downloads/
+
+**2. Git:**
+  - Caso não tenha git, instale: http://git-scm.com/install/
+
+**3. VS Code (ou outra IDE):**
+  - Caso não tenha vscode, instale: https://code.visualstudio.com/download
 
 ---
 
@@ -242,13 +227,37 @@ source venv/bin/activate
 
 # Como Rodar o Projeto :computer:
 
+Com o ambiente virtual ativado, execute:
+
 python src/main.py
+
+Após executar o comando, a interface gráfica do sistema será aberta automaticamente.
 
 ---
 
 ### 5️⃣ Instalar dependências
 
 pip install -r requirements.txt
+
+---
+
+# Primeiro Acesso :closed_lock_with_key:
+
+Ao iniciar o sistema pela primeira vez, será criado automaticamente um usuário administrador:
+
+- **E-mail:** `teste@bemstock.com`  
+- **Senha:** `123456`  
+
+### Regra obrigatória ⚠️
+
+No primeiro login:
+
+- o sistema **não libera acesso ao dashboard**
+- o usuário deve obrigatoriamente:
+  - alterar o e-mail  
+  - alterar a senha  
+
+Somente após isso o sistema será liberado.
 
 ---
 

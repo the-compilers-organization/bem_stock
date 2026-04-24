@@ -23,7 +23,7 @@ Antes de iniciar os testes:
 
 1. Abrir o projeto no VS Code.
 2. Verificar se o arquivo `main.py` existe na pasta `src`.
-3. Executar o sistema: execute o arqrivo `main.py`.
+3. Executar o sistema com o ambiente virtual ativado: execute o arqrivo `main.py`.
 4. Confirmar que o banco `bemstock.db` foi criado.
 5. Usar o usuário administrador padrão:
 
