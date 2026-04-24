@@ -34,7 +34,11 @@
 
 :small_blue_diamond: [Estrutura do Projeto](#estrutura-do-projeto-file_folder)  
 
+:small_blue_diamond: [Pré-requisitos](#pré-requisitos-warning)
+
 :small_blue_diamond: [Instalação](#instalação-rocket)  
+
+:small_blue_diamond: [Como Rodar o Projeto](como-rodar-o-projeto-computer)
 
 :small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)  
 
@@ -195,11 +199,21 @@ bemstock/
 
 ---
 
+# Pré-requisitos :warning:
+
+Antes de clonar o repositório e executar o projeto, é necessário ter instalado:
+
+Python 3.x
+Git
+VS Code (ou outra IDE)
+
+---
+
 # Instalação :rocket:
 
 ### 1️⃣ Clonar o repositório
 
-git clone https://github.com/SEU-REPOSITORIO/bemstock.git
+git clone https://github.com/the-compilers-organization/bem_stock.git
 
 ---
 
@@ -223,6 +237,12 @@ venv\Scripts\activate
 
 **Linux/Mac:**
 source venv/bin/activate
+
+---
+
+# Como Rodar o Projeto :computer:
+
+python src/main.py
 
 ---
 
