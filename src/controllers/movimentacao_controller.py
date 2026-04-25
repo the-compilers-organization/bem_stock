@@ -4,7 +4,8 @@ from utils.validacoes import (
     categoria_valida,
     quantidade_movimentacao_valida,
     data_valida,
-    destino_valido
+    destino_valido,
+    campo_preenchido
 )
 from utils.formatadores import (
     data_atual_formatada,
@@ -31,6 +32,7 @@ def _enriquecer_registros(registros):
         registro["data_validade_formatada"] = formatar_data_para_exibicao(
             registro.get("data_validade")
         )
+
         registro["data_movimentacao_formatada"] = formatar_data_hora_para_exibicao(
             registro.get("data_movimentacao")
         )
@@ -125,7 +127,10 @@ def registrar_entrada(
         return False, "A quantidade de entrada deve ser maior que zero."
 
     if not data_valida(data_validade):
-        return False, "A data de validade deve estar no formato YYYY-MM-DD."
+        return False, "A data de validade é obrigatória e deve estar no formato YYYY-MM-DD."
+
+    if not campo_preenchido(fornecedor):
+        return False, "O fornecedor é obrigatório para entrada."
 
     if not isinstance(id_usuario, int) or id_usuario <= 0:
         return False, "Usuário inválido."
@@ -168,7 +173,7 @@ def registrar_entrada(
             id_produto=id_produto,
             categoria=categoria,
             quantidade=quantidade,
-            fornecedor=fornecedor.strip() if fornecedor else None,
+            fornecedor=fornecedor.strip(),
             data_validade=data_validade.strip(),
             numero_lote=numero_lote.strip() if numero_lote else None,
             destino=None,
@@ -220,6 +225,9 @@ def registrar_saida(
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de saída deve ser maior que zero."
 
+    if not campo_preenchido(destino):
+        return False, "O destino é obrigatório para saída."
+
     if not destino_valido(destino):
         return False, "Destino inválido."
 
@@ -264,7 +272,7 @@ def registrar_saida(
             fornecedor=None,
             data_validade=None,
             numero_lote=None,
-            destino=destino,
+            destino=destino.strip(),
             observacoes=observacoes.strip() if observacoes else None,
             data_movimentacao=data_atual_formatada(),
             id_usuario=id_usuario
@@ -306,6 +314,7 @@ def listar_historico(pagina=1, itens_por_pagina=10):
 
     offset = (pagina - 1) * itens_por_pagina
     total = _contar_historico()
+
     registros = _buscar_historico(
         limite=itens_por_pagina,
         offset=offset
@@ -319,8 +328,10 @@ def buscar_movimentacao_por_id(id_movimentacao):
         "WHERE m.id_movimentacao = ?",
         (id_movimentacao,)
     )
+
     if not registros:
         return None
+
     return registros[0]
 
 
@@ -387,7 +398,10 @@ def atualizar_movimentacao_entrada(
         return False, "A quantidade de entrada deve ser maior que zero."
 
     if not data_valida(data_validade):
-        return False, "A data de validade deve estar no formato YYYY-MM-DD."
+        return False, "A data de validade é obrigatória e deve estar no formato YYYY-MM-DD."
+
+    if not campo_preenchido(fornecedor):
+        return False, "O fornecedor é obrigatório para entrada."
 
     if not isinstance(id_usuario, int) or id_usuario <= 0:
         return False, "Usuário inválido."
@@ -460,7 +474,7 @@ def atualizar_movimentacao_entrada(
                 id_produto,
                 categoria,
                 quantidade,
-                fornecedor.strip() if fornecedor else None,
+                fornecedor.strip(),
                 data_validade.strip(),
                 numero_lote.strip() if numero_lote else None,
                 observacoes.strip() if observacoes else None,
@@ -495,6 +509,9 @@ def atualizar_movimentacao_saida(
 
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de saída deve ser maior que zero."
+
+    if not campo_preenchido(destino):
+        return False, "O destino é obrigatório para saída."
 
     if not destino_valido(destino):
         return False, "Destino inválido."
@@ -567,7 +584,7 @@ def atualizar_movimentacao_saida(
                 id_produto,
                 produto["categoria"],
                 quantidade,
-                destino,
+                destino.strip(),
                 observacoes.strip() if observacoes else None,
                 id_usuario,
                 id_movimentacao
@@ -593,6 +610,7 @@ def filtrar_historico_por_produto(id_produto, pagina=1, itens_por_pagina=10):
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -615,6 +633,7 @@ def filtrar_historico_por_categoria(categoria, pagina=1, itens_por_pagina=10):
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -637,6 +656,7 @@ def filtrar_historico_por_destino(destino, pagina=1, itens_por_pagina=10):
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -659,6 +679,7 @@ def filtrar_historico_por_periodo(data_inicial, data_final, pagina=1, itens_por_
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -678,6 +699,7 @@ def filtrar_historico_por_fornecedor(fornecedor, pagina=1, itens_por_pagina=10):
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -697,6 +719,7 @@ def filtrar_historico_por_lote(numero_lote, pagina=1, itens_por_pagina=10):
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,
@@ -719,6 +742,7 @@ def filtrar_historico_por_tipo(tipo_movimentacao, pagina=1, itens_por_pagina=10)
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
+
     registros = _buscar_historico(
         where_clause,
         params,

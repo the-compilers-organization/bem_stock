@@ -104,6 +104,24 @@ def criar_tabelas():
 
             id_usuario INTEGER NOT NULL,
 
+            CHECK (
+                tipo_movimentacao = 'saida'
+                OR (
+                    fornecedor IS NOT NULL
+                    AND TRIM(fornecedor) <> ''
+                    AND data_validade IS NOT NULL
+                    AND TRIM(data_validade) <> ''
+                )
+            ),
+
+            CHECK (
+                tipo_movimentacao = 'entrada'
+                OR (
+                    destino IS NOT NULL
+                    AND TRIM(destino) <> ''
+                )
+            ),
+
             FOREIGN KEY (id_produto) REFERENCES produtos(id_produto),
             FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
         )
@@ -120,7 +138,6 @@ def criar_admin_inicial():
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # verifica se já existe algum admin
     cursor.execute("""
         SELECT id_usuario
         FROM usuarios

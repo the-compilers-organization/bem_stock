@@ -363,6 +363,10 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         self.frame_campos_entrada.pack_forget()
         self.frame_campos_saida.pack_forget()
 
+        self.limpar_erro("data_validade")
+        self.limpar_erro("fornecedor")
+        self.limpar_erro("destino")
+
         if tipo == "entrada":
             self.frame_campos_entrada.pack(fill="x", pady=(0, 0))
         else:
@@ -387,6 +391,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
             return
 
         tipo = self.movimentacao_edicao.get("tipo_movimentacao", "").lower()
+
         if tipo == "entrada":
             tipo = "entrada"
         elif tipo == "saída":
@@ -461,6 +466,8 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
 
         if tipo == "entrada":
             data_br = self.obter_valor_campo("data_validade")
+            fornecedor = self.obter_valor_campo("fornecedor")
+
             if not data_br:
                 self.marcar_erro("data_validade", "A data de validade é obrigatória.")
                 valido = False
@@ -471,8 +478,13 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
                     self.marcar_erro("data_validade", "Data inválida.")
                     valido = False
 
+            if not fornecedor:
+                self.marcar_erro("fornecedor", "O fornecedor é obrigatório para entrada.")
+                valido = False
+
         if tipo == "saida":
             destino = self.obter_valor_campo("destino")
+
             if not destino:
                 self.marcar_erro("destino", "O destino é obrigatório.")
                 valido = False
@@ -628,6 +640,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         self.criar_label(scroll, "Produto*")
         valores_produto = list(self.produtos_map.keys()) if self.produtos_map else ["Nenhum produto cadastrado"]
         valor_inicial_produto = valores_produto[0] if valores_produto and valores_produto[0] != "Nenhum produto cadastrado" else ""
+
         self.criar_combobox(
             scroll,
             "produto",
@@ -670,12 +683,12 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
             obrigatorio=True
         )
 
-        self.criar_label(self.frame_campos_entrada, "Fornecedor")
+        self.criar_label(self.frame_campos_entrada, "Fornecedor*")
         self.criar_entry(
             self.frame_campos_entrada,
             "fornecedor",
-            placeholder="Fornecedor (opcional)",
-            obrigatorio=False
+            placeholder="Digite o fornecedor",
+            obrigatorio=True
         )
 
         self.criar_label(self.frame_campos_entrada, "Número do Lote")
