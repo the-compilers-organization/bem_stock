@@ -68,10 +68,10 @@ Durante cada teste, verificar:
 - O botão “Entrar” deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+O sistema iniciou sem erros ao executar o arquivo main.py. A tela de login carregou perfeitamente com os campos de e-mail, senha e entrar claramente visivéis. 
 
 ---
 
