@@ -115,7 +115,14 @@ O sistema permitirá registrar entradas e saídas de produtos, acompanhar quanti
 
 # Protótipo do Sistema :art:
 
-O protótipo visual do sistema BemStock foi desenvolvido no Figma e pode ser acessado no link abaixo:
+O design das telas do sistema BemStock foi desenvolvido com foco em **usabilidade, clareza e padronização visual**, baseado na identidade da instituição **Lar Bem**.
+
+📄 A documentação completa da interface pode ser acessada em:
+
+🔗 [Interfaces do Sistema](docs/interfaces-do-sistema.md)
+
+
+🎨 O protótipo visual pode ser acessado no link abaixo:
 
 🔗 [Acessar protótipo do BemStock no Figma](https://drawn-award-18708393.figma.site/)
 
