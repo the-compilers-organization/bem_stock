@@ -88,10 +88,10 @@ O sistema iniciou sem erros ao executar o arquivo main.py. A tela de login carre
 - O sistema deve abrir o Dashboard.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(  ) OK   ( X ) ERRO
 
 **Observações:**  
-_________________________________________
+Após o primeiro cadastro do usuário com sua criação do e-mail e senha, o email "admin@bemstock.com" e a senha "123456", não acessa mais o dashboard. O estoque só é acessado por meio do e-mail e a senha que o usuário criou.       
 
 ---
 
@@ -106,10 +106,10 @@ _________________________________________
 - O sistema deve exibir mensagem informando que os campos são obrigatórios.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir a tela de login e não preencher nenhum dos campos (e-mail e senha) e apertar em entrar, é exibido uma mensagem pedindo para que o usuário digite seu email. 
 
 ---
 
@@ -124,10 +124,10 @@ _________________________________________
 - O sistema deve informar que o e-mail é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar "admin" no campo de e-mail, digitar uma senha aleátoria e acessar "entrar", aparece a mensagem claramente de que o e-mail é inválido.   
 
 ---
 
@@ -143,10 +143,10 @@ _________________________________________
 - Deve exibir mensagem clara de erro.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar o email "admin@bemstock.com" e a senha "senhaerrada" e apertar em "entrar", é exibido uma mensagem clara de que o usuário não foi encontrado e é bloqueado o acesso ao sistema. 
 
 ---
 
@@ -162,10 +162,10 @@ _________________________________________
 - A senha deve ficar oculta quando desmarcada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar uma senha no campo "senha" e marcar a opção "mostrar senha" e desmarcar essa opção, a senha aparece claramente quando marcada e fica oculta ao ser desmarcada. 
 
 ---
 
@@ -185,10 +185,10 @@ _________________________________________
 - O menu lateral deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao fazer login com sucesso, o dashboard aparece claramente ao usuário, os cards estão organizados e o menu lateral está claramente visível.
 
 ---
 
@@ -202,10 +202,10 @@ _________________________________________
 - A tela de Lista de Produtos deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+No dashboard ao localizar e apertar a aba "Produtos" e clicar nela, a tela de Lista de Produtos abre visivelmente mostrando ao usuário a lista de produtos. 
 
 ---
 
@@ -219,10 +219,10 @@ _________________________________________
 - A tela de Histórico de Movimentações deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+No dashboard ao apertar na aba "movimentações" e clicar, a tela do Histórico de Movimentações abre e aparece claramente ao usuário. 
 
 ---
 
@@ -236,10 +236,10 @@ _________________________________________
 - A opção “Usuários” deve aparecer para o administrador.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao entrar em uma conta de administrador, e observar o menu lateral, a opção "Usuários" aparece claramente para o administrador. 
 
 ---
 
@@ -253,10 +253,10 @@ _________________________________________
 - A opção “Usuários” não deve aparecer para o perfil estoque.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao entrar no usuário estoque e observar o menu lateral, a opção "usuários" não é encontrada, confirmando o resultado esperado.  
 
 ---
 
@@ -276,10 +276,10 @@ _________________________________________
 - Nenhuma coluna deve estar cortada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar a tela "Produtos" e observar a lista exibida, a lista estava organizada, os cabeçalhos visíveis e nenhuma coluna estava cortada.  
 
 ---
 
@@ -294,10 +294,10 @@ _________________________________________
 - As colunas Status, Validade e Ações não devem estar desalinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao observar os títulos das colunas e analisar os títulos de acordo com o conteúdo de suas células, os cabeçalhos estão alinhados com os conteúdos e as colunas Status, Validade e Ações não estão desalinhadas, logo, teste com sucesso.  
 
 ---
 
@@ -312,10 +312,10 @@ _________________________________________
 - Nenhum botão deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+A coluna ações não existe. 
 
 ---
 
@@ -329,10 +329,10 @@ _________________________________________
 - A lista deve mostrar apenas produtos correspondentes à busca.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar no campo de busca e digitar o nome de um produto já cadastrado, a lista aparece os produtos correspondentes a busca. 
 
 ---
 
@@ -346,10 +346,10 @@ _________________________________________
 - A lista deve ficar vazia ou exibir uma mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar no campo de busca e digitar o nome de um produto ou nome não existente, a lista ficou vazia.  
 
 ---
 
@@ -363,10 +363,10 @@ _________________________________________
 - Apenas produtos da categoria escolhida devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir a tela de produtos e selecionar uma categoria no filtro, os produtos selecionados na categoria foram listados. 
 
 ---
 
