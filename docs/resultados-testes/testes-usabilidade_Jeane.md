@@ -975,6 +975,7 @@ Ao abrir edição de uma saída, alterar tipo para "Entrada" e salvar, o estoque
 
 **Observações:**  
 _Ao abrir edição de uma movimentação, alterar o produto, salvar e conferir estoque do produto antigo e do novo produto, o estoque o produto antigo foi ajustado corretamente e o do novo também foi ajustado corretamente.
+
 ---
 
 ## CT049 — Editar movimentação com quantidade inválida
