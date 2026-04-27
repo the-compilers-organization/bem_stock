@@ -68,10 +68,10 @@ Durante cada teste, verificar:
 - O botão “Entrar” deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Após realizar os passos , conseguir realizar o login com sucesso.
 
 ---
 
@@ -88,10 +88,10 @@ _________________________________________
 - O sistema deve abrir o Dashboard.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Após realizar meu cadastro e usar minhas credenciais consegue realizar o acesso.
 
 ---
 
@@ -106,11 +106,10 @@ _________________________________________
 - O sistema deve exibir mensagem informando que os campos são obrigatórios.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+Ao tentar realizar login sem preencher nada , consta que devo inserir meu e-mail.
 ---
 
 ## CT004 — Login com e-mail inválido
@@ -124,10 +123,10 @@ _________________________________________
 - O sistema deve informar que o e-mail é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar realizar login com um e-mail inexistente , aparece a pop-up iformando que o email é inválido.
 
 ---
 
@@ -143,10 +142,10 @@ _________________________________________
 - Deve exibir mensagem clara de erro.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar a senha errada aparece a pop up de senha errada , como o esperado.
 
 ---
 
@@ -162,10 +161,10 @@ _________________________________________
 - A senha deve ficar oculta quando desmarcada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar ˜mostrar senha"a criptografia desaaprece e a senha digitada é revelada.
 
 ---
 
@@ -185,10 +184,10 @@ _________________________________________
 - O menu lateral deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar o login com sucesso , consigo observar os cards organizados e em seus devidos lugares.
 
 ---
 
@@ -202,10 +201,10 @@ _________________________________________
 - A tela de Lista de Produtos deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em "Produtos" a lista de produtos abre normalmente.
 
 ---
 
@@ -219,10 +218,10 @@ _________________________________________
 - A tela de Histórico de Movimentações deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em movimentações , o histórico dela abre sem problemas.
 
 ---
 
@@ -236,10 +235,10 @@ _________________________________________
 - A opção “Usuários” deve aparecer para o administrador.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar login como administrador e vou para a aba de usuarios , consigo ver os usuários disponiveis.
 
 ---
 
@@ -253,10 +252,10 @@ _________________________________________
 - A opção “Usuários” não deve aparecer para o perfil estoque.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar login como usuário , a opção "Usuários" não está mais disponivel.
 
 ---
 
@@ -276,10 +275,10 @@ _________________________________________
 - Nenhuma coluna deve estar cortada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em "produtos" , consigo ver com clareza o cabeçalho.
 
 ---
 
@@ -294,10 +293,10 @@ _________________________________________
 - As colunas Status, Validade e Ações não devem estar desalinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao observar os títulos , não noto nenhum desalinhamento.
 
 ---
 
@@ -312,10 +311,10 @@ _________________________________________
 - Nenhum botão deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+Não encontro a coluna "ações".
 
 ---
 
@@ -329,10 +328,10 @@ _________________________________________
 - A lista deve mostrar apenas produtos correspondentes à busca.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar um teste com um produto e filtra-lo , apenas ele aparece na lista.
 
 ---
 
@@ -346,10 +345,10 @@ _________________________________________
 - A lista deve ficar vazia ou exibir uma mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar a busca por um item inexistente , a busca retorna em uma lista vazia.
 
 ---
 
@@ -363,10 +362,10 @@ _________________________________________
 - Apenas produtos da categoria escolhida devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em filtrar e escolher a categoria desejada , apenas os itens da categoria aparecem.
 
 ---
 
@@ -380,10 +379,10 @@ _________________________________________
 - Todos os produtos devem voltar a aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao aplicar a limpeza no filtro , todos oos itens aparecem , sem especificação na categoria.
 
 ---
 
@@ -399,10 +398,10 @@ _________________________________________
 - O conteúdo não deve sobrepor outros elementos.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+A rolagem vertical funcionou de forma suave e natural.
 
 ---
 
@@ -417,10 +416,10 @@ _________________________________________
 - As colunas devem continuar alinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Não foi necessário a rolagem horizontal.
 
 ---
 
@@ -438,10 +437,10 @@ _________________________________________
 - O formulário de cadastro deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em novo produto , o cadastro do produto abre com sucesso.
 
 ---
 
@@ -462,10 +461,10 @@ _________________________________________
 - Produto deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao fazer o passo a passo da criação do produto , o produto é cadastrado , a mensagem aparece e o produto consta na lista.
 
 ---
 
@@ -481,11 +480,10 @@ _________________________________________
 - Sistema deve informar que o nome é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+Ao tentar cadastrar um produto sem nome aparece a pop-up me informando nome obrigatorio.
 ---
 
 ## CT024 — Cadastrar produto sem categoria
@@ -500,10 +498,10 @@ _________________________________________
 - Sistema deve informar que a categoria é obrigatória ou inválida.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Não consigo nem finalizar o cadastro de produto se nao tiver uma categoria selecionada.
 
 ---
 
@@ -520,10 +518,10 @@ _________________________________________
 - Deve informar que o estoque mínimo não pode ser negativo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar criar um produto com estoque negativo , aparece uma mensagem abaixo informando que o estoque não pode ser negativo.
 
 ---
 
@@ -539,11 +537,10 @@ _________________________________________
 - Deve informar que o campo deve ser numérico.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+Ao tentar cadastrar um produto com um estoque "abc"é informado que o estoque deve ser um número inteiro válido.
 ---
 
 ## CT027 — Editar produto
@@ -560,10 +557,10 @@ _________________________________________
 - Alteração deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar o passo a passo , a edição foi concluida com sucesso e a alteração é visivel no dashboard.
 
 ---
 
@@ -578,10 +575,10 @@ _________________________________________
 - Alterações não devem ser salvas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir a edição e tentar alterar algum campo e clicar em "voltar", nenhuma alteração feita foi salva.
 
 ---
 
@@ -596,10 +593,10 @@ _________________________________________
 - Produto deve ser removido da lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+() OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao deletar o produto , ele é removido da lista.
 
 ---
 
@@ -614,10 +611,10 @@ _________________________________________
 - Deve informar que o produto possui histórico de movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+() OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+O sistema não bloqueia a exclusão
 
 ---
 
@@ -636,10 +633,10 @@ _________________________________________
 - Campos devem estar visíveis e organizados.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir o formulário , noto que todos os campos estão visiveis e organizados.
 
 ---
 
@@ -660,10 +657,10 @@ _________________________________________
 - Estoque do produto deve aumentar.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao seguir o passo a movimentação foi registrada e o estoque aumentou.
 
 ---
 
@@ -682,10 +679,10 @@ _________________________________________
 - Estoque do produto deve diminuir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao realizar a movimentação de saída , ela é registrada e seu estoque diminuiu
 
 ---
 
@@ -702,11 +699,10 @@ _________________________________________
 - Deve informar estoque insuficiente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
-
+O sistema não bloqueia a movimentação e mostra um estoque negativo
 ---
 
 ## CT035 — Movimentação sem produto
@@ -722,10 +718,10 @@ _________________________________________
 - Sistema deve informar que o produto é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar realizar uma nova movimentação e não informar o produto o sistema iforma que é obrigatório informar o produto
 
 ---
 
@@ -742,10 +738,10 @@ _________________________________________
 - Sistema deve informar que o tipo é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar realizar uma nova movimentação sem selecionar seu tipo , o sistema informa que o tipo é obrigatório
 
 ---
 
@@ -761,10 +757,10 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser maior que zero.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar realizar uma nova movimentação e informar que a quantidade é 0 , o sistema informa que o valor é invalido que deve ser maior.
 
 ---
 
@@ -779,10 +775,10 @@ _________________________________________
 - Deve exibir mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+O sistema informa que o número deve ser maior que zero
 
 ---
 
@@ -796,10 +792,10 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser numérica.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar 'abc'em quantidade , o sistema informa que deve ser um número valido.
 
 ---
 
@@ -816,10 +812,10 @@ _________________________________________
 - Sistema deve informar que o destino é obrigatório para saída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao tentar realizar movimentação sem informar destino , o sistema bloqueia e informar que é necessário informar o destino
 
 ---
 
@@ -834,10 +830,10 @@ _________________________________________
 - A data escolhida deve aparecer corretamente no campo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+Nenhum calendário aparece para a data ser escolhida.
 
 ---
 
@@ -874,10 +870,10 @@ _________________________________________
 - Os campos devem vir preenchidos com os dados da movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar no botão de editar a tela de edição é aberta e os dados estão presentes.
 
 ---
 
@@ -894,10 +890,10 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+A alteração é atualizada e seu estoque recalculado.
 
 ---
 
@@ -915,10 +911,10 @@ _________________________________________
 - Se a quantidade for maior que o estoque disponível, o sistema deve bloquear.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+O sistema não bloqueia a movimentação , mesmo que o estoque seja menor do que a saída
 
 ---
 
@@ -934,10 +930,10 @@ _________________________________________
 - Caso não exista estoque suficiente, deve bloquear a edição.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
-_________________________________________
+Apesar de conseguir alterar o tipo de entrada para saída , o estoque se torna negativo .
 
 ---
 
@@ -952,10 +948,10 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Alteração realizada sem problemas.
 
 ---
 
