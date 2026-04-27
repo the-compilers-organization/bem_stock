@@ -402,7 +402,8 @@ Ao aplicar uma busca ou filtro e clicar em limpar filtros ou apagar a busca, os 
 ( X ) OK   ( ) ERRO  
 
 **Observações:**  
-Ao cadastrar vários produtos, acessar a lista e utilizar a rolagem vertical, a rolagem funcionou corretamente e nenhum conteúdo sobrepos outros elementos. 
+Ao cadastrar vários produtos, acessar a lista e utilizar a rolagem vertical, a rolagem funcionou corretamente e nenhum conteúdo sobrepos outros elementos.
+ 
 ---
 
 ## CT020 — Testar rolagem horizontal da lista de produtos
