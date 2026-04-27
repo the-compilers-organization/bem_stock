@@ -479,7 +479,7 @@ Ao clicar em "Novo Produto" e preencher os campos necessários de nome, estoque 
 - Sistema deve informar que o nome é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
 Ao abrir cadastro de produto, deixar o nome vazio, preencher os outros campos e clicar em salvar, o sistema bloqueou o cadastro e informou que o nome é obrigatório, conforme o esperado.
