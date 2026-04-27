@@ -380,10 +380,10 @@ Ao abrir a tela de produtos e selecionar uma categoria no filtro, os produtos se
 - Todos os produtos devem voltar a aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao aplicar uma busca ou filtro e clicar em limpar filtros ou apagar a busca, os produtos voltaram a aparecer claramente no sistema.
 
 ---
 
@@ -399,11 +399,10 @@ _________________________________________
 - O conteúdo não deve sobrepor outros elementos.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+Ao cadastrar vários produtos, acessar a lista e utilizar a rolagem vertical, a rolagem funcionou corretamente e nenhum conteúdo sobrepos outros elementos. 
 ---
 
 ## CT020 — Testar rolagem horizontal da lista de produtos
@@ -417,10 +416,10 @@ _________________________________________
 - As colunas devem continuar alinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar a lista de produtos e utilizar a rolagem horizontal, o cabeçalho e o conteúdo rolaram juntos e as colunas estavam alinhadas. Logo, teste com resultado sucesso.
 
 ---
 
@@ -438,11 +437,10 @@ _________________________________________
 - O formulário de cadastro deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+Ao acessar a aba "Produtos" e clicar em "Novo Produto", o formulário de cadastro do produto abriu corretamente. 
 ---
 
 ## CT022 — Cadastrar produto válido
@@ -462,10 +460,10 @@ _________________________________________
 - Produto deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar em "Novo Produto" e preencher os campos necessários de nome, estoque mínimo,selecionar categoria e unidade de medida, apertar em "Salvar", o produto foi cadastrado e exibiu uma mensagem de sucesso. Além disso, o produto apareceu na lista conforme o esperado.  
 
 ---
 
@@ -484,7 +482,7 @@ _________________________________________
 ( ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro de produto, deixar o nome vazio, preencher os outros campos e clicar em salvar, o sistema bloqueou o cadastro e informou que o nome é obrigatório, conforme o esperado.
 
 ---
 
@@ -500,10 +498,10 @@ _________________________________________
 - Sistema deve informar que a categoria é obrigatória ou inválida.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro, preencher o nome do produto e não selecionar uma categoria, o sistema permitiu que o produto fosse cadastrado, já que automaticamente o produto está na categoria "alimentos", sem possibilidade de deixar o campo vazio. 
 
 ---
 
@@ -520,10 +518,10 @@ _________________________________________
 - Deve informar que o estoque mínimo não pode ser negativo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro, preencher os campos,digitar um valor negativo no estoque mínimo e clicar em "Salvar", o sistema bloqueou o casdastro do produto e informou que o estoque deve ser maior ou igual a 0. 
 
 ---
 
@@ -539,10 +537,10 @@ _________________________________________
 - Deve informar que o campo deve ser numérico.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro do produto, digitar 'abc' no estoque mínimo e clicar em "Salvar", o sistema informou para informar um numero inteiro válido. 
 
 ---
 
@@ -560,10 +558,10 @@ _________________________________________
 - Alteração deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar a lista de produtos, localizar um produto, clicar no botão de editar, alterar algum campo e clicar em "Salvar", o produto foi devidamente atualizado e sua alteração foi automaticamente visualizada na lista conforme o esperado.
 
 ---
 
@@ -578,10 +576,10 @@ _________________________________________
 - Alterações não devem ser salvas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição de um produto, alterar algum campo e clicar em "Cancelar" ou "Voltar", as alterações não foram salvas na listagem, conforme o esperado.
 
 ---
 
@@ -596,10 +594,10 @@ _________________________________________
 - Produto deve ser removido da lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar um produto sem histórico de movimentação, clicar em excluir e confirmar exclusão, o produto foi automaticamente removido da lista. 
 
 ---
 
@@ -614,10 +612,10 @@ _________________________________________
 - Deve informar que o produto possui histórico de movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar um produto que possui entrada ou saída registrada e clicar em excluir, o sistema não permitiu a exclusão e informou que o produto possui um histórico de movimentação. 
 
 ---
 
@@ -636,10 +634,10 @@ _________________________________________
 - Campos devem estar visíveis e organizados.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar a aba "Movimentações" e clicar em "Nova Movimentação", o formulário de movimentações abriu e os campos estavam claramente visíveis e organizados. 
 
 ---
 
@@ -660,10 +658,10 @@ _________________________________________
 - Estoque do produto deve aumentar.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação, selecionar tipo entrada, selecionar um produto, preencher os campos necessários e clicar em salvar, a movimentação foi registrada e houve um aumento no produto. Por exemplo, se o produto tinha 20 no estoque e foi colocado 30 de entrada, o produto resultou em uma quantidade de 50.
 
 ---
 
@@ -682,10 +680,10 @@ _________________________________________
 - Estoque do produto deve diminuir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação, selecionar tipo saída, selecionar produto, informar quantidade válida, selecionar destino e clicar em "Salvar", os produtos foram automaticamente diminuidos e a movimentação foi registrada, conforme o esperado.
 
 ---
 
@@ -702,10 +700,10 @@ _________________________________________
 - Deve informar estoque insuficiente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar o tipo "Saída", selecionar produto com pouco estoque, informar quantidade maior que o estoque atual e clicar em "Salvar", a movimentação foi realizada e não foi informado que o estoque era insuficiente. Por exemplo, se o produto tinha um estoque atual de 10, ao realizar movimentação de saída de 20, a quantidade de produto foi negativado, invés de informar que o estoque era insuficiente. 
 
 ---
 
@@ -722,10 +720,10 @@ _________________________________________
 - Sistema deve informar que o produto é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação, selecionar tipo, não selecionar produto, informar quantidade e clicar em "Salvar", o sistema não informou que o produto é obrigatório, visto que a categoria "produto" vai automaticamente para "alimentos".
 
 ---
 
@@ -742,10 +740,10 @@ _________________________________________
 - Sistema deve informar que o tipo é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação, não selecionar o tipo de movimentação, selecionar o produto, informar a quantidade e clicar em "Salvar", a movimentação foi registrada já que o tipo é automaticamente "entrada".
 
 ---
 
@@ -761,10 +759,10 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser maior que zero.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação, preencher produto e tipo, digitar 0 na quantidade e clicar em salvar, o sistema informou que a quantidade deve ser maior que 0, conforme o esperado.
 
 ---
 
@@ -782,7 +780,7 @@ _________________________________________
 ( ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar um número negativo no campo quantidade e tentar salvar, o sistema não permitiu e exibiu mensagem clara de que deve ser um numero inteiro maior que 0.
 
 ---
 
@@ -796,10 +794,10 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser numérica.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar 'abc' no campo quantidade e tentar salvar, o ssitema informou que deve ser informado um numero inteiro válido.
 
 ---
 
