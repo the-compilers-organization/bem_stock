@@ -1290,10 +1290,10 @@ Ao digitar o campo e-mail no campo de busca, os usuários compatíveis com esse 
 - Deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Seguindo o passo a passo, o usuário foi cadastrado e apareceu na tela corretamente conforme o esperado.
 
 ---
 
