@@ -833,10 +833,10 @@ Ao selecionar tipo "Saída", selecionar produto, informar quantidade, não selec
 - A data escolhida deve aparecer corretamente no campo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir nova movimentação de entrada, clicar no campo de validade e escolher uma data no calendário, a data escolhida apareceu corretamente no campo validade.
 
 ---
 
@@ -855,10 +855,10 @@ _________________________________________
 - O botão deve estar visível e alinhado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar o histórico de movimentações e observar a coluna ações, o botão editar aparece visivelmente e alinhado.
 
 ---
 
@@ -873,10 +873,10 @@ _________________________________________
 - Os campos devem vir preenchidos com os dados da movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar uma movimentação e apertar no botão editar, a tela de edição é aberta e os campos são automaticamente preenchidos com os dados anteriores da movimentação.
 
 ---
 
@@ -893,10 +893,10 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição de uma movimentação de entrada, alterar a quantidade, salvar e conferir o estoque do produto, ele foi atualizado e foi recalculado corretamente.
 
 ---
 
@@ -914,10 +914,10 @@ _________________________________________
 - Se a quantidade for maior que o estoque disponível, o sistema deve bloquear.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição de uma movimentação de saída, alterar a quantidade, salvar e conferir o estoque, a movimentação foi atualizada, o estoque foi ajustado, porém ao ser posto uma quantidade de saída de produtos a mais do que a atual, a movimentação foi permitida, sem indicação de que o estoque atual era menor do que o valor pedido.
 
 ---
 
@@ -933,10 +933,10 @@ _________________________________________
 - Caso não exista estoque suficiente, deve bloquear a edição.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(  ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição de uma entrar, alterar tipo para saída e salvar, o sistema não permite que o estoque seja válido.
 
 ---
 
@@ -951,10 +951,10 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição de uma saída, alterar tipo para "Entrada" e salvar, o estoque não foi recalculado automaticamente.
 
 ---
 
@@ -971,11 +971,10 @@ _________________________________________
 - Estoque do novo produto deve ser ajustado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
-
+_Ao abrir edição de uma movimentação, alterar o produto, salvar e conferir estoque do produto antigo e do novo produto, o estoque o produto antigo foi ajustado corretamente e o do novo também foi ajustado corretamente.
 ---
 
 ## CT049 — Editar movimentação com quantidade inválida
@@ -990,10 +989,10 @@ _________________________________________
 - Mensagem de erro deve ser clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição, digitar quantidade zero, negativa ou texto e clicar em salvar, o sistema não permitiu a edição e exibiu mensagem clara.
 
 ---
 
@@ -1009,10 +1008,10 @@ _________________________________________
 - Sistema deve retornar ao histórico.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir edição, alterar algum campo e clicar em "voltar", nenhuma alteração foi salva e o sistema retornou ao histórico, conforme o esperado.
 
 ---
 
@@ -1031,10 +1030,10 @@ _________________________________________
 - O botão não deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Após a rolagem horizontal a aba ações é vista visivelmente e o botão não foi cortado, assim como esperado.
 
 ---
 
@@ -1049,10 +1048,10 @@ _________________________________________
 - O estoque não deve ser alterado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar no botão excluir, e quando aparecer a tela confirmação, clicar em cancelar, a movimentação não foi removida e o estoque não foi alterado, assim como esperado.
 
 ---
 
@@ -1069,10 +1068,10 @@ _________________________________________
 - O estoque deve diminuir conforme a entrada excluída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar uma movimentação de entrada, clicar em excluir, confirmar a exclusão e verificar o estoque do produto, a movimentação foi removida e o estoque diminuiu conforme a entrada excluida. 
 
 ---
 
@@ -1089,10 +1088,10 @@ _________________________________________
 - O estoque deve aumentar conforme a saída excluída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar uma movimentação de saída, clicar em excluir, confirmar a exclusão, confirmar a exclusão e verificar o estoque do produto, a movimentação foi removida e o estoque aumentou conforme a saída excluída como esperado.
 
 ---
 
@@ -1106,10 +1105,10 @@ _________________________________________
 - A movimentação excluída não deve aparecer mais na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao excluir uma movimentação e observar a lista de histórico, a movimentação excluída não aparece mais na lista conforme o resultado esperado.
 
 ---
 
@@ -1127,10 +1126,10 @@ _________________________________________
 - As movimentações cadastradas devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao acessar a tela de movimentações e observar a lista as movimentações registradas apareceram conforme o esperado.
 
 ---
 
@@ -1144,10 +1143,10 @@ _________________________________________
 - Apenas movimentações daquele produto devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar um produto no filtro e aplicar, apenas movimentações do produto apareceram, conforme o esperado.
 
 ---
 
@@ -1161,10 +1160,10 @@ _________________________________________
 - Apenas movimentações da categoria selecionada devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar uma categoria e selecionar filtro, apenas as movimentações da categoria selecionada apareceram conforme o esperado
 
 ---
 
@@ -1179,10 +1178,10 @@ _________________________________________
 - Apenas movimentações dentro do período devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar data inicial, selecionar data final e aplicar o filtro, apenas movimentações dentro do período selecionado foi exibido. 
 
 ---
 
@@ -1196,10 +1195,10 @@ _________________________________________
 - Sistema deve informar que o período é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar data inicial maior que a data final e aplicar o filtro, o sistema não informou que o período é inválido e apareceu um produto que não estava na data inicial ou final do que foi posto no filtro. 
 
 ---
 
@@ -1213,10 +1212,10 @@ _________________________________________
 - A lista deve voltar ao estado original.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao aplicar filtros e clicar em "Limpar filtros", a lista retornou ao seu estado original, conforme o esperado.
 
 ---
 
@@ -1234,10 +1233,10 @@ _________________________________________
 - A lista de usuários deve aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao entrar como administrador e acessar a aba "Usuários", a lista de usuários apareceu como o esperado (no caso apenas o meu email de entrada)
 
 ---
 
@@ -1251,10 +1250,10 @@ _________________________________________
 - A lista deve filtrar corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao clicar no campo de busca, digitar nome de um usuário já cadastrado, a lista filtrou corretamente, conforme o esperado.
 
 ---
 
@@ -1267,10 +1266,10 @@ _________________________________________
 - Usuários compatíveis devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar o campo e-mail no campo de busca, os usuários compatíveis com esse enderaço de e-mail foram exibidos, conforme o esperado.
 
 ---
 
@@ -1310,10 +1309,10 @@ _________________________________________
 - Sistema deve informar que o e-mail é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro de usuário, digitar um e-mail inválido,preencher os demais campos e clicar em salvar, o sistema informou corretamente que o e-mail é inválido.
 
 ---
 
@@ -1330,10 +1329,10 @@ _________________________________________
 - Deve informar que já existe usuário com esse e-mail.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir cadastro de usuário, digitar e-mail já cadastrado, preencher os demais campos e apertar em salvar, o sistema não permite acesso e informa que um usuário já existe com esse e-mail como o esperado.
 
 ---
 
@@ -1348,10 +1347,10 @@ _________________________________________
 - Sistema deve informar que as senhas não conferem.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao digitar uma senha, digitar uma confirmação diferente e clicar em salvar, o sistema não permite o cadastro e informa que as senhas não conferem, de acordo com o esperado.
 
 ---
 
@@ -1367,10 +1366,10 @@ _________________________________________
 - Dados devem ser atualizados.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar um usuário, não existe o botão editar.
 
 ---
 
@@ -1385,10 +1384,10 @@ _________________________________________
 - Usuário deve ser removido da lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar um usuário comum, não existe o botão excluir. 
 
 ---
 
@@ -1402,10 +1401,10 @@ _________________________________________
 - Sistema deve bloquear a exclusão do administrador padrão.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao localizar o usuário, não é permitido excluir pois não existe botão de exclusão de usuário, nem edição.
 
 ---
 
@@ -1426,10 +1425,10 @@ _________________________________________
 - Todas as telas devem carregar corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao seguir os passos acima, o sistema deu uma leve travada mas as telas carregaram rapidamente e corretamente.
 
 ---
 
@@ -1444,10 +1443,10 @@ _________________________________________
 - Nenhuma informação deve ser salva sem confirmação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao abrir formulário de produto, usuário ou movimentação e clicar em "Voltar" ou "Cancelar", o sistema retornou para a tela anterior e nenhuma alteração foi feita sem confirmação.
 
 ---
 
@@ -1465,10 +1464,10 @@ _________________________________________
 - Nenhum texto importante deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao observar todas as telas, os títulos, botões, colunas e cards estão claramente visiveis e nenhum texto importante foi cortado.
 
 ---
 
@@ -1483,10 +1482,10 @@ _________________________________________
 - Cabeçalhos devem estar alinhados com as células.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao seguir o passo a passo e observar as abas e tabelas, os cabeçalhos estavam alinhados com suas cédulas respectivamente.
 
 ---
 
@@ -1500,10 +1499,10 @@ _________________________________________
 - O usuário deve entender a função de cada botão.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao observar botões principais, e os de editar e excluir, eles são simples de serem entendidos. 
 
 ---
 
@@ -1517,10 +1516,10 @@ _________________________________________
 - As mensagens devem ser simples e compreensíveis.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+As mensagens são simples de serem exibidas, porém ao colocar uma data de validade com dias no passado no caléndario, o registro foi permitido. 
 
 ---
 
@@ -1534,10 +1533,10 @@ _________________________________________
 - O sistema deve informar claramente que a operação foi realizada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao cadastrar, editar ou excluir algum registro, a mensagem é exibida e simples de ser entendida, informando ao usuário que a operação foi realizada corretamente.
 
 ---
 
