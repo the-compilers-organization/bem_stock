@@ -777,7 +777,7 @@ Ao abrir nova movimentação, preencher produto e tipo, digitar 0 na quantidade 
 - Deve exibir mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( X ) OK   ( ) ERRO  
 
 **Observações:**  
 Ao digitar um número negativo no campo quantidade e tentar salvar, o sistema não permitiu e exibiu mensagem clara de que deve ser um numero inteiro maior que 0.
@@ -814,10 +814,10 @@ Ao digitar 'abc' no campo quantidade e tentar salvar, o ssitema informou que dev
 - Sistema deve informar que o destino é obrigatório para saída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   ( X ) ERRO  
 
 **Observações:**  
-_________________________________________
+Ao selecionar tipo "Saída", selecionar produto, informar quantidade, não selecionar destino e clicar em "Salvar", o sistema permitiu que a movimentação fosse feita, pois o destino é automatico. 
 
 ---
 
