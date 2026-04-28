@@ -1135,15 +1135,28 @@ class MovimentacaoView(ctk.CTkFrame):
         )
         frame_lista.pack(fill="both", expand=True)
 
+        # ctk.CTkLabel(
+        #     frame_lista,
+        #     text="Histórico de movimentações",
+        #     font=("Segoe UI", 18, "bold"),
+        #     text_color=self.cor_texto
+        # ).pack(anchor="w", padx=20, pady=(20, 10))
+
+        # frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+
+        frame_lista.grid_columnconfigure(0, weight=1)
+        frame_lista.grid_rowconfigure(1, weight=1)
+
         ctk.CTkLabel(
             frame_lista,
             text="Histórico de movimentações",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(20, 10))
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(14, 6))
 
         frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
-        frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+        frame_tabela_area.grid(row=1, column=0, sticky="nsew", padx=20, pady=(0, 4))
 
         frame_tabela_area.grid_rowconfigure(1, weight=1)
         frame_tabela_area.grid_columnconfigure(0, weight=1)
@@ -1207,8 +1220,11 @@ class MovimentacaoView(ctk.CTkFrame):
         self.canvas_cabecalho.bind("<Configure>", self.ajustar_largura_cabecalho)
         self.canvas_corpo.bind("<Configure>", self.ajustar_largura_corpo)
 
-        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
-        frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+        # frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent", height=48)
+        frame_paginacao.grid(row=2, column=0, sticky="ew", padx=20, pady=(4, 12))
+        frame_paginacao.grid_propagate(False)
 
         self.btn_anterior = ctk.CTkButton(
             frame_paginacao,

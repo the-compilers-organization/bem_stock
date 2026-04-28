@@ -152,15 +152,26 @@ class ProdutoView(ctk.CTkFrame):
         # A largura de cada coluna é controlada apenas por colunas_tabela.
         # Isso evita desalinhamento entre cabeçalho e células, principalmente
         # nas colunas Status, Validade e Ações.
+        # self.paddings_colunas = {
+        #     0: (0, 0),
+        #     1: (0, 0),
+        #     2: (0, 0),
+        #     3: (0, 0),
+        #     4: (0, 0),
+        #     5: (0, 0),
+        #     6: (0, 0),
+        #     7: (0, 0),
+        # }
+
         self.paddings_colunas = {
-            0: (0, 0),
-            1: (0, 0),
-            2: (0, 0),
-            3: (0, 0),
-            4: (0, 0),
-            5: (0, 0),
-            6: (0, 0),
-            7: (0, 0),
+            0: (14, 8),
+            1: (0, 8),
+            2: (0, 8),
+            3: (0, 8),
+            4: (0, 8),
+            5: (0, 8),
+            6: (0, 8),
+            7: (0, 14),
         }
 
         self.colunas_centralizadas = {1, 2, 3, 4, 5, 6, 7}
@@ -328,41 +339,79 @@ class ProdutoView(ctk.CTkFrame):
         finally:
             self._sincronizando_scroll_x = False
 
+    # def atualizar_scrollregion_cabecalho(self, event=None):
+    #     if self.canvas_cabecalho is not None and self.frame_cabecalho is not None:
+    #         largura = max(self.largura_conteudo_tabela, self.canvas_cabecalho.winfo_width())
+    #         self.canvas_cabecalho.configure(
+    #             scrollregion=(0, 0, largura, self.frame_cabecalho.winfo_reqheight())
+    #         )
+
     def atualizar_scrollregion_cabecalho(self, event=None):
-        if self.canvas_cabecalho is not None and self.frame_cabecalho is not None:
-            largura = max(self.largura_conteudo_tabela, self.canvas_cabecalho.winfo_width())
+        if self.canvas_cabecalho is not None:
             self.canvas_cabecalho.configure(
-                scrollregion=(0, 0, largura, self.frame_cabecalho.winfo_reqheight())
+                scrollregion=self.canvas_cabecalho.bbox("all")
             )
 
+    # def atualizar_scrollregion_corpo(self, event=None):
+    #     if self.canvas_corpo is not None and self.frame_corpo is not None:
+    #         largura = max(self.largura_conteudo_tabela, self.canvas_corpo.winfo_width())
+    #         self.canvas_corpo.configure(
+    #             scrollregion=(0, 0, largura, self.frame_corpo.winfo_reqheight())
+    #         )
+
     def atualizar_scrollregion_corpo(self, event=None):
-        if self.canvas_corpo is not None and self.frame_corpo is not None:
-            largura = max(self.largura_conteudo_tabela, self.canvas_corpo.winfo_width())
+        if self.canvas_corpo is not None:
             self.canvas_corpo.configure(
-                scrollregion=(0, 0, largura, self.frame_corpo.winfo_reqheight())
+                scrollregion=self.canvas_corpo.bbox("all")
             )
+
+    # def ajustar_largura_cabecalho(self, event):
+    #     if self.canvas_cabecalho is None or self.canvas_window_id_cabecalho is None:
+    #         return
+
+    #     largura = max(self.largura_conteudo_tabela, event.width)
+    #     self.canvas_cabecalho.itemconfigure(
+    #         self.canvas_window_id_cabecalho,
+    #         width=largura
+    #     )
+    #     self.atualizar_scrollregion_cabecalho()
 
     def ajustar_largura_cabecalho(self, event):
         if self.canvas_cabecalho is None or self.canvas_window_id_cabecalho is None:
             return
 
-        largura = max(self.largura_conteudo_tabela, event.width)
-        self.canvas_cabecalho.itemconfigure(
-            self.canvas_window_id_cabecalho,
-            width=largura
-        )
-        self.atualizar_scrollregion_cabecalho()
+        largura_conteudo = sum(l for _, l in self.colunas_tabela) + 120
+        largura_canvas = event.width
+
+        if largura_canvas > largura_conteudo:
+            self.canvas_cabecalho.itemconfigure(
+                self.canvas_window_id_cabecalho,
+                width=largura_canvas
+            )
+
+    # def ajustar_largura_corpo(self, event):
+    #     if self.canvas_corpo is None or self.canvas_window_id_corpo is None:
+    #         return
+
+    #     largura = max(self.largura_conteudo_tabela, event.width)
+    #     self.canvas_corpo.itemconfigure(
+    #         self.canvas_window_id_corpo,
+    #         width=largura
+    #     )
+    #     self.atualizar_scrollregion_corpo()
 
     def ajustar_largura_corpo(self, event):
         if self.canvas_corpo is None or self.canvas_window_id_corpo is None:
             return
 
-        largura = max(self.largura_conteudo_tabela, event.width)
-        self.canvas_corpo.itemconfigure(
-            self.canvas_window_id_corpo,
-            width=largura
-        )
-        self.atualizar_scrollregion_corpo()
+        largura_conteudo = sum(l for _, l in self.colunas_tabela) + 120
+        largura_canvas = event.width
+
+        if largura_canvas > largura_conteudo:
+            self.canvas_corpo.itemconfigure(
+                self.canvas_window_id_corpo,
+                width=largura_canvas
+            )
 
     def ativar_scroll_mouse(self, event=None):
         if self.canvas_corpo is not None:
@@ -480,7 +529,8 @@ class ProdutoView(ctk.CTkFrame):
 
     def criar_cabecalho_tabela(self):
         cabecalho = ctk.CTkFrame(self.frame_cabecalho, fg_color="transparent")
-        cabecalho.pack(fill="x", padx=0, pady=(0, 8))
+        # cabecalho.pack(fill="x", padx=0, pady=(0, 8))
+        cabecalho.pack(fill="x", padx=12, pady=(0, 8))
 
         self.configurar_colunas_grid(cabecalho)
         cabecalho.grid_rowconfigure(0, weight=1)
@@ -534,6 +584,15 @@ class ProdutoView(ctk.CTkFrame):
         return validade
 
     def criar_linha_produto(self, produto):
+        # linha = ctk.CTkFrame(
+        #     self.frame_corpo,
+        #     fg_color="#ffffff",
+        #     corner_radius=12,
+        #     border_width=1,
+        #     border_color="#eeeeee"
+        # )
+        # linha.pack(fill="x", padx=0, pady=6)
+
         linha = ctk.CTkFrame(
             self.frame_corpo,
             fg_color="#ffffff",
@@ -541,7 +600,7 @@ class ProdutoView(ctk.CTkFrame):
             border_width=1,
             border_color="#eeeeee"
         )
-        linha.pack(fill="x", padx=0, pady=6)
+        linha.pack(fill="x", padx=12, pady=6)
 
         self.configurar_colunas_grid(linha)
         linha.grid_rowconfigure(0, weight=1)
@@ -995,15 +1054,29 @@ class ProdutoView(ctk.CTkFrame):
         )
         frame_lista.pack(fill="both", expand=True)
 
+        # ctk.CTkLabel(
+        #     frame_lista,
+        #     text="Lista de Produtos",
+        #     font=("Segoe UI", 18, "bold"),
+        #     text_color=self.cor_texto
+        # ).pack(anchor="w", padx=20, pady=(20, 10))
+
+        # frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # # frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+        # frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 6))
+
+        frame_lista.grid_columnconfigure(0, weight=1)
+        frame_lista.grid_rowconfigure(1, weight=1)
+
         ctk.CTkLabel(
             frame_lista,
             text="Lista de Produtos",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(20, 10))
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(14, 6))
 
         frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
-        frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+        frame_tabela_area.grid(row=1, column=0, sticky="nsew", padx=20, pady=(0, 4))
 
         frame_tabela_area.grid_rowconfigure(1, weight=1)
         frame_tabela_area.grid_columnconfigure(0, weight=1)
@@ -1021,8 +1094,8 @@ class ProdutoView(ctk.CTkFrame):
         self.canvas_window_id_cabecalho = self.canvas_cabecalho.create_window(
             (0, 0),
             window=self.frame_cabecalho,
-            anchor="nw",
-            width=self.largura_conteudo_tabela
+            anchor="nw"
+            # width=self.largura_conteudo_tabela
         )
 
         self.canvas_corpo = tk.Canvas(
@@ -1060,8 +1133,8 @@ class ProdutoView(ctk.CTkFrame):
         self.canvas_window_id_corpo = self.canvas_corpo.create_window(
             (0, 0),
             window=self.frame_corpo,
-            anchor="nw",
-            width=self.largura_conteudo_tabela
+            anchor="nw"
+            # width=self.largura_conteudo_tabela
         )
 
         self.frame_cabecalho.bind("<Configure>", self.atualizar_scrollregion_cabecalho)
@@ -1070,8 +1143,13 @@ class ProdutoView(ctk.CTkFrame):
         self.canvas_cabecalho.bind("<Configure>", self.ajustar_largura_cabecalho)
         self.canvas_corpo.bind("<Configure>", self.ajustar_largura_corpo)
 
-        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
-        frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+        # frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # # frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+        # frame_paginacao.pack(fill="x", padx=20, pady=(4, 12))
+
+        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent", height=48)
+        frame_paginacao.grid(row=2, column=0, sticky="ew", padx=20, pady=(4, 12))
+        frame_paginacao.grid_propagate(False)
 
         self.btn_anterior = ctk.CTkButton(
             frame_paginacao,

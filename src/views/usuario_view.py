@@ -1,4 +1,5 @@
 import math
+import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox
 
@@ -93,10 +94,19 @@ class UsuarioView(ctk.CTkFrame):
 
         self.entry_busca = None
         self.combo_tipo_busca = None
-        self.lista_container = None
         self.label_paginacao = None
         self.btn_anterior = None
         self.btn_proxima = None
+
+        # Cabeçalho fixo + corpo rolável, seguindo o mesmo padrão de ProdutoView e MovimentacaoView.
+        self.canvas_cabecalho = None
+        self.canvas_corpo = None
+        self.frame_cabecalho = None
+        self.frame_corpo = None
+        self.scroll_x = None
+        self.scroll_y = None
+        self.canvas_window_id_cabecalho = None
+        self.canvas_window_id_corpo = None
 
         self.pagina_atual = 1
         self.itens_por_pagina = 10
@@ -264,6 +274,85 @@ class UsuarioView(ctk.CTkFrame):
         )
         return label
 
+    def sync_xview(self, *args):
+        if self.canvas_cabecalho is not None:
+            self.canvas_cabecalho.xview(*args)
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.xview(*args)
+
+    def on_cabecalho_xscroll(self, first, last):
+        if self.scroll_x is not None:
+            self.scroll_x.set(first, last)
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.xview_moveto(first)
+
+    def on_corpo_xscroll(self, first, last):
+        if self.scroll_x is not None:
+            self.scroll_x.set(first, last)
+        if self.canvas_cabecalho is not None:
+            self.canvas_cabecalho.xview_moveto(first)
+
+    def atualizar_scrollregion_cabecalho(self, event=None):
+        if self.canvas_cabecalho is not None:
+            self.canvas_cabecalho.configure(
+                scrollregion=self.canvas_cabecalho.bbox("all")
+            )
+
+    def atualizar_scrollregion_corpo(self, event=None):
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.configure(
+                scrollregion=self.canvas_corpo.bbox("all")
+            )
+
+    def ajustar_largura_cabecalho(self, event):
+        if self.canvas_cabecalho is None or self.canvas_window_id_cabecalho is None:
+            return
+
+        largura_conteudo = sum(largura for _, largura in self.colunas_tabela) + 120
+        largura_canvas = event.width
+
+        if largura_canvas > largura_conteudo:
+            self.canvas_cabecalho.itemconfigure(
+                self.canvas_window_id_cabecalho,
+                width=largura_canvas
+            )
+
+    def ajustar_largura_corpo(self, event):
+        if self.canvas_corpo is None or self.canvas_window_id_corpo is None:
+            return
+
+        largura_conteudo = sum(largura for _, largura in self.colunas_tabela) + 120
+        largura_canvas = event.width
+
+        if largura_canvas > largura_conteudo:
+            self.canvas_corpo.itemconfigure(
+                self.canvas_window_id_corpo,
+                width=largura_canvas
+            )
+
+    def ativar_scroll_mouse(self, event=None):
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.bind_all("<MouseWheel>", self.rolar_tabela_mouse)
+            self.canvas_corpo.bind_all("<Button-4>", self.rolar_tabela_mouse)
+            self.canvas_corpo.bind_all("<Button-5>", self.rolar_tabela_mouse)
+
+    def desativar_scroll_mouse(self, event=None):
+        if self.canvas_corpo is not None:
+            self.canvas_corpo.unbind_all("<MouseWheel>")
+            self.canvas_corpo.unbind_all("<Button-4>")
+            self.canvas_corpo.unbind_all("<Button-5>")
+
+    def rolar_tabela_mouse(self, event):
+        if self.canvas_corpo is None:
+            return
+
+        if getattr(event, "num", None) == 4:
+            self.canvas_corpo.yview_scroll(-1, "units")
+        elif getattr(event, "num", None) == 5:
+            self.canvas_corpo.yview_scroll(1, "units")
+        else:
+            self.canvas_corpo.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
     def obter_filtros_atuais(self):
         termo = self.entry_busca.get().strip() if self.entry_busca else ""
         tipo_busca = self.combo_tipo_busca.get().strip() if self.combo_tipo_busca else "Nome"
@@ -291,7 +380,12 @@ class UsuarioView(ctk.CTkFrame):
             )
 
     def carregar_usuarios(self):
-        for widget in self.lista_container.winfo_children():
+        if self.frame_cabecalho is None or self.frame_corpo is None:
+            return
+
+        for widget in self.frame_cabecalho.winfo_children():
+            widget.destroy()
+        for widget in self.frame_corpo.winfo_children():
             widget.destroy()
 
         termo, tipo_busca = self.obter_filtros_atuais()
@@ -316,28 +410,31 @@ class UsuarioView(ctk.CTkFrame):
             )
 
         self.total_registros = total
+        self.criar_cabecalho_tabela()
 
         if not usuarios:
             ctk.CTkLabel(
-                self.lista_container,
+                self.frame_corpo,
                 text="Nenhum usuário encontrado.",
                 font=("Segoe UI", 14),
                 text_color=self.cor_texto_secundario
             ).pack(pady=20)
 
             self.atualizar_controles_paginacao()
+            self.after(50, self.atualizar_scrollregion_cabecalho)
+            self.after(50, self.atualizar_scrollregion_corpo)
             return
-
-        self.criar_cabecalho_tabela()
 
         for usuario in usuarios:
             self.criar_linha_usuario(usuario)
 
         self.atualizar_controles_paginacao()
+        self.after(50, self.atualizar_scrollregion_cabecalho)
+        self.after(50, self.atualizar_scrollregion_corpo)
 
     def criar_cabecalho_tabela(self):
-        cabecalho = ctk.CTkFrame(self.lista_container, fg_color="transparent")
-        cabecalho.pack(fill="x", padx=14, pady=(0, 8))
+        cabecalho = ctk.CTkFrame(self.frame_cabecalho, fg_color="transparent")
+        cabecalho.pack(fill="x", padx=12, pady=(0, 8))
 
         self.configurar_colunas_grid(cabecalho)
 
@@ -381,13 +478,13 @@ class UsuarioView(ctk.CTkFrame):
 
     def criar_linha_usuario(self, usuario):
         linha = ctk.CTkFrame(
-            self.lista_container,
+            self.frame_corpo,
             fg_color="#ffffff",
             corner_radius=12,
             border_width=1,
             border_color="#eeeeee"
         )
-        linha.pack(fill="x", padx=14, pady=6)
+        linha.pack(fill="x", padx=12, pady=6)
 
         self.configurar_colunas_grid(linha)
 
@@ -764,23 +861,98 @@ class UsuarioView(ctk.CTkFrame):
         )
         frame_lista.pack(fill="both", expand=True)
 
+        # ctk.CTkLabel(
+        #     frame_lista,
+        #     text="Lista de Usuários",
+        #     font=("Segoe UI", 18, "bold"),
+        #     text_color=self.cor_texto
+        # ).pack(anchor="w", padx=20, pady=(20, 10))
+
+        # frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # frame_tabela_area.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+
+        frame_lista.grid_columnconfigure(0, weight=1)
+        frame_lista.grid_rowconfigure(1, weight=1)
+
         ctk.CTkLabel(
             frame_lista,
             text="Lista de Usuários",
             font=("Segoe UI", 18, "bold"),
             text_color=self.cor_texto
-        ).pack(anchor="w", padx=20, pady=(20, 10))
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(14, 6))
 
-        scroll = ctk.CTkScrollableFrame(
-            frame_lista,
-            fg_color="transparent"
+        frame_tabela_area = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        frame_tabela_area.grid(row=1, column=0, sticky="nsew", padx=20, pady=(0, 4))
+
+        frame_tabela_area.grid_rowconfigure(1, weight=1)
+        frame_tabela_area.grid_columnconfigure(0, weight=1)
+
+        self.canvas_cabecalho = tk.Canvas(
+            frame_tabela_area,
+            bg="#ffffff",
+            highlightthickness=0,
+            bd=0,
+            height=56
         )
-        scroll.pack(fill="both", expand=True, padx=20, pady=(0, 10))
+        self.canvas_cabecalho.grid(row=0, column=0, sticky="ew")
 
-        self.lista_container = scroll
+        self.frame_cabecalho = ctk.CTkFrame(self.canvas_cabecalho, fg_color="#ffffff")
+        self.canvas_window_id_cabecalho = self.canvas_cabecalho.create_window(
+            (0, 0),
+            window=self.frame_cabecalho,
+            anchor="nw"
+        )
 
-        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
-        frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+        self.canvas_corpo = tk.Canvas(
+            frame_tabela_area,
+            bg="#ffffff",
+            highlightthickness=0,
+            bd=0
+        )
+        self.canvas_corpo.grid(row=1, column=0, sticky="nsew")
+
+        self.canvas_corpo.bind("<Enter>", self.ativar_scroll_mouse)
+        self.canvas_corpo.bind("<Leave>", self.desativar_scroll_mouse)
+
+        self.scroll_y = ctk.CTkScrollbar(
+            frame_tabela_area,
+            orientation="vertical",
+            command=self.canvas_corpo.yview
+        )
+        self.scroll_y.grid(row=1, column=1, sticky="ns")
+
+        self.scroll_x = ctk.CTkScrollbar(
+            frame_tabela_area,
+            orientation="horizontal",
+            command=self.sync_xview
+        )
+        self.scroll_x.grid(row=2, column=0, sticky="ew")
+
+        self.canvas_cabecalho.configure(xscrollcommand=self.on_cabecalho_xscroll)
+        self.canvas_corpo.configure(
+            yscrollcommand=self.scroll_y.set,
+            xscrollcommand=self.on_corpo_xscroll
+        )
+
+        self.frame_corpo = ctk.CTkFrame(self.canvas_corpo, fg_color="#ffffff")
+        self.canvas_window_id_corpo = self.canvas_corpo.create_window(
+            (0, 0),
+            window=self.frame_corpo,
+            anchor="nw"
+        )
+
+        self.frame_cabecalho.bind("<Configure>", self.atualizar_scrollregion_cabecalho)
+        self.frame_corpo.bind("<Configure>", self.atualizar_scrollregion_corpo)
+
+        self.canvas_cabecalho.bind("<Configure>", self.ajustar_largura_cabecalho)
+        self.canvas_corpo.bind("<Configure>", self.ajustar_largura_corpo)
+
+        # frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent")
+        # frame_paginacao.pack(fill="x", padx=20, pady=(0, 20))
+
+        frame_paginacao = ctk.CTkFrame(frame_lista, fg_color="transparent", height=48)
+        frame_paginacao.grid(row=2, column=0, sticky="ew", padx=20, pady=(4, 12))
+        frame_paginacao.grid_propagate(False)
 
         self.btn_anterior = ctk.CTkButton(
             frame_paginacao,
