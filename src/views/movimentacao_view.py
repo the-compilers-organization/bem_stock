@@ -133,6 +133,7 @@ class MovimentacaoView(ctk.CTkFrame):
             ("Produto", 170),
             ("Categoria", 170),
             ("Quantidade", 170),
+            ("lote", 140),  # nova
             ("Fornecedor /\nDestino", 210),
             ("Responsável", 190),
             ("Observações", 190),
@@ -145,6 +146,7 @@ class MovimentacaoView(ctk.CTkFrame):
             "Produto": 140,
             "Categoria": 140,
             "Quantidade": 130,
+            "lote": 120, # novo
             "Fornecedor /\nDestino": 160,
             "Responsável": 140,
             "Observações": 140,
@@ -157,6 +159,7 @@ class MovimentacaoView(ctk.CTkFrame):
             "produto": 140,
             "categoria": 140,
             "quantidade": 130,
+            "lote": 120, # novo
             "fornecedor_destino": 160,
             "responsavel": 140,
             "observacoes": 140,
@@ -168,10 +171,11 @@ class MovimentacaoView(ctk.CTkFrame):
             2: (0, 8),
             3: (0, 8),
             4: (0, 8),
-            5: (0, 8),
+            5: (0, 8), #lote novo
             6: (0, 8),
             7: (0, 8),
-            8: (0, 14),
+            8: (0, 8),
+            9: (0, 14),
         }
 
         self.colunas_centralizadas = {1, 8}
@@ -507,25 +511,33 @@ class MovimentacaoView(ctk.CTkFrame):
             ("Segoe UI", 13), self.cor_texto, self.wrap_celulas["quantidade"]
         )
 
-        frame_fd = self.criar_container_coluna(linha, 5, pady=(12, 12))
+        lote = item.get("numero_lote") or "-"
+
+        frame_lote = self.criar_container_coluna(linha, 5, pady=(12, 12))
         self.criar_label_padrao(
-            frame_fd, valor_fornecedor_destino, 5,
+            frame_lote, lote, 5,
+            ("Segoe UI", 13), self.cor_texto, self.wrap_celulas["lote"]
+        )
+
+        frame_fd = self.criar_container_coluna(linha, 6, pady=(12, 12))
+        self.criar_label_padrao(
+            frame_fd, valor_fornecedor_destino, 6,
             ("Segoe UI", 13), self.cor_texto, self.wrap_celulas["fornecedor_destino"]
         )
 
-        frame_responsavel = self.criar_container_coluna(linha, 6, pady=(12, 12))
+        frame_responsavel = self.criar_container_coluna(linha, 7, pady=(12, 12))
         self.criar_label_padrao(
-            frame_responsavel, responsavel, 6,
+            frame_responsavel, responsavel, 7,
             ("Segoe UI", 13), self.cor_texto, self.wrap_celulas["responsavel"]
         )
 
-        frame_observacoes = self.criar_container_coluna(linha, 7, pady=(12, 12))
+        frame_observacoes = self.criar_container_coluna(linha, 8, pady=(12, 12))
         self.criar_label_padrao(
-            frame_observacoes, observacoes, 7,
+            frame_observacoes, observacoes, 8,
             ("Segoe UI", 13), self.cor_texto_secundario, self.wrap_celulas["observacoes"]
         )
 
-        frame_acoes = self.criar_container_coluna(linha, 8, pady=(12, 12))
+        frame_acoes = self.criar_container_coluna(linha, 9, pady=(12, 12))
         container_acoes = ctk.CTkFrame(frame_acoes, fg_color="transparent")
         container_acoes.pack(anchor="center")
 
@@ -765,7 +777,7 @@ class MovimentacaoView(ctk.CTkFrame):
     #             historico, total = filtrar_historico_por_fornecedor(
     #                 valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
     #             )
-    #         elif filtro == "Por Lote":
+    #         elif filtro == "Por lote":
     #             if not valor:
     #                 messagebox.showerror("Erro", "Informe o lote.")
     #                 return
@@ -902,7 +914,7 @@ class MovimentacaoView(ctk.CTkFrame):
                     itens_por_pagina=self.itens_por_pagina
                 )
 
-            elif filtro == "Por Lote":
+            elif filtro == "Por lote":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o lote.")
                     return
@@ -986,7 +998,7 @@ class MovimentacaoView(ctk.CTkFrame):
     #         return filtrar_historico_por_destino(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
     #     if filtro == "Por Fornecedor":
     #         return filtrar_historico_por_fornecedor(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-    #     if filtro == "Por Lote":
+    #     if filtro == "Por lote":
     #         return filtrar_historico_por_lote(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
     #     if filtro == "Por Entrada":
     #         return filtrar_historico_por_tipo("entrada", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
@@ -1051,7 +1063,7 @@ class MovimentacaoView(ctk.CTkFrame):
                 itens_por_pagina=self.itens_por_pagina
             )
 
-        if filtro == "Por Lote":
+        if filtro == "Por lote":
             return filtrar_historico_por_lote(
                 valor,
                 pagina=self.pagina_atual,
@@ -1267,7 +1279,7 @@ class MovimentacaoView(ctk.CTkFrame):
                 "Por Categoria",
                 "Por Destino",
                 "Por Fornecedor",
-                "Por Lote",
+                "Por lote",
                 "Por Entrada",
                 "Por Saída",
                 "Por Período"
