@@ -736,17 +736,46 @@ def filtrar_historico_por_destino(destino, pagina=1, itens_por_pagina=10):
     return registros, total
 
 
+# def filtrar_historico_por_periodo(data_inicial, data_final, pagina=1, itens_por_pagina=10):
+#     if pagina < 1:
+#         pagina = 1
+
+    
+#     if not data_inicial or not data_final:
+#         return [], 0
+
+#     if not data_valida(data_inicial) or not data_valida(data_final):
+#         return [], 0
+
+#     if data_inicial > data_final:
+#         return [], 0
+
+#     where_clause = "WHERE m.data_movimentacao >= ? AND m.data_movimentacao <= ?"
+#     params = (data_inicial, data_final)
+#     offset = (pagina - 1) * itens_por_pagina
+
+#     total = _contar_historico(where_clause, params)
+
+#     registros = _buscar_historico(
+#         where_clause,
+#         params,
+#         limite=itens_por_pagina,
+#         offset=offset
+#     )
+
+#     return registros, total
+
 def filtrar_historico_por_periodo(data_inicial, data_final, pagina=1, itens_por_pagina=10):
     if pagina < 1:
         pagina = 1
 
-    if not data_valida(data_inicial) or not data_valida(data_final):
+    if not data_inicial or not data_final:
         return [], 0
 
     if data_inicial > data_final:
         return [], 0
 
-    where_clause = "WHERE date(m.data_movimentacao) BETWEEN date(?) AND date(?)"
+    where_clause = "WHERE m.data_movimentacao >= ? AND m.data_movimentacao <= ?"
     params = (data_inicial, data_final)
     offset = (pagina - 1) * itens_por_pagina
 
@@ -818,6 +847,77 @@ def filtrar_historico_por_tipo(tipo_movimentacao, pagina=1, itens_por_pagina=10)
     registros = _buscar_historico(
         where_clause,
         params,
+        limite=itens_por_pagina,
+        offset=offset
+    )
+
+    return registros, total
+
+
+def filtrar_historico_combinado(
+    filtro="Todos",
+    valor="",
+    data_inicial="",
+    data_final="",
+    pagina=1,
+    itens_por_pagina=10
+):
+    if pagina < 1:
+        pagina = 1
+
+    where_partes = []
+    params = []
+
+    valor = str(valor).strip()
+
+    if filtro == "Por Produto" and valor:
+        if valor.isdigit():
+            where_partes.append("(m.id_produto = ? OR p.nome LIKE ?)")
+            params.extend([int(valor), f"%{valor}%"])
+        else:
+            where_partes.append("p.nome LIKE ?")
+            params.append(f"%{valor}%")
+
+    elif filtro == "Por Categoria" and valor:
+        where_partes.append("m.categoria LIKE ?")
+        params.append(f"%{valor}%")
+
+    elif filtro == "Por Destino" and valor:
+        where_partes.append("m.destino LIKE ?")
+        params.append(f"%{valor}%")
+
+    elif filtro == "Por Fornecedor" and valor:
+        where_partes.append("m.fornecedor LIKE ?")
+        params.append(f"%{valor}%")
+
+    elif filtro == "Por Lote" and valor:
+        where_partes.append("m.numero_lote LIKE ?")
+        params.append(f"%{valor}%")
+
+    elif filtro == "Por Entrada":
+        where_partes.append("m.tipo_movimentacao = ?")
+        params.append("entrada")
+
+    elif filtro == "Por Saída":
+        where_partes.append("m.tipo_movimentacao = ?")
+        params.append("saida")
+
+    if data_inicial and data_final:
+        where_partes.append("m.data_movimentacao >= ? AND m.data_movimentacao <= ?")
+        params.extend([data_inicial, data_final])
+
+    where_clause = ""
+
+    if where_partes:
+        where_clause = "WHERE " + " AND ".join(where_partes)
+
+    offset = (pagina - 1) * itens_por_pagina
+
+    total = _contar_historico(where_clause, tuple(params))
+
+    registros = _buscar_historico(
+        where_clause,
+        tuple(params),
         limite=itens_por_pagina,
         offset=offset
     )
