@@ -68,9 +68,11 @@ Durante cada teste, verificar:
 - O botão “Entrar” deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Chegou ao resultado esperado, a tela é intuitiva e objetiva.
 _________________________________________
 
 ---
@@ -88,9 +90,11 @@ _________________________________________
 - O sistema deve abrir o Dashboard.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O sistema retorna a mensagem "Usuário não encontrado".
 _________________________________________
 
 ---
@@ -106,9 +110,11 @@ _________________________________________
 - O sistema deve exibir mensagem informando que os campos são obrigatórios.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna a mensagem "Por favor, digite seu e-mail", porém não especifica que os dois campos estão sem dígitos.
 _________________________________________
 
 ---
@@ -124,9 +130,11 @@ _________________________________________
 - O sistema deve informar que o e-mail é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Chegou ao resultado, o sistema retornou a mensagem "E-mail inválido".
 _________________________________________
 
 ---
@@ -143,9 +151,11 @@ _________________________________________
 - Deve exibir mensagem clara de erro.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Assim como o resultado esperado, o sistema bloqueou o acesso e retornou o erro, porém retornou a mensagem "Usuário não encontrado, não especificando que o erro foi a senha ou o e-mail"
 _________________________________________
 
 ---
@@ -162,9 +172,11 @@ _________________________________________
 - A senha deve ficar oculta quando desmarcada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema respondeu como esperado, facilitando o usuário a visualizar a senha que está sendo inserida.
 _________________________________________
 
 ---
@@ -185,9 +197,11 @@ _________________________________________
 - O menu lateral deve estar visível.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Opções estão visíveis e claras. 
 _________________________________________
 
 ---
@@ -202,9 +216,11 @@ _________________________________________
 - A tela de Lista de Produtos deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Direcionado para a tela de lista de produtos com sucesso, no momento, sem nenhum produto registrado.
 _________________________________________
 
 ---
@@ -219,9 +235,11 @@ _________________________________________
 - A tela de Histórico de Movimentações deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Direcionado para a tela de histórico de movimentações com sucesso, no momento, sem nenhum registro.
 _________________________________________
 
 ---
@@ -236,9 +254,11 @@ _________________________________________
 - A opção “Usuários” deve aparecer para o administrador.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+A opção disponível para admins está visível na lateral junto com as demais opções do estoque.
 _________________________________________
 
 ---
@@ -253,9 +273,11 @@ _________________________________________
 - A opção “Usuários” não deve aparecer para o perfil estoque.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O usuário possui apenas três opções no menu lateral.
 _________________________________________
 
 ---
@@ -276,9 +298,11 @@ _________________________________________
 - Nenhuma coluna deve estar cortada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Foi adicionado um produto na lista para poder visualizar as colunas e cabeçalhos.
 _________________________________________
 
 ---
@@ -294,9 +318,11 @@ _________________________________________
 - As colunas Status, Validade e Ações não devem estar desalinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+As colunas e cabeçalhos estão alinhados, com os conteúdos relacionados corretos.
 _________________________________________
 
 ---
@@ -312,9 +338,11 @@ _________________________________________
 - Nenhum botão deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Os botões estão intuitivos, porém a opção "Editar" parece pouco visível.
 _________________________________________
 
 ---
@@ -329,9 +357,11 @@ _________________________________________
 - A lista deve mostrar apenas produtos correspondentes à busca.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Produto usado como exemplo foi exibido.
 _________________________________________
 
 ---
@@ -346,9 +376,11 @@ _________________________________________
 - A lista deve ficar vazia ou exibir uma mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Após clicar em "Filtrar" o sistema retorna a mensagem "Nenhum produto encontrado" na lista de produtos.
 _________________________________________
 
 ---
@@ -363,9 +395,11 @@ _________________________________________
 - Apenas produtos da categoria escolhida devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Chegou ao resultado esperado, exibindo os respectivos produtos de cada categoria e retornando a mensagem "Nenhum produto encontrado" nas categorias que não possuem produtos.
 _________________________________________
 
 ---
@@ -380,9 +414,11 @@ _________________________________________
 - Todos os produtos devem voltar a aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Os produtos cadastrados voltaram a aparecer com sucesso.
 _________________________________________
 
 ---
@@ -399,9 +435,11 @@ _________________________________________
 - O conteúdo não deve sobrepor outros elementos.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Exibição da lista continua correta, com células e conteúdos alinhados.
 _________________________________________
 
 ---
@@ -417,9 +455,11 @@ _________________________________________
 - As colunas devem continuar alinhadas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Exibição da lista continua correta, com células e conteúdos alinhados, porém a rolagem horizontal só pôde ser utilizada com a janela reduzida.
 _________________________________________
 
 ---
@@ -438,9 +478,11 @@ _________________________________________
 - O formulário de cadastro deve abrir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Campos disponíveis na tela de criação de produtos são claras, indicando também quais dos campos são obrigatórios.
 _________________________________________
 
 ---
@@ -462,9 +504,11 @@ _________________________________________
 - Produto deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O produto e todos os dados inseridos nos campos são exibidos na lista.
 _________________________________________
 
 ---
@@ -481,9 +525,11 @@ _________________________________________
 - Sistema deve informar que o nome é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retornou a mensagem "O nome é obrigatório" abaixo do campo "Nome", deixando claro onde foi o erro do usuário.
 _________________________________________
 
 ---
@@ -500,9 +546,11 @@ _________________________________________
 - Sistema deve informar que a categoria é obrigatória ou inválida.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+Não é possível cadastrar o produto sem categoria, visto que o sistema inicia como padrão a opção "Alimentos" no campo.
 _________________________________________
 
 ---
@@ -520,9 +568,11 @@ _________________________________________
 - Deve informar que o estoque mínimo não pode ser negativo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna a mensagem de erro "Informe um número maior ou igual a zero" abaixo do campo de "Estoque mínimo".
 _________________________________________
 
 ---
@@ -539,9 +589,11 @@ _________________________________________
 - Deve informar que o campo deve ser numérico.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna a mensagem de erro "Informe um número inteiro válido" abaixo do campo de "Estoque Mínimo".
 _________________________________________
 
 ---
@@ -560,9 +612,11 @@ _________________________________________
 - Alteração deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todas as alterações feitas foram realizadas com sucesso.
 _________________________________________
 
 ---
@@ -578,9 +632,11 @@ _________________________________________
 - Alterações não devem ser salvas.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Nenhuma das alterações foram registradas na lista.
 _________________________________________
 
 ---
@@ -596,9 +652,11 @@ _________________________________________
 - Produto deve ser removido da lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Foi exibida uma janela para confirmar a exclusão do produto. Ao confirmar, o produto foi excluído com sucesso.
 _________________________________________
 
 ---
@@ -614,9 +672,11 @@ _________________________________________
 - Deve informar que o produto possui histórico de movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema não autorizou a exclusão após eu confirmar a opção, exibindo uma mensagem informando que o produto possui movimentação.
 _________________________________________
 
 ---
@@ -636,9 +696,11 @@ _________________________________________
 - Campos devem estar visíveis e organizados.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todos os campos disponíveis estão claros e objetivos, sinalizando quais são obrigatórios e quais são opcionais.
 _________________________________________
 
 ---
@@ -660,9 +722,11 @@ _________________________________________
 - Estoque do produto deve aumentar.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todos os dados registrados nos campos foram exibidos logo após o salvamento.
 _________________________________________
 
 ---
@@ -682,9 +746,11 @@ _________________________________________
 - Estoque do produto deve diminuir.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Tanto a movimentação foi registrada como o estoque do produto diminuiu na lista de produtos.
 _________________________________________
 
 ---
@@ -702,9 +768,11 @@ _________________________________________
 - Deve informar estoque insuficiente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O sistema registrou o estoque atual com um valor negativo.
 _________________________________________
 
 ---
