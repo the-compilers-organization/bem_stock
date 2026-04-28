@@ -120,6 +120,9 @@ class CadastroUsuarioView(ctk.CTkFrame):
         if "confirmar_senha" in self.campos:
             self.campos["confirmar_senha"].configure(show=mostrar)
 
+    def senha_tamanho_valido(self, senha):
+        return 6 <= len(senha) <= 10
+
     def validar_campos(self):
         self.limpar_todos_erros()
         valido = True
@@ -142,9 +145,15 @@ class CadastroUsuarioView(ctk.CTkFrame):
             self.marcar_erro("perfil", "O perfil é obrigatório.")
             valido = False
 
+        
+
         if self.usuario_edicao is None:
             if not senha:
                 self.marcar_erro("senha", "A senha é obrigatória.")
+                valido = False
+
+            if senha and not self.senha_tamanho_valido(senha):
+                self.marcar_erro("senha", "A senha deve ter entre 6 e 10 caracteres.")
                 valido = False
 
             if not confirmar_senha:
@@ -165,11 +174,17 @@ class CadastroUsuarioView(ctk.CTkFrame):
                 if not confirmar_senha:
                     self.marcar_erro("confirmar_senha", "Confirme a nova senha.")
                     valido = False
+                
+                if senha and not self.senha_tamanho_valido(senha):
+                    self.marcar_erro("senha", "A senha deve ter entre 6 e 10 caracteres.")
+                    valido = False
 
                 if senha and confirmar_senha and senha != confirmar_senha:
                     self.marcar_erro("senha", "As senhas não coincidem.")
                     self.marcar_erro("confirmar_senha", "As senhas não coincidem.")
                     valido = False
+
+                
 
         return valido
 

@@ -649,12 +649,23 @@ def atualizar_movimentacao_saida(
         conexao.close()
 
 
-def filtrar_historico_por_produto(id_produto, pagina=1, itens_por_pagina=10):
+
+def filtrar_historico_por_produto(produto, pagina=1, itens_por_pagina=10):
     if pagina < 1:
         pagina = 1
 
-    where_clause = "WHERE m.id_produto = ?"
-    params = (id_produto,)
+    produto = str(produto).strip()
+
+    if not produto:
+        return [], 0
+
+    if produto.isdigit():
+        where_clause = "WHERE m.id_produto = ? OR p.nome LIKE ?"
+        params = (int(produto), f"%{produto}%")
+    else:
+        where_clause = "WHERE p.nome LIKE ?"
+        params = (f"%{produto}%",)
+
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
@@ -670,14 +681,16 @@ def filtrar_historico_por_produto(id_produto, pagina=1, itens_por_pagina=10):
 
 
 def filtrar_historico_por_categoria(categoria, pagina=1, itens_por_pagina=10):
-    if not categoria_valida(categoria):
-        return [], 0
-
     if pagina < 1:
         pagina = 1
 
-    where_clause = "WHERE m.categoria = ?"
-    params = (categoria,)
+    categoria = categoria.strip()
+
+    if not categoria:
+        return [], 0
+
+    where_clause = "WHERE m.categoria LIKE ?"
+    params = (f"%{categoria}%",)
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
@@ -693,14 +706,16 @@ def filtrar_historico_por_categoria(categoria, pagina=1, itens_por_pagina=10):
 
 
 def filtrar_historico_por_destino(destino, pagina=1, itens_por_pagina=10):
-    if not destino_valido(destino):
-        return [], 0
-
     if pagina < 1:
         pagina = 1
 
-    where_clause = "WHERE m.destino = ?"
-    params = (destino,)
+    destino = destino.strip()
+
+    if not destino:
+        return [], 0
+
+    where_clause = "WHERE m.destino LIKE ?"
+    params = (f"%{destino}%",)
     offset = (pagina - 1) * itens_por_pagina
 
     total = _contar_historico(where_clause, params)
@@ -716,13 +731,16 @@ def filtrar_historico_por_destino(destino, pagina=1, itens_por_pagina=10):
 
 
 def filtrar_historico_por_periodo(data_inicial, data_final, pagina=1, itens_por_pagina=10):
-    if not data_valida(data_inicial) or not data_valida(data_final):
-        return [], 0
-
     if pagina < 1:
         pagina = 1
 
-    where_clause = "WHERE date(m.data_movimentacao) BETWEEN ? AND ?"
+    if not data_valida(data_inicial) or not data_valida(data_final):
+        return [], 0
+
+    if data_inicial > data_final:
+        return [], 0
+
+    where_clause = "WHERE date(m.data_movimentacao) BETWEEN date(?) AND date(?)"
     params = (data_inicial, data_final)
     offset = (pagina - 1) * itens_por_pagina
 

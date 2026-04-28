@@ -142,6 +142,9 @@ class PrimeiroAcessoView(ctk.CTkFrame):
         self.campos[chave] = entry
         self.criar_label_erro(parent, chave)
 
+    def senha_tamanho_valido(self, senha):
+        return 6 <= len(senha) <= 10
+
     def validar_campos(self):
         self.limpar_todos_erros()
         valido = True
@@ -156,6 +159,10 @@ class PrimeiroAcessoView(ctk.CTkFrame):
 
         if not nova_senha:
             self.marcar_erro("nova_senha", "A nova senha é obrigatória.")
+            valido = False
+
+        if nova_senha and not self.senha_tamanho_valido(nova_senha):
+            self.marcar_erro("nova_senha", "A senha deve ter entre 6 e 10 caracteres.")
             valido = False
 
         if not confirmar_senha:

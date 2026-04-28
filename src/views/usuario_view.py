@@ -557,7 +557,12 @@ class UsuarioView(ctk.CTkFrame):
         if not confirmar:
             return
 
-        sucesso, mensagem = excluir_usuario(usuario["id_usuario"])
+        # sucesso, mensagem = excluir_usuario(usuario["id_usuario"])
+
+        sucesso, mensagem = excluir_usuario(
+            usuario["id_usuario"],
+            self.usuario["id_usuario"]
+        )
 
         if sucesso:
             messagebox.showinfo("Sucesso", mensagem)

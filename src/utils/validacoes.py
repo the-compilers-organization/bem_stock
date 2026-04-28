@@ -12,6 +12,15 @@ def campo_preenchido(valor):
     return valor is not None and str(valor).strip() != ""
 
 
+def senha_valida(senha):
+    if not campo_preenchido(senha):
+        return False
+
+    senha = str(senha).strip()
+
+    return 6 <= len(senha) <= 10
+
+
 def email_valido(email):
     if not campo_preenchido(email):
         return False

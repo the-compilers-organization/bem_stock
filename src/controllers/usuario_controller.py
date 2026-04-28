@@ -1,6 +1,6 @@
 from database.connection import conectar
 from models.usuario import criar_usuario, usuario_para_tupla
-from utils.validacoes import campo_preenchido, email_valido, perfil_valido
+from utils.validacoes import campo_preenchido, email_valido, perfil_valido, senha_valida
 from utils.seguranca import gerar_hash_senha
 
 
@@ -61,6 +61,9 @@ def cadastrar_usuario(nome, email, senha, perfil):
 
     if not campo_preenchido(senha):
         return False, "A senha é obrigatória."
+    
+    if not senha_valida(senha):
+        return False, "A senha deve ter entre 6 e 10 caracteres."
 
     if not perfil_valido(perfil):
         return False, "Perfil inválido."
@@ -231,6 +234,9 @@ def atualizar_usuario(id_usuario, nome, email, perfil):
 def atualizar_senha_usuario(id_usuario, nova_senha):
     if not campo_preenchido(nova_senha):
         return False, "A nova senha é obrigatória."
+    
+    if not senha_valida(nova_senha):
+        return False, "A senha deve ter entre 6 e 10 caracteres."
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -271,6 +277,9 @@ def concluir_primeiro_acesso(id_usuario, novo_email, nova_senha):
 
     if not campo_preenchido(nova_senha):
         return False, "A senha é obrigatória."
+    
+    if not senha_valida(nova_senha):
+        return False, "A senha deve ter entre 6 e 10 caracteres."
 
     novo_email = novo_email.strip()
 
@@ -335,7 +344,10 @@ def concluir_primeiro_acesso(id_usuario, novo_email, nova_senha):
         conexao.close()
 
 
-def excluir_usuario(id_usuario):
+def excluir_usuario(id_usuario, id_usuario_logado=None):
+    if id_usuario_logado is not None and id_usuario == id_usuario_logado:
+        return False, "Você não pode excluir o próprio usuário logado."
+
     conexao = conectar()
     cursor = conexao.cursor()
 

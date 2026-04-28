@@ -705,6 +705,104 @@ class MovimentacaoView(ctk.CTkFrame):
 
         return entry
 
+    # def aplicar_filtros(self):
+    #     filtro = self.combo_filtro.get()
+    #     valor = self.entry_valor_filtro.get().strip()
+
+    #     data_inicial_br = self.entry_data_inicial.get().strip()
+    #     data_final_br = self.entry_data_final.get().strip()
+
+    #     data_inicial = ""
+    #     data_final = ""
+
+    #     if data_inicial_br:
+    #         try:
+    #             data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+    #         except ValueError:
+    #             messagebox.showerror("Erro", "A data inicial deve estar no formato dd/mm/aaaa.")
+    #             return
+
+    #     if data_final_br:
+    #         try:
+    #             data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+    #         except ValueError:
+    #             messagebox.showerror("Erro", "A data final deve estar no formato dd/mm/aaaa.")
+    #             return
+
+    #     try:
+    #         self.pagina_atual = 1
+
+    #         if filtro == "Todos":
+    #             historico, total = listar_historico(
+    #                 pagina=self.pagina_atual,
+    #                 itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Produto":
+    #             if not valor:
+    #                 messagebox.showerror("Erro", "Informe o ID do produto.")
+    #                 return
+    #             historico, total = filtrar_historico_por_produto(
+    #                 int(valor), pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Categoria":
+    #             if not valor:
+    #                 messagebox.showerror("Erro", "Informe a categoria.")
+    #                 return
+    #             historico, total = filtrar_historico_por_categoria(
+    #                 valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Destino":
+    #             if not valor:
+    #                 messagebox.showerror("Erro", "Informe o destino.")
+    #                 return
+    #             historico, total = filtrar_historico_por_destino(
+    #                 valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Fornecedor":
+    #             if not valor:
+    #                 messagebox.showerror("Erro", "Informe o fornecedor.")
+    #                 return
+    #             historico, total = filtrar_historico_por_fornecedor(
+    #                 valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Lote":
+    #             if not valor:
+    #                 messagebox.showerror("Erro", "Informe o lote.")
+    #                 return
+    #             historico, total = filtrar_historico_por_lote(
+    #                 valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Entrada":
+    #             historico, total = filtrar_historico_por_tipo(
+    #                 "entrada", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Saída":
+    #             historico, total = filtrar_historico_por_tipo(
+    #                 "saida", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         elif filtro == "Por Período":
+    #             if not data_inicial or not data_final:
+    #                 messagebox.showerror("Erro", "Informe a data inicial e a data final.")
+    #                 return
+    #             historico, total = filtrar_historico_por_periodo(
+    #                 data_inicial, data_final,
+    #                 pagina=self.pagina_atual,
+    #                 itens_por_pagina=self.itens_por_pagina
+    #             )
+    #         else:
+    #             historico, total = listar_historico(
+    #                 pagina=self.pagina_atual,
+    #                 itens_por_pagina=self.itens_por_pagina
+    #             )
+
+    #         self.carregar_historico(historico, total)
+
+    #     except ValueError:
+    #         messagebox.showerror("Erro", "O ID do produto deve ser um número inteiro.")
+    #     except Exception as e:
+    #         messagebox.showerror("Erro", f"Erro ao aplicar filtros: {str(e)}")
+
+
     def aplicar_filtros(self):
         filtro = self.combo_filtro.get()
         valor = self.entry_valor_filtro.get().strip()
@@ -715,21 +813,43 @@ class MovimentacaoView(ctk.CTkFrame):
         data_inicial = ""
         data_final = ""
 
-        if data_inicial_br:
-            try:
-                data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
-            except ValueError:
-                messagebox.showerror("Erro", "A data inicial deve estar no formato dd/mm/aaaa.")
-                return
-
-        if data_final_br:
-            try:
-                data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
-            except ValueError:
-                messagebox.showerror("Erro", "A data final deve estar no formato dd/mm/aaaa.")
-                return
-
         try:
+            # if data_inicial_br:
+            #     data_inicial_obj = datetime.strptime(data_inicial_br, "%d/%m/%Y")
+            #     data_inicial = data_inicial_obj.strftime("%Y-%m-%d 00:00:00")
+
+            # if data_final_br:
+            #     data_final_obj = datetime.strptime(data_final_br, "%d/%m/%Y")
+            #     data_final = data_final_obj.strftime("%Y-%m-%d 23:59:59")
+
+            # if data_inicial and data_final and data_inicial > data_final:
+            #     messagebox.showerror(
+            #         "Erro",
+            #         "A data inicial não pode ser maior que a data final."
+            #     )
+            #     return
+
+            if data_inicial_br:
+                try:
+                    data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+                except ValueError:
+                    messagebox.showerror("Erro", "A data inicial deve estar no formato dd/mm/aaaa.")
+                    return
+
+            if data_final_br:
+                try:
+                    data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+                except ValueError:
+                    messagebox.showerror("Erro", "A data final deve estar no formato dd/mm/aaaa.")
+                    return
+
+            if data_inicial and data_final and data_inicial > data_final:
+                messagebox.showerror(
+                    "Erro",
+                    "A data inicial não pode ser maior que a data final."
+                )
+                return
+
             self.pagina_atual = 1
 
             if filtro == "Todos":
@@ -737,58 +857,88 @@ class MovimentacaoView(ctk.CTkFrame):
                     pagina=self.pagina_atual,
                     itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Produto":
                 if not valor:
-                    messagebox.showerror("Erro", "Informe o ID do produto.")
+                    messagebox.showerror("Erro", "Informe o nome ou ID do produto.")
                     return
+
                 historico, total = filtrar_historico_por_produto(
-                    int(valor), pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Categoria":
                 if not valor:
                     messagebox.showerror("Erro", "Informe a categoria.")
                     return
+
                 historico, total = filtrar_historico_por_categoria(
-                    valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Destino":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o destino.")
                     return
+
                 historico, total = filtrar_historico_por_destino(
-                    valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Fornecedor":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o fornecedor.")
                     return
+
                 historico, total = filtrar_historico_por_fornecedor(
-                    valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Lote":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o lote.")
                     return
+
                 historico, total = filtrar_historico_por_lote(
-                    valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    valor,
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Entrada":
                 historico, total = filtrar_historico_por_tipo(
-                    "entrada", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    "entrada",
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Saída":
                 historico, total = filtrar_historico_por_tipo(
-                    "saida", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina
+                    "saida",
+                    pagina=self.pagina_atual,
+                    itens_por_pagina=self.itens_por_pagina
                 )
+
             elif filtro == "Por Período":
                 if not data_inicial or not data_final:
                     messagebox.showerror("Erro", "Informe a data inicial e a data final.")
                     return
+
                 historico, total = filtrar_historico_por_periodo(
-                    data_inicial, data_final,
+                    data_inicial,
+                    data_final,
                     pagina=self.pagina_atual,
                     itens_por_pagina=self.itens_por_pagina
                 )
+
             else:
                 historico, total = listar_historico(
                     pagina=self.pagina_atual,
@@ -798,9 +948,10 @@ class MovimentacaoView(ctk.CTkFrame):
             self.carregar_historico(historico, total)
 
         except ValueError:
-            messagebox.showerror("Erro", "O ID do produto deve ser um número inteiro.")
+            messagebox.showerror("Erro", "As datas devem estar no formato dd/mm/aaaa.")
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao aplicar filtros: {str(e)}")
+
 
     def limpar_filtros(self):
         self.combo_filtro.set("Todos")
@@ -810,41 +961,129 @@ class MovimentacaoView(ctk.CTkFrame):
         self.pagina_atual = 1
         self.carregar_historico()
 
+    # def obter_resultado_paginado_atual(self):
+    #     filtro = self.combo_filtro.get()
+    #     valor = self.entry_valor_filtro.get().strip()
+
+    #     data_inicial_br = self.entry_data_inicial.get().strip()
+    #     data_final_br = self.entry_data_final.get().strip()
+
+    #     data_inicial = ""
+    #     data_final = ""
+
+    #     if data_inicial_br:
+    #         data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+    #     if data_final_br:
+    #         data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+    #     if filtro == "Todos":
+    #         return listar_historico(pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Produto":
+    #         return filtrar_historico_por_produto(int(valor), pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Categoria":
+    #         return filtrar_historico_por_categoria(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Destino":
+    #         return filtrar_historico_por_destino(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Fornecedor":
+    #         return filtrar_historico_por_fornecedor(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Lote":
+    #         return filtrar_historico_por_lote(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Entrada":
+    #         return filtrar_historico_por_tipo("entrada", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Saída":
+    #         return filtrar_historico_por_tipo("saida", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+    #     if filtro == "Por Período":
+    #         return filtrar_historico_por_periodo(data_inicial, data_final, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+
+    #     return listar_historico(pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+
+
     def obter_resultado_paginado_atual(self):
         filtro = self.combo_filtro.get()
         valor = self.entry_valor_filtro.get().strip()
 
-        data_inicial_br = self.entry_data_inicial.get().strip()
-        data_final_br = self.entry_data_final.get().strip()
-
         data_inicial = ""
         data_final = ""
 
-        if data_inicial_br:
-            data_inicial = datetime.strptime(data_inicial_br, "%d/%m/%Y").strftime("%Y-%m-%d")
-        if data_final_br:
-            data_final = datetime.strptime(data_final_br, "%d/%m/%Y").strftime("%Y-%m-%d")
+        if self.entry_data_inicial.get().strip():
+            data_inicial = datetime.strptime(
+                self.entry_data_inicial.get().strip(),
+                "%d/%m/%Y"
+            ).strftime("%Y-%m-%d 00:00:00")
+
+        if self.entry_data_final.get().strip():
+            data_final = datetime.strptime(
+                self.entry_data_final.get().strip(),
+                "%d/%m/%Y"
+            ).strftime("%Y-%m-%d 23:59:59")
 
         if filtro == "Todos":
-            return listar_historico(pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Produto":
-            return filtrar_historico_por_produto(int(valor), pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Categoria":
-            return filtrar_historico_por_categoria(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Destino":
-            return filtrar_historico_por_destino(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Fornecedor":
-            return filtrar_historico_por_fornecedor(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Lote":
-            return filtrar_historico_por_lote(valor, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Entrada":
-            return filtrar_historico_por_tipo("entrada", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Saída":
-            return filtrar_historico_por_tipo("saida", pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
-        if filtro == "Por Período":
-            return filtrar_historico_por_periodo(data_inicial, data_final, pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+            return listar_historico(
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
 
-        return listar_historico(pagina=self.pagina_atual, itens_por_pagina=self.itens_por_pagina)
+        if filtro == "Por Produto":
+            return filtrar_historico_por_produto(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Categoria":
+            return filtrar_historico_por_categoria(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Destino":
+            return filtrar_historico_por_destino(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Fornecedor":
+            return filtrar_historico_por_fornecedor(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Lote":
+            return filtrar_historico_por_lote(
+                valor,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Entrada":
+            return filtrar_historico_por_tipo(
+                "entrada",
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Saída":
+            return filtrar_historico_por_tipo(
+                "saida",
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        if filtro == "Por Período":
+            return filtrar_historico_por_periodo(
+                data_inicial,
+                data_final,
+                pagina=self.pagina_atual,
+                itens_por_pagina=self.itens_por_pagina
+            )
+
+        return listar_historico(
+            pagina=self.pagina_atual,
+            itens_por_pagina=self.itens_por_pagina
+        )
 
     def ir_para_pagina_anterior(self):
         if self.pagina_atual > 1:
