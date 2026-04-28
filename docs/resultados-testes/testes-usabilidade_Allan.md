@@ -1542,9 +1542,11 @@ _________________________________________
 - Sistema deve bloquear a exclusão do administrador padrão.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+Foi excluído o administrador padrão, acarretando em erros em outras telas além da lista de usuários.
 _________________________________________
 
 ---
@@ -1566,9 +1568,11 @@ _________________________________________
 - Todas as telas devem carregar corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todas as telas foram acessadas sem erro algum.
 _________________________________________
 
 ---
@@ -1584,9 +1588,11 @@ _________________________________________
 - Nenhuma informação deve ser salva sem confirmação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Nenhuma modificação foi registrada ao eu voltar do formulário.
 _________________________________________
 
 ---
@@ -1605,9 +1611,11 @@ _________________________________________
 - Nenhum texto importante deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Nenhum texto foi cortado ou desalinhado na interface.
 _________________________________________
 
 ---
@@ -1623,9 +1631,11 @@ _________________________________________
 - Cabeçalhos devem estar alinhados com as células.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todas as informações estão alinhadas nas células com seus respectivos títulos.
 _________________________________________
 
 ---
@@ -1640,9 +1650,11 @@ _________________________________________
 - O usuário deve entender a função de cada botão.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+A interface está intuitiva e fácil de utilizar.
 _________________________________________
 
 ---
@@ -1657,9 +1669,11 @@ _________________________________________
 - As mensagens devem ser simples e compreensíveis.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+As mensagens estão claras e objetivas, informando ao usuário qual o erro cometido.
 _________________________________________
 
 ---
@@ -1674,9 +1688,11 @@ _________________________________________
 - O sistema deve informar claramente que a operação foi realizada.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna mensagens claras confirmando a edição/delete de algum registro.
 _________________________________________
 
 ---
