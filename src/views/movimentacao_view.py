@@ -133,7 +133,7 @@ class MovimentacaoView(ctk.CTkFrame):
             ("Produto", 170),
             ("Categoria", 170),
             ("Quantidade", 170),
-            ("lote", 140),  # nova
+            ("Lote", 140),  # nova
             ("Fornecedor /\nDestino", 210),
             ("Responsável", 190),
             ("Observações", 190),
@@ -146,7 +146,7 @@ class MovimentacaoView(ctk.CTkFrame):
             "Produto": 140,
             "Categoria": 140,
             "Quantidade": 130,
-            "lote": 120, # novo
+            "Lote": 120, # novo
             "Fornecedor /\nDestino": 160,
             "Responsável": 140,
             "Observações": 140,
@@ -914,7 +914,7 @@ class MovimentacaoView(ctk.CTkFrame):
                     itens_por_pagina=self.itens_por_pagina
                 )
 
-            elif filtro == "Por lote":
+            elif filtro == "Por Lote":
                 if not valor:
                     messagebox.showerror("Erro", "Informe o lote.")
                     return
@@ -1063,7 +1063,7 @@ class MovimentacaoView(ctk.CTkFrame):
                 itens_por_pagina=self.itens_por_pagina
             )
 
-        if filtro == "Por lote":
+        if filtro == "Por Lote":
             return filtrar_historico_por_lote(
                 valor,
                 pagina=self.pagina_atual,
@@ -1279,7 +1279,7 @@ class MovimentacaoView(ctk.CTkFrame):
                 "Por Categoria",
                 "Por Destino",
                 "Por Fornecedor",
-                "Por lote",
+                "Por Lote",
                 "Por Entrada",
                 "Por Saída",
                 "Por Período"
