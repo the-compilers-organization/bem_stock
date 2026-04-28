@@ -14,6 +14,31 @@ from utils.formatadores import (
 )
 
 
+def calcular_estoque_atual(id_produto):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute(
+        """
+        SELECT COALESCE(SUM(
+            CASE
+                WHEN tipo_movimentacao = 'entrada' THEN quantidade
+                WHEN tipo_movimentacao = 'saida' THEN -quantidade
+                ELSE 0
+            END
+        ), 0) AS estoque_atual
+        FROM movimentacoes
+        WHERE id_produto = ?
+        """,
+        (id_produto,)
+    )
+
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    return resultado["estoque_atual"] if resultado else 0
+
+
 def _enriquecer_registros(registros):
     resultado = []
 
@@ -126,6 +151,8 @@ def registrar_entrada(
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de entrada deve ser maior que zero."
 
+    quantidade = int(quantidade)
+
     if not data_valida(data_validade):
         return False, "A data de validade é obrigatória e deve estar no formato YYYY-MM-DD."
 
@@ -225,6 +252,8 @@ def registrar_saida(
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de saída deve ser maior que zero."
 
+    quantidade = int(quantidade)
+
     if not campo_preenchido(destino):
         return False, "O destino é obrigatório para saída."
 
@@ -263,6 +292,11 @@ def registrar_saida(
 
         if usuario is None:
             return False, "Usuário não encontrado."
+
+        estoque_atual = calcular_estoque_atual(id_produto)
+
+        if quantidade > estoque_atual:
+            return False, "Estoque insuficiente para realizar a saída."
 
         movimentacao = criar_movimentacao(
             tipo_movimentacao="saida",
@@ -397,6 +431,8 @@ def atualizar_movimentacao_entrada(
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de entrada deve ser maior que zero."
 
+    quantidade = int(quantidade)
+
     if not data_valida(data_validade):
         return False, "A data de validade é obrigatória e deve estar no formato YYYY-MM-DD."
 
@@ -510,6 +546,8 @@ def atualizar_movimentacao_saida(
     if not quantidade_movimentacao_valida(quantidade):
         return False, "A quantidade de saída deve ser maior que zero."
 
+    quantidade = int(quantidade)
+
     if not campo_preenchido(destino):
         return False, "O destino é obrigatório para saída."
 
@@ -525,7 +563,7 @@ def atualizar_movimentacao_saida(
     try:
         cursor.execute(
             """
-            SELECT id_movimentacao, tipo_movimentacao
+            SELECT id_movimentacao, tipo_movimentacao, id_produto, quantidade
             FROM movimentacoes
             WHERE id_movimentacao = ?
             """,
@@ -564,6 +602,16 @@ def atualizar_movimentacao_saida(
 
         if usuario is None:
             return False, "Usuário não encontrado."
+
+        estoque_atual = calcular_estoque_atual(id_produto)
+
+        if movimentacao["id_produto"] == id_produto:
+            estoque_disponivel = estoque_atual + movimentacao["quantidade"]
+        else:
+            estoque_disponivel = estoque_atual
+
+        if quantidade > estoque_disponivel:
+            return False, "Estoque insuficiente para realizar a saída."
 
         cursor.execute(
             """

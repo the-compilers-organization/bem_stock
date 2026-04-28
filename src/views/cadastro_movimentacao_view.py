@@ -210,8 +210,8 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
 
         if valor_inicial:
             combo.set(valor_inicial)
-        elif values:
-            combo.set(values[0])
+        else:
+            combo.set("Selecione...")
 
         combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c), add="+")
         combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o), add="+")
@@ -443,11 +443,12 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         produto = self.obter_valor_campo("produto")
         quantidade_texto = self.obter_valor_campo("quantidade")
 
-        if not tipo:
+        if not tipo or tipo == "Selecione...":
             self.marcar_erro("tipo_movimentacao", "Selecione o tipo de movimentação.")
             valido = False
 
-        if not produto or produto not in self.produtos_map:
+        # if not produto or produto not in self.produtos_map:
+        if not produto or produto == "Selecione..." or produto not in self.produtos_map:
             self.marcar_erro("produto", "Selecione um produto válido.")
             valido = False
 
@@ -485,7 +486,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
         if tipo == "saida":
             destino = self.obter_valor_campo("destino")
 
-            if not destino:
+            if not destino or destino == "Selecione...":
                 self.marcar_erro("destino", "O destino é obrigatório.")
                 valido = False
 
@@ -494,7 +495,9 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
     def tratar_erro_controller(self, mensagem, tipo):
         texto = mensagem.lower()
 
-        if "produto" in texto:
+        if "estoque insuficiente" in texto or "estoque" in texto:
+            self.marcar_erro("quantidade", mensagem)
+        elif "produto" in texto:
             self.marcar_erro("produto", mensagem)
         elif "categoria" in texto:
             self.marcar_erro("categoria", mensagem)
@@ -632,20 +635,33 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
             scroll,
             "tipo_movimentacao",
             ["entrada", "saida"],
-            "entrada",
+            "",
             obrigatorio=True,
             command=self.atualizar_tipo_movimentacao
         )
 
+        
+
         self.criar_label(scroll, "Produto*")
-        valores_produto = list(self.produtos_map.keys()) if self.produtos_map else ["Nenhum produto cadastrado"]
-        valor_inicial_produto = valores_produto[0] if valores_produto and valores_produto[0] != "Nenhum produto cadastrado" else ""
+        # valores_produto = list(self.produtos_map.keys()) if self.produtos_map else ["Nenhum produto cadastrado"]
+        # valor_inicial_produto = valores_produto[0] if valores_produto and valores_produto[0] != "Nenhum produto cadastrado" else ""
+        valores_produto = list(self.produtos_map.keys()) if self.produtos_map else []
+        valor_inicial_produto = ""
+
+        # self.criar_combobox(
+        #     scroll,
+        #     "produto",
+        #     valores_produto,
+        #     valor_inicial_produto,
+        #     obrigatorio=True,
+        #     command=self.atualizar_categoria_do_produto
+        # )
 
         self.criar_combobox(
             scroll,
             "produto",
             valores_produto,
-            valor_inicial_produto,
+            "",
             obrigatorio=True,
             command=self.atualizar_categoria_do_produto
         )
@@ -721,7 +737,7 @@ class CadastroMovimentacaoView(ctk.CTkFrame):
                 "refeitorio",
                 "outros"
             ],
-            "cozinha",
+            "",
             obrigatorio=True
         )
 

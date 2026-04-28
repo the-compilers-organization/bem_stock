@@ -122,11 +122,11 @@ class CadastroProdutoView(ctk.CTkFrame):
             self.marcar_erro("nome", "O nome é obrigatório.")
             valido = False
 
-        if not categoria:
+        if not categoria or categoria == "Selecione...":
             self.marcar_erro("categoria", "A categoria é obrigatória.")
             valido = False
 
-        if not unidade_medida:
+        if not unidade_medida or unidade_medida == "Selecione...":
             self.marcar_erro("unidade_medida", "A unidade de medida é obrigatória.")
             valido = False
 
@@ -254,8 +254,8 @@ class CadastroProdutoView(ctk.CTkFrame):
 
         if valor_inicial:
             combo.set(valor_inicial)
-        elif values:
-            combo.set(values[0])
+        else:
+            combo.set("Selecione...")
 
         combo.bind("<FocusIn>", lambda event, c=chave: self.ao_entrar_no_campo(c), add="+")
         combo.bind("<FocusOut>", lambda event, c=chave, o=obrigatorio: self.ao_sair_do_campo(c, o), add="+")
@@ -326,11 +326,12 @@ class CadastroProdutoView(ctk.CTkFrame):
         )
 
         self.criar_label(scroll, "Categoria*")
+
         self.criar_combobox(
             scroll,
             "categoria",
             ["Alimentos", "Limpeza", "Higiene Pessoal"],
-            self.produto["categoria"] if self.produto else "Alimentos",
+            self.produto["categoria"] if self.produto else "",
             obrigatorio=True
         )
 
@@ -339,7 +340,7 @@ class CadastroProdutoView(ctk.CTkFrame):
             scroll,
             "unidade_medida",
             ["unidade", "pacote", "caixa", "litros", "ml", "kg", "grama"],
-            self.produto["unidade_medida"] if self.produto else "unidade",
+            self.produto["unidade_medida"] if self.produto else "",
             obrigatorio=True
         )
 
