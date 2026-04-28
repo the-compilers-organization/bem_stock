@@ -768,11 +768,11 @@ _________________________________________
 - Deve informar estoque insuficiente.
 
 **Resultado obtido:**  
-( ) OK   (X) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
 
-O sistema registrou o estoque atual com um valor negativo.
+O sistema impediu a saída do produto.
 _________________________________________
 
 ---
@@ -790,9 +790,11 @@ _________________________________________
 - Sistema deve informar que o produto é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema exibiu uma mensagem "Selecione um produto válido" abaixo do campo "Produto".
 _________________________________________
 
 ---
@@ -810,9 +812,11 @@ _________________________________________
 - Sistema deve informar que o tipo é obrigatório.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema exibe a imagem "Selecione o tipo de movimentação" abaixo do campo "Tipo de movimentação".
 _________________________________________
 
 ---
@@ -829,9 +833,11 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser maior que zero.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna uma mensagem de erro abaixo do campo de "Quantidade", solicitando que o usuário insira um número inteiro maior que zero.
 _________________________________________
 
 ---
@@ -847,9 +853,11 @@ _________________________________________
 - Deve exibir mensagem clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna uma mensagem de erro solicitando que o usuário insira um número inteiro maior que zero.
 _________________________________________
 
 ---
@@ -864,9 +872,11 @@ _________________________________________
 - Sistema deve informar que a quantidade deve ser numérica.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Abaixo do campo "Quantidade" o sistema retorna uma mensagem de erro solicitando que o usuário insira um número inteiro válido.
 _________________________________________
 
 ---
@@ -884,9 +894,11 @@ _________________________________________
 - Sistema deve informar que o destino é obrigatório para saída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna uma mensagem próximo ao campo de "Destino" informando que o preenchimento é obrigatório.
 _________________________________________
 
 ---
@@ -902,9 +914,11 @@ _________________________________________
 - A data escolhida deve aparecer corretamente no campo.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+A data selecionada no calendário foi exibida corretamente no campo de validade.
 _________________________________________
 
 ---
@@ -924,9 +938,11 @@ _________________________________________
 - O botão deve estar visível e alinhado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Ambos os botões (Editar e Excluir) estão alinhados e visíveis.
 _________________________________________
 
 ---
@@ -942,9 +958,11 @@ _________________________________________
 - Os campos devem vir preenchidos com os dados da movimentação.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Todas as informações estão preenchidas em seus respectivos campos e disponíveis para edição.
 _________________________________________
 
 ---
@@ -962,9 +980,11 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Resultado esperado foi obtido. O estoque foi atualizado e também considera as saídas feitas após a entrada.
 _________________________________________
 
 ---
@@ -983,9 +1003,11 @@ _________________________________________
 - Se a quantidade for maior que o estoque disponível, o sistema deve bloquear.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+A movimentação foi atualizada e o estoque mudou respeitando a saída editada.
 _________________________________________
 
 ---
@@ -1002,9 +1024,11 @@ _________________________________________
 - Caso não exista estoque suficiente, deve bloquear a edição.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O sistema impede que o usuário modifique o tipo de movimentação.
 _________________________________________
 
 ---
@@ -1020,9 +1044,11 @@ _________________________________________
 - O estoque deve ser recalculado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O sistema impede que o usuário modifique o tipo da movimentação.
 _________________________________________
 
 ---
@@ -1040,9 +1066,11 @@ _________________________________________
 - Estoque do novo produto deve ser ajustado corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+As modificações foram exibidas corretamente na tela de Produtos e na tela de Movimentações, assim como o estoque de ambos os produtos.
 _________________________________________
 
 ---
@@ -1059,9 +1087,11 @@ _________________________________________
 - Mensagem de erro deve ser clara.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retorna uma mensagem de erro abaixo do campo de "Quantidade" solicitando que o usuário insira um valor inteiro válido.
 _________________________________________
 
 ---
@@ -1078,9 +1108,11 @@ _________________________________________
 - Sistema deve retornar ao histórico.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:** 
+
+Nenhuma movimentação foi modificada após clicar em "Voltar".
 _________________________________________
 
 ---
@@ -1100,9 +1132,11 @@ _________________________________________
 - O botão não deve estar cortado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Botão visível ao scrollar horizontalmente.
 _________________________________________
 
 ---
@@ -1118,9 +1152,11 @@ _________________________________________
 - O estoque não deve ser alterado.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Não foi feita nenhuma exclusão ao recusar na janela de confirmação do sistema.
 _________________________________________
 
 ---
@@ -1138,9 +1174,11 @@ _________________________________________
 - O estoque deve diminuir conforme a entrada excluída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Movimentação excluída com sucesso e o respectivo estoque também foi modificado.
 _________________________________________
 
 ---
@@ -1158,9 +1196,11 @@ _________________________________________
 - O estoque deve aumentar conforme a saída excluída.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+A movimentação de entrada foi excluída e seu respectivo estoque também foi modificado.
 _________________________________________
 
 ---
@@ -1175,9 +1215,11 @@ _________________________________________
 - A movimentação excluída não deve aparecer mais na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+As movimentações foram excluídas e não são mais exibidas na tela de movimetações.
 _________________________________________
 
 ---
@@ -1196,9 +1238,11 @@ _________________________________________
 - As movimentações cadastradas devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todas as movimentações estão exibidas corretamente e alinhadas.
 _________________________________________
 
 ---
@@ -1213,9 +1257,11 @@ _________________________________________
 - Apenas movimentações daquele produto devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O filtro Por Produto está solicitando ao usuário um ID.
 _________________________________________
 
 ---
@@ -1229,10 +1275,11 @@ _________________________________________
 **Resultado esperado:**
 - Apenas movimentações da categoria selecionada devem aparecer.
 
-**Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Todas as categorias foram filtradas com sucesso.
 _________________________________________
 
 ---
@@ -1248,9 +1295,11 @@ _________________________________________
 - Apenas movimentações dentro do período devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+Os registros de movimentações exibidos após a filtragem não respeitam as datas do intervalo.
 _________________________________________
 
 ---
@@ -1265,9 +1314,11 @@ _________________________________________
 - Sistema deve informar que o período é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+( ) OK   (X) ERRO  
 
 **Observações:**  
+
+O sistema exibe todos os registros já feitos, sem respeitar o intervalo além de não impedir a filtragem.
 _________________________________________
 
 ---
@@ -1282,9 +1333,11 @@ _________________________________________
 - A lista deve voltar ao estado original.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Os campos de filtragem foram limpos e o histórico de movimentações está completo.
 _________________________________________
 
 ---
@@ -1303,9 +1356,11 @@ _________________________________________
 - A lista de usuários deve aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Tanto usuários administradores e de estoque estão sendo exibidos na tela.
 _________________________________________
 
 ---
@@ -1320,9 +1375,11 @@ _________________________________________
 - A lista deve filtrar corretamente.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Usuários filtrados por nome apareceram corretamente, respeitando os campos de filtragem.
 _________________________________________
 
 ---
@@ -1336,9 +1393,11 @@ _________________________________________
 - Usuários compatíveis devem aparecer.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Os usuários foram exibidos com os respectivos e-mails que foram inseridos no campo de filtros.
 _________________________________________
 
 ---
@@ -1360,9 +1419,11 @@ _________________________________________
 - Deve aparecer na lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Usuário criado com sucesso e sendo exibido na tela de usuários.
 _________________________________________
 
 ---
@@ -1379,9 +1440,11 @@ _________________________________________
 - Sistema deve informar que o e-mail é inválido.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retornou uma mensagem de erro solicitando que o usuário insira o e-mail válido.
 _________________________________________
 
 ---
@@ -1399,9 +1462,11 @@ _________________________________________
 - Deve informar que já existe usuário com esse e-mail.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
-**Observações:**  
+**Observações:**
+
+O sistema retorna uma janela com uma mensagem informando que já existe um usuário cadastrado com o e-mail.
 _________________________________________
 
 ---
@@ -1417,9 +1482,11 @@ _________________________________________
 - Sistema deve informar que as senhas não conferem.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O sistema retornou duas mensagens claras abaixo dos campos de senha identificando o erro do usuário.
 _________________________________________
 
 ---
@@ -1436,9 +1503,11 @@ _________________________________________
 - Dados devem ser atualizados.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+O novo nome do usuário foi exibido na lista, tanto os usuários administradores como estoque.
 _________________________________________
 
 ---
@@ -1454,9 +1523,11 @@ _________________________________________
 - Usuário deve ser removido da lista.
 
 **Resultado obtido:**  
-( ) OK   ( ) ERRO  
+(X) OK   ( ) ERRO  
 
 **Observações:**  
+
+Os usuários excluídos (tanto admin como estoque) não foram mais exibidos na lista.
 _________________________________________
 
 ---
