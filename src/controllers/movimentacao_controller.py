@@ -62,6 +62,12 @@ def _enriquecer_registros(registros):
             registro.get("data_movimentacao")
         )
 
+        if not registro.get("nome_usuario"):
+            registro["nome_usuario"] = "Usuário removido"
+
+        if not registro.get("email_usuario"):
+            registro["email_usuario"] = "-"
+
         resultado.append(registro)
 
     return resultado
@@ -75,7 +81,7 @@ def _contar_historico(where_clause="", params=()):
         SELECT COUNT(*) AS total
         FROM movimentacoes m
         JOIN produtos p ON m.id_produto = p.id_produto
-        JOIN usuarios u ON m.id_usuario = u.id_usuario
+        LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
         {where_clause}
     """
 
@@ -110,7 +116,7 @@ def _buscar_historico(where_clause="", params=(), limite=None, offset=None):
             m.id_usuario
         FROM movimentacoes m
         JOIN produtos p ON m.id_produto = p.id_produto
-        JOIN usuarios u ON m.id_usuario = u.id_usuario
+        LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
         {where_clause}
         ORDER BY m.data_movimentacao DESC, m.id_movimentacao DESC
     """

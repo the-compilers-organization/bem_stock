@@ -102,7 +102,7 @@ def criar_tabelas():
 
             data_movimentacao TEXT NOT NULL,
 
-            id_usuario INTEGER NOT NULL,
+            id_usuario INTEGER,
 
             CHECK (
                 tipo_movimentacao = 'saida'
@@ -123,7 +123,7 @@ def criar_tabelas():
             ),
 
             FOREIGN KEY (id_produto) REFERENCES produtos(id_produto),
-            FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+            FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
         )
     """)
 
