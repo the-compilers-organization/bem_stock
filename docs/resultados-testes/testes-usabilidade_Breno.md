@@ -27,7 +27,7 @@ Antes de iniciar os testes:
 4. Confirmar que o banco `bemstock.db` foi criado.
 5. Usar o usuário administrador padrão:
 
-- Email: `admin@bemstock.com`
+- Email: `teste@bemstock.com`
 - Senha: `123456`
 
 ---
@@ -79,7 +79,7 @@ Após realizar os passos , conseguir realizar o login com sucesso.
 
 **Passos:**
 1. Clicar no campo de e-mail.
-2. Digitar `admin@bemstock.com`.
+2. Digitar `teste@bemstock.com`.
 3. Clicar no campo de senha.
 4. Digitar `123456`.
 5. Clicar no botão “Entrar”.
@@ -133,7 +133,7 @@ Ao tentar realizar login com um e-mail inexistente , aparece a pop-up iformando 
 ## CT005 — Login com senha incorreta
 
 **Passos:**
-1. Digitar `admin@bemstock.com`.
+1. Digitar `teste@bemstock.com`.
 2. Digitar `senhaerrada`.
 3. Clicar em “Entrar”.
 
@@ -1392,7 +1392,7 @@ _________________________________________
 ## CT071 — Tentar excluir administrador padrão
 
 **Passos:**
-1. Localizar o usuário `admin@bemstock.com`.
+1. Localizar o usuário `teste@bemstock.com`.
 2. Clicar em excluir.
 
 **Resultado esperado:**

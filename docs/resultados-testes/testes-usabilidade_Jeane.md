@@ -27,7 +27,7 @@ Antes de iniciar os testes:
 4. Confirmar que o banco `bemstock.db` foi criado.
 5. Usar o usuário administrador padrão:
 
-- Email: `admin@bemstock.com`
+- Email: `teste@bemstock.com`
 - Senha: `123456`
 
 ---
@@ -79,7 +79,7 @@ O sistema iniciou sem erros ao executar o arquivo main.py. A tela de login carre
 
 **Passos:**
 1. Clicar no campo de e-mail.
-2. Digitar `admin@bemstock.com`.
+2. Digitar `teste@bemstock.com`.
 3. Clicar no campo de senha.
 4. Digitar `123456`.
 5. Clicar no botão “Entrar”.
@@ -91,7 +91,7 @@ O sistema iniciou sem erros ao executar o arquivo main.py. A tela de login carre
 (  ) OK   ( X ) ERRO
 
 **Observações:**  
-Após o primeiro cadastro do usuário com sua criação do e-mail e senha, o email "admin@bemstock.com" e a senha "123456", não acessa mais o dashboard. O estoque só é acessado por meio do e-mail e a senha que o usuário criou.       
+Após o primeiro cadastro do usuário com sua criação do e-mail e senha, o email "teste@bemstock.com" e a senha "123456", não acessa mais o dashboard. O estoque só é acessado por meio do e-mail e a senha que o usuário criou.       
 
 ---
 
@@ -134,7 +134,7 @@ Ao digitar "admin" no campo de e-mail, digitar uma senha aleátoria e acessar "e
 ## CT005 — Login com senha incorreta
 
 **Passos:**
-1. Digitar `admin@bemstock.com`.
+1. Digitar `teste@bemstock.com`.
 2. Digitar `senhaerrada`.
 3. Clicar em “Entrar”.
 
@@ -146,7 +146,7 @@ Ao digitar "admin" no campo de e-mail, digitar uma senha aleátoria e acessar "e
 ( X ) OK   ( ) ERRO  
 
 **Observações:**  
-Ao digitar o email "admin@bemstock.com" e a senha "senhaerrada" e apertar em "entrar", é exibido uma mensagem clara de que o usuário não foi encontrado e é bloqueado o acesso ao sistema. 
+Ao digitar o email "teste@bemstock.com" e a senha "senhaerrada" e apertar em "entrar", é exibido uma mensagem clara de que o usuário não foi encontrado e é bloqueado o acesso ao sistema. 
 
 ---
 
@@ -1395,7 +1395,7 @@ Ao localizar um usuário comum, não existe o botão excluir.
 ## CT071 — Tentar excluir administrador padrão
 
 **Passos:**
-1. Localizar o usuário `admin@bemstock.com`.
+1. Localizar o usuário `teste@bemstock.com`.
 2. Clicar em excluir.
 
 **Resultado esperado:**
