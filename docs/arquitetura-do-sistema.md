@@ -263,10 +263,12 @@ bemstock/
 │   │   └── schema.py
 │
 │   └── utils/
-│       ├── constantes.py
-│       ├── validacoes.py
-│       ├── formatadores.py
-│       └── seguranca.py
+|        ├── caminho_recurso.py
+│        ├── constantes.py
+│        ├── criar_backup.py
+│        ├── validacoes.py
+│        ├── formatadores.py
+│        └── seguranca.py
 │
 ├── .gitignore
 ├── LICENSE
