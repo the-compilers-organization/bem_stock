@@ -274,7 +274,7 @@ Somente após isso o sistema será liberado.
 - **Python**
 - **CustomTkinter**
 - **SQLite**
-- **pyinstaller**
+- **Pyinstaller**
 - **Inno Setup Compiler**
 - **Git**
 - **GitHub**
