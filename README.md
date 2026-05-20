@@ -40,6 +40,8 @@
 
 :small_blue_diamond: [Primeiro Acesso](#primeiro-acesso-closed_lock_with_key) 
 
+:small_blue_diamond: [Distribuição](#distribuição-desktop-package) 
+
 :small_blue_diamond: [Tecnologias Utilizadas](#tecnologias-utilizadas-wrench)  
 
 :small_blue_diamond: [Documentação](#documentação-book)  
@@ -266,6 +268,31 @@ No primeiro login:
   - alterar a senha  
 
 Somente após isso o sistema será liberado.
+
+---
+
+# Distribuição Desktop :package:
+
+O sistema BemStock foi preparado para distribuição desktop no Windows utilizando:
+
+- **PyInstaller** → responsável por gerar o executável standalone do sistema;
+- **Inno Setup Compiler** → utilizado para criar o instalador profissional do sistema.
+
+O instalador gerado permite:
+
+- instalação automática no Windows;
+- criação de atalho na área de trabalho;
+- criação de atalho no menu iniciar;
+- instalação em `Program Files`;
+- distribuição simplificada para usuários finais.
+
+O sistema pode ser instalado através do arquivo:
+
+```txt
+
+BemStock-Setup.exe
+
+```
 
 ---
 
