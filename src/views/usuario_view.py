@@ -2,6 +2,8 @@ import math
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox
+from PIL import Image
+from utils.caminho_recurso import caminho_recurso
 
 from controllers.usuario_controller import (
     listar_usuarios,
@@ -623,13 +625,16 @@ class UsuarioView(ctk.CTkFrame):
         frame_logo.grid_columnconfigure(1, weight=1)
 
         try:
-            from PIL import Image
-            logo_img = ctk.CTkImage(
-                light_image=Image.open("assets/logo.png"),
+            self.logo_img = ctk.CTkImage(
+                light_image=Image.open(
+                    caminho_recurso(
+                        "assets/logo_1.ico"
+                    )
+                ),
                 size=(42, 42)
             )
-            label_logo = ctk.CTkLabel(frame_logo, image=logo_img, text="")
-            label_logo.image = logo_img
+            label_logo = ctk.CTkLabel(frame_logo, image=self.logo_img, text="")
+            label_logo.image = self.logo_img
             label_logo.grid(row=0, column=0, rowspan=2, padx=(0, 10))
         except Exception:
             ctk.CTkLabel(

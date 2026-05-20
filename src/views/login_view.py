@@ -2,6 +2,7 @@ import re
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
+from utils.caminho_recurso import caminho_recurso
 
 from controllers.login_controller import autenticar_usuario
 
@@ -125,16 +126,20 @@ class LoginView(ctk.CTkFrame):
         frame_principal.grid_propagate(False)
 
         try:
-            logo_img = ctk.CTkImage(
-                light_image=Image.open("assets/logo.png"),
+            self.logo_img = ctk.CTkImage(
+                light_image=Image.open(
+                    caminho_recurso(
+                        "assets/logo_1.ico"
+                    )
+                ),
                 size=(80, 80)
             )
             label_logo = ctk.CTkLabel(
                 frame_principal,
-                image=logo_img,
+                image=self.logo_img,
                 text=""
             )
-            label_logo.image = logo_img
+            label_logo.image = self.logo_img,
             label_logo.pack(pady=(32, 8))
         except Exception:
             label_logo = ctk.CTkLabel(

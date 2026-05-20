@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from PIL import Image
+from utils.caminho_recurso import caminho_recurso
 
 from controllers.produto_controller import listar_produtos_para_combobox
 from controllers.movimentacao_controller import listar_historico
@@ -129,16 +130,20 @@ class DashboardView(ctk.CTkFrame):
         frame_logo.grid_columnconfigure(1, weight=1)
 
         try:
-            logo_img = ctk.CTkImage(
-                light_image=Image.open("assets/logo.png"),
+            self.logo_img = ctk.CTkImage(
+                light_image=Image.open(
+                    caminho_recurso(
+                        "assets/logo_1.ico"
+                    )
+                ),
                 size=(42, 42)
             )
             label_logo = ctk.CTkLabel(
                 frame_logo,
-                image=logo_img,
+                image=self.logo_img,
                 text=""
             )
-            label_logo.image = logo_img
+            label_logo.image = self.logo_img,
             label_logo.grid(row=0, column=0, rowspan=2, padx=(0, 10))
         except Exception:
             label_logo = ctk.CTkLabel(
