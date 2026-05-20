@@ -4,9 +4,6 @@
   <img src="http://img.shields.io/static/v1?label=Python&message=3.x&color=3776AB&style=for-the-badge&logo=python"/>
   <img src="http://img.shields.io/static/v1?label=CustomTkinter&message=GUI&color=1E90FF&style=for-the-badge"/>
   <img src="http://img.shields.io/static/v1?label=SQLite&message=Database&color=003B57&style=for-the-badge&logo=sqlite"/>
-  <img src="http://img.shields.io/static/v1?label=Git&message=2.x&color=f05032&style=for-the-badge&logo=pyinstaller"/>
-  <img src="http://img.shields.io/static/v1?label=Git&message=2.x&color=f05032&style=for-the-badge&logo=InnoSetup"/>
-
   <img src="http://img.shields.io/static/v1?label=Git&message=2.x&color=f05032&style=for-the-badge&logo=git"/>
   <img src="http://img.shields.io/static/v1?label=GitHub&message=2026&color=181717&style=for-the-badge&logo=github"/>
   <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=yellow&style=for-the-badge"/>
