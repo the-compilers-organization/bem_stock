@@ -11,7 +11,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{5E46A246-652B-4AC5-AC29-7111FEBADF4E}
+AppId={{15A673CA-F3F2-4C15-B621-D931421F0AA8}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -34,13 +34,14 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\Francisco\Desktop\bem_stock\installer
 OutputBaseFilename=BemStock-Setup
-SetupIconFile=C:\Users\Francisco\Desktop\bem_stock\assets\logo.ico
+SetupIconFile=C:\Users\Francisco\Desktop\bem_stock\assets\logo_app.ico
 SolidCompression=yes
 WizardStyle=modern dynamic
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
-Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
+Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

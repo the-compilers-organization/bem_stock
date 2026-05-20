@@ -78,7 +78,7 @@ class BemStockApp(ctk.CTk):
         # =========================
         try:
             self.iconbitmap(
-                caminho_recurso("assets/logo.ico")
+                caminho_recurso("assets/logo_app.ico")
             )
         except Exception as erro:
             print(f"Erro ao carregar ícone: {erro}")
