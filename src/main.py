@@ -86,11 +86,21 @@ class BemStockApp(ctk.CTk):
         # =========================
         # JANELA MAXIMIZADA
         # =========================
-        try:
-            self.state("zoomed")
-        except Exception:
-            self.attributes("-zoomed", True)
+        # try:
+        #     self.state("zoomed")
+        # except Exception:
+        #     self.attributes("-zoomed", True)
+        self.after(
+            100,
+            self.deiconify
+        )
 
+        self.after(
+            200,
+            lambda: self.state("zoomed")
+        )
+
+        
         self.resizable(True, True)
 
         # =========================
