@@ -319,8 +319,11 @@ A documentação do projeto está disponível na pasta **docs** do repositório:
 - [Requisitos Não Funcionais](docs/requisitos-nao-funcionais.md)
 - [Arquitetura do Sistema](docs/arquitetura-do-sistema.md)
 - [Atores e Casos de Uso](docs/casos_de_uso_bem_stock.png)
-- [Plano de Testes de Usabilidade](docs/plano-de-testes-usabilidade.md)
 - [Interfaces do Sistema](docs/interfaces-do-sistema.md)
+- [Plano de Testes de Usabilidade](docs/plano-de-testes-usabilidade.md)
+- [Resultado dos Testes de Usabilidade](docs/resultados_testes)
+- [Plano de Validação](validacao-do-sistema.md)
+- [Resultado da Validação com Cliente](docs/resultado_validacao)
 
 ---
 
